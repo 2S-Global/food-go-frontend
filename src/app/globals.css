@@ -40,3 +40,233 @@ a {
     color-scheme: dark;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Embla carousel minimal styles */
+.embla {
+  overflow: hidden;
+  max-height: 500px;
+}
+.embla__container {
+  display: flex;
+  will-change: transform;
+}
+.embla__slide {
+  position: relative;
+  min-width: 100%;
+  flex: 0 0 100%;
+}
+.embla__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Thumbnail strip */
+.restaurant-detail-thumb-carousel {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.restaurant-detail-thumb-carousel .thumb-item {
+  cursor: pointer;
+}
+.restaurant-detail-thumb-carousel .thumb-item img {
+  display: block;
+  border-radius: 6px;
+}
+.restaurant-detail-thumb-carousel .thumb-item.is-selected img {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+  border: 2px solid #dc2626;
+}
+
+/* Small responsive tweaks */
+@media (max-width: 768px) {
+  .restaurant-detail-thumb-carousel .thumb-item img {
+    width: 56px !important;
+    height: 42px !important;
+  }
+}
+
+/* Menu item layout: image | info (title+desc) | price + order button */
+.featured-restaurant-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  /* border-bottom: 1px solid #f0f0f0; */
+}
+.featured-restaurant-thumb {
+  flex: 0 0 90px;
+}
+.featured-restaurant-thumb img {
+  width: 100px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.featured-restaurant-info {
+  flex: 1 1 auto;
+  position: relative;
+  padding-right: 160px; /* reserve space on the right for price/button */
+}
+.featured-restaurant-info h4 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+.featured-restaurant-info p {
+  margin: 6px 0 0;
+  color: #666;
+}
+.featured-restaurant-info .price {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #111;
+}
+.ord-btn {
+  flex: 0 0 auto;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .featured-restaurant-box {
+    flex-direction: row;
+    gap: 12px;
+  }
+  .featured-restaurant-info {
+    padding-right: 100px;
+  }
+  .featured-restaurant-thumb {
+    flex: 0 0 70px;
+  }
+  .featured-restaurant-thumb img {
+    width: 70px;
+    height: 56px;
+  }
+}
+
+/* Ensure title, description and metadata stack vertically even if other rules set flex */
+.featured-restaurant-info,
+.featured-restaurant-info * {
+  box-sizing: border-box;
+}
+.featured-restaurant-info > h4,
+.featured-restaurant-info > h4 a,
+.featured-restaurant-info > p,
+.featured-restaurant-info .post-meta {
+  display: block !important;
+  width: 100% !important;
+}
+.featured-restaurant-info h4 a {
+  display: block;
+}
+.featured-restaurant-info p {
+  margin-top: 6px;
+  color: #666;
+}
+
+/* ---------- Right Icons Wrapper ---------- */
+.header-right-icons {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-left: auto;
+  float: none;
+  /* margin-top: 10px; */
+}
+
+/* ---------- Cart Icon ---------- */
+.cart-icon {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: 600;
+}
+
+/* ---------- User Avatar Circle ---------- */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-avatar:hover {
+  border-color: #f9a825; /* yellow hover accent (optional) */
+}
+
+/* ---------- Dropdown (same as MENU dropdown) ---------- */
+.user-profile {
+  position: relative;
+}
+
+.user-profile ul {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  min-width: 200px;
+  padding: 18px 0;
+  border-radius: 6px;
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); */
+  box-shadow: 4px 4px 9px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  z-index: 99;
+  list-style: none;
+}
+
+/* Show dropdown on hover */
+.user-profile:hover ul {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown items */
+.user-profile ul li {
+  padding: 10px 22px;
+  font-weight: 600;
+  color: #222;
+  font-size: 14px;
+}
+
+.user-profile ul li a {
+  color: #222 !important;
+  text-transform: uppercase;
+  display: block;
+  font-family: Poppins;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.user-profile ul li a:hover {
+  color: #ffbe00 !important;
+}
+
+/* divider line like your MENU dropdown */
+.user-profile ul li:not(:last-child) {
+  border-bottom: 1px solid #eaeaea;
+}
