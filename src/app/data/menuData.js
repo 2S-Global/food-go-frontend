@@ -113,6 +113,82 @@ const menuData = [
     restaurantLogo: "/assets/images/restaurant-logo1.png",
     address: "5th Avenue New York 68",
   },
+  {
+    id: 7,
+    title: "Maenaam Thai Restaurant",
+    image: "/assets/images/popular-dish-img3.jpg",
+    images: [
+      "/assets/images/popular-dish-img1.jpg",
+      "/assets/images/popular-dish-img2.jpg",
+      "/assets/images/popular-dish-img3.jpg",
+    ],
+    rating: 4.25,
+    likes: 12,
+    price: 85,
+    category: "veg",
+    description:
+      "Taste homemade with our rich, slow-cooked tomato sauce. Made from vine-ripened tomatoes, fresh garlic, and herbs, it offers deep, authentic flavor perfect for pasta or pizza. Gluten-free and free from artificial preservatives, it brings fresh, natural goodness to your table.",
+    restaurant: "Fabio al Porto Ristorante",
+    restaurantLogo: "/assets/images/restaurant-logo1.png",
+    address: "5th Avenue New York 68",
+  },
+  {
+    id: 8,
+    title: "Maenaam Thai Restaurant",
+    image: "/assets/images/popular-dish-img2.jpg",
+    images: [
+      "/assets/images/popular-dish-img1.jpg",
+      "/assets/images/popular-dish-img2.jpg",
+      "/assets/images/popular-dish-img3.jpg",
+    ],
+    rating: 4.25,
+    likes: 12,
+    price: 85,
+    category: "non-veg",
+    description:
+      "Taste homemade with our rich, slow-cooked tomato sauce. Made from vine-ripened tomatoes, fresh garlic, and herbs, it offers deep, authentic flavor perfect for pasta or pizza. Gluten-free and free from artificial preservatives, it brings fresh, natural goodness to your table.",
+    restaurant: "Fabio al Porto Ristorante",
+    restaurantLogo: "/assets/images/restaurant-logo1.png",
+    address: "5th Avenue New York 68",
+  },
+  {
+    id: 9,
+    title: "Maenaam Thai Restaurant",
+    image: "/assets/images/popular-dish-img1.jpg",
+    images: [
+      "/assets/images/popular-dish-img1.jpg",
+      "/assets/images/popular-dish-img2.jpg",
+      "/assets/images/popular-dish-img3.jpg",
+    ],
+    rating: 4.25,
+    likes: 12,
+    price: 85,
+    category: "veg",
+    description:
+      "Taste homemade with our rich, slow-cooked tomato sauce. Made from vine-ripened tomatoes, fresh garlic, and herbs, it offers deep, authentic flavor perfect for pasta or pizza. Gluten-free and free from artificial preservatives, it brings fresh, natural goodness to your table.",
+    restaurant: "Fabio al Porto Ristorante",
+    restaurantLogo: "/assets/images/restaurant-logo1.png",
+    address: "5th Avenue New York 68",
+  },
+  {
+    id: 10,
+    title: "Maenaam Thai Restaurant",
+    image: "/assets/images/popular-dish-img1.jpg",
+    images: [
+      "/assets/images/popular-dish-img1.jpg",
+      "/assets/images/popular-dish-img2.jpg",
+      "/assets/images/popular-dish-img3.jpg",
+    ],
+    rating: 4.25,
+    likes: 12,
+    price: 85,
+    category: "non-veg",
+    description:
+      "Taste homemade with our rich, slow-cooked tomato sauce. Made from vine-ripened tomatoes, fresh garlic, and herbs, it offers deep, authentic flavor perfect for pasta or pizza. Gluten-free and free from artificial preservatives, it brings fresh, natural goodness to your table.",
+    restaurant: "Fabio al Porto Ristorante",
+    restaurantLogo: "/assets/images/restaurant-logo1.png",
+    address: "5th Avenue New York 68",
+  },
 ];
 
 export default menuData;

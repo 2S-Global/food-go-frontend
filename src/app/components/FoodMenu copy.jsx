@@ -12,13 +12,14 @@ export default function FoodMenu({
 }) {
   const visibleItems = limit ? items.slice(0, limit) : items;
   const isMenu = variant === "menu";
-
   const [isHover, setIsHover] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
 
   return (
     <section>
-      <div className={isMenu ? "block less-spacing gray-bg top-padd30" : "block"}>
+      <div
+        className={isMenu ? "block less-spacing gray-bg top-padd30" : "block"}
+      >
         <div className="container">
           {/* HOME PAGE TITLE */}
           {showTitle && !isMenu && (
@@ -30,7 +31,7 @@ export default function FoodMenu({
             </div>
           )}
 
-          {/* MENU PAGE */}
+          {/* MENU PAGE STRUCTURE */}
           {isMenu ? (
             <div className="sec-box">
               <div className="remove-ext">
@@ -46,31 +47,23 @@ export default function FoodMenu({
                 </div>
               </div>
 
-              {/* ✅ ADD TO CART BUTTON (BOTTOM RIGHT) */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "30px",
-                }}
-              >
-                <button
-                  onClick={() => setOpenCartModal(true)}
-                  className="brd-rd4"
-                  onMouseEnter={() => setIsHover(true)}
-                  onMouseLeave={() => setIsHover(false)}
-                  style={{
-                    padding: "14px 30px",
-                    backgroundColor: isHover ? "black" : "#ea1b25",
-                    color: "#fff",
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: "16px",
-                    borderRadius: "6px",
-                  }}
-                >
-                  Add to Cart
-                </button>
+              {/* Pagination (static for now) */}
+              <div className="pagination-wrapper text-center">
+                <ul className="pagination justify-content-center">
+                  <li className="page-item prev">
+                    <a className="page-link brd-rd2" href="#">
+                      PREVIOUS
+                    </a>
+                  </li>
+                  <li className="page-item active">
+                    <span className="page-link brd-rd2">1</span>
+                  </li>
+                  <li className="page-item next">
+                    <a className="page-link brd-rd2" href="#">
+                      NEXT
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
           ) : (
@@ -85,6 +78,26 @@ export default function FoodMenu({
               ))}
             </div>
           )}
+
+          <button
+            onClick={() => setOpenCartModal(true)}
+            className="brd-rd4"
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            style={{
+              padding: "14px 30px",
+              backgroundColor: isHover ? "black" : "#ea1b25",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "16px",
+              float: "inline-end",
+              margin: "30px 0",
+              borderRadius: "6px",
+            }}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
 

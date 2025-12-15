@@ -9,28 +9,41 @@ export default function AddToCartDateModal({ open, onClose }) {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [minEndDate, setMinEndDate] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
 
-  // Auto calculate end date (+6 days)
+  // When start date changes → calculate min end date (start + 6 days)
   useEffect(() => {
-    if (!startDate) return;
+    if (!startDate) {
+      setEndDate("");
+      setMinEndDate("");
+      return;
+    }
 
     const start = new Date(startDate);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6); // 7days total
+    const minEnd = new Date(start);
+    minEnd.setDate(start.getDate() + 6);
 
-    setEndDate(end.toISOString().split("T")[0]);
+    const formattedMinEnd = minEnd.toISOString().split("T")[0];
+
+    setMinEndDate(formattedMinEnd);
+    setEndDate(formattedMinEnd); // default selection
   }, [startDate]);
 
   const handleSave = () => {
-    if (!startDate) {
-      alert("Please select start date");
+    if (!startDate || !endDate) {
+      alert("Please select start and end date");
       return;
     }
 
     if (new Date(startDate) < new Date(today)) {
       alert("Start date cannot be in the past");
+      return;
+    }
+
+    if (new Date(endDate) < new Date(minEndDate)) {
+      alert("End date must be at least 6 days after start date");
       return;
     }
 
@@ -48,6 +61,7 @@ export default function AddToCartDateModal({ open, onClose }) {
       <h3 style={{ marginBottom: "16px" }}>Select Date Range</h3>
 
       <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+        {/* START DATE */}
         <div style={{ flex: 1 }}>
           <label>Start Date</label>
           <input
@@ -63,17 +77,18 @@ export default function AddToCartDateModal({ open, onClose }) {
           />
         </div>
 
+        {/* END DATE */}
         <div style={{ flex: 1 }}>
           <label>End Date</label>
           <input
             type="date"
             value={endDate}
-            disabled
+            min={minEndDate}
+            onChange={(e) => setEndDate(e.target.value)}
             style={{
               width: "100%",
               padding: "10px",
               marginTop: "6px",
-              backgroundColor: "#f5f5f5",
             }}
           />
         </div>
