@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import FoodDetailsModal from "./FoodDetailsModal";
 
-export default function MenuCard({ item, delay = 0, variant = "menu" }) {
+export default function MenuCard({ item, delay = 0, variant = "home" }) {
+  const [isHover, setIsHover] = useState(false);
   const [open, setOpen] = useState(false);
 
   const cardClass =
@@ -17,45 +19,87 @@ export default function MenuCard({ item, delay = 0, variant = "menu" }) {
     <>
       <div className="col-md-4 col-sm-6 col-lg-4">
         <div className={cardClass} data-wow-delay={`${delay}s`}>
-          <div
-            className="popular-dish-thumb"
-            onClick={() => setOpen(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <img src={item.image} alt={item.title} />
+          {/* IMAGE – SAME CLASSES, SAME STRUCTURE */}
+          <div className="popular-dish-thumb">
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen(true);
+              }}
+            >
+              <img src={item.image} alt={item.title} />
+            </Link>
+
             <span className="post-rate yellow-bg brd-rd2">
               <i className="fa fa-star-o" /> {item.rating}
             </span>
           </div>
 
+          {/* INFO */}
           <div className="popular-dish-info">
-            <h4 onClick={() => setOpen(true)} style={{ cursor: "pointer" }}>
-              {item.title}
+            <h4>
+              <Link
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(true);
+                }}
+              >
+                {item.title}
+              </Link>
             </h4>
 
             <p>{item.description}</p>
-            <span className="price">${item.price}</span>
+            {/* <span className="price">${item.price}</span> */}
 
-            <div style={{ textAlign: "right", marginTop: "12px" }}>
+            {/* BUTTON – SAME STYLE & HOVER */}
+            <div
+              className="button-group"
+              style={{
+                display: "flex",
+                gap: "8px",
+                marginBottom: "12px",
+                float: "right",
+              }}
+            >
               <button
-                className={orderBtnClass}
                 onClick={() => setOpen(true)}
+                className={orderBtnClass}
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
                 style={{
-                  padding: "10px 18px",
-                  backgroundColor: "#000",
-                  color: "#fff",
-                  borderRadius: "20px",
+                  flex: 1,
+                  padding: "10px 15px",
+                  backgroundColor: isHover ? "#ea1b25" : "black",
+                  color: "white",
                   border: "none",
                   cursor: "pointer",
+                  borderRadius: "20px",
+                  transition: "background-color 160ms ease",
                 }}
               >
                 View Details
               </button>
             </div>
+
+            {/* RESTAURANT – UNCHANGED */}
+            <div className="restaurant-info">
+              <img src={item.restaurantLogo} alt={item.restaurant} />
+              <div className="restaurant-info-inner">
+                <h6>
+                  <Link href="/restaurant-detail">
+                    {item.restaurant}
+                  </Link>
+                </h6>
+                <span className="red-clr">{item.address}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* MODAL */}
       <FoodDetailsModal
         item={item}
         open={open}
