@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import MenuCard from "./MenuCard";
+import AddToCartDateModal from "./AddToCartDateModal";
 
 export default function FoodMenu({
   items,
@@ -10,18 +12,15 @@ export default function FoodMenu({
 }) {
   const visibleItems = limit ? items.slice(0, limit) : items;
   const isMenu = variant === "menu";
+  const [isHover, setIsHover] = useState(false);
+  const [openCartModal, setOpenCartModal] = useState(false);
 
   return (
     <section>
       <div
-        className={
-          isMenu
-            ? "block less-spacing gray-bg top-padd30"
-            : "block"
-        }
+        className={isMenu ? "block less-spacing gray-bg top-padd30" : "block"}
       >
         <div className="container">
-
           {/* HOME PAGE TITLE */}
           {showTitle && !isMenu && (
             <div className="title1-wrapper text-center">
@@ -80,8 +79,33 @@ export default function FoodMenu({
             </div>
           )}
 
+          <button
+            onClick={() => setOpenCartModal(true)}
+            className="brd-rd4"
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            style={{
+              padding: "14px 30px",
+              backgroundColor: isHover ? "black" : "#ea1b25",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "16px",
+              float: "inline-end",
+              margin: "30px 0",
+              borderRadius: "6px",
+            }}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
+
+      {/* DATE MODAL */}
+      <AddToCartDateModal
+        open={openCartModal}
+        onClose={() => setOpenCartModal(false)}
+      />
     </section>
   );
 }

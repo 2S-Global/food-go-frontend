@@ -19,7 +19,7 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
     <>
       <div className="col-md-4 col-sm-6 col-lg-4">
         <div className={cardClass} data-wow-delay={`${delay}s`}>
-          {/* IMAGE – SAME CLASSES, SAME STRUCTURE */}
+          {/* THUMBNAIL */}
           <div className="popular-dish-thumb">
             <Link
               href="#"
@@ -50,8 +50,22 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
               </Link>
             </h4>
 
-            <p>{item.description}</p>
-            {/* <span className="price">${item.price}</span> */}
+            {/* <p>{item.description}</p> */}
+            
+            {/* DESCRIPTION (2 lines only) */}
+            <p
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textAlign: "justify",
+              }}
+            >
+              {item.description}
+            </p>
+
+            
 
             {/* BUTTON – SAME STYLE & HOVER */}
             <div
@@ -75,25 +89,12 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
                   color: "white",
                   border: "none",
                   cursor: "pointer",
-                  borderRadius: "20px",
+                  borderRadius: "6px",
                   transition: "background-color 160ms ease",
                 }}
               >
                 View Details
               </button>
-            </div>
-
-            {/* RESTAURANT – UNCHANGED */}
-            <div className="restaurant-info">
-              <img src={item.restaurantLogo} alt={item.restaurant} />
-              <div className="restaurant-info-inner">
-                <h6>
-                  <Link href="/restaurant-detail">
-                    {item.restaurant}
-                  </Link>
-                </h6>
-                <span className="red-clr">{item.address}</span>
-              </div>
             </div>
           </div>
         </div>

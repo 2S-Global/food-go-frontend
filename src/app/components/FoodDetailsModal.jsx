@@ -52,7 +52,7 @@ export default function FoodDetailsModal({ item, open, onClose }) {
       </div>
 
       {/* Description */}
-      <p style={{ lineHeight: "1.6", marginBottom: "10px" }}>
+      <p style={{ lineHeight: "1.6", marginBottom: "10px", textAlign: "justify" }}>
         {item.description}
       </p>
 
