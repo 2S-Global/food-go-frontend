@@ -7,7 +7,7 @@ return(
     <section>
   <div className="block">
     <div
-      style={{ backgroundImage: "url(assets/images/topbg.jpg)" }}
+      style={{ backgroundImage: "url(assets/images/group-2.jpg)" }}
       className="fixed-bg"
     />
     <div className="restaurant-searching text-center">

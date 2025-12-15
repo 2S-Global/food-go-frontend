@@ -31,7 +31,7 @@ export default function CheckoutPage() {
         <PageBanner
           title="Checkout"
           subtitle="Complete your order"
-          background="/assets/images/topbg.jpg"
+          background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
         <div

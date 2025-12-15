@@ -12,7 +12,7 @@ export default function PageBanner({
         <div
           className="fixed-bg"
           style={{
-            backgroundImage: `url(${background || "/assets/images/topbg.jpg"})`,
+            backgroundImage: `url(${background || "/assets/images/group-2.jpg"})`,
           }}
         />
 

@@ -10,7 +10,7 @@ export default function DashboardPage() {
       <PageBanner
         title="Dashboard"
         subtitle="A Greate Restaurant Website"
-        background="/assets/images/topbg.jpg"
+        background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
 

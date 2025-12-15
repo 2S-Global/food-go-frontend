@@ -14,7 +14,7 @@ export default function VegMenuPage() {
       <PageBanner
         title="Veg Menu"
         subtitle="Fresh & Healthy Veg Meals"
-        background="/assets/images/topbg.jpg"
+        background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
 

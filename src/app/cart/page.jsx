@@ -14,7 +14,7 @@ export default function CartPage() {
         <PageBanner
           title="Cart"
           subtitle="Review your order"
-          background="/assets/images/topbg.jpg"
+          background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
         <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />

@@ -12,7 +12,7 @@ export default function MenuPage() {
       <PageBanner
         title="Our Menu"
         subtitle="Discover Delicious Options"
-        background="/assets/images/topbg.jpg"
+        background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
 
