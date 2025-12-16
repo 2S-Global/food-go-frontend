@@ -19,33 +19,6 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== HEADER ===== */
-.monthRow {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-
-.monthDropdown {
-  display: inline-block;
-  width: auto !important;
-  min-width: unset !important;
-  max-width: 180px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  background: #fff;
-}
-
-.monthDropdown:focus {
-  border-color: #e63946;
-}
-
-.monthDropdown:hover {
-  border-color: #bbb;
-}
-
 /* ===== DATE SLIDER ===== */
 .dateSlider {
   display: flex;

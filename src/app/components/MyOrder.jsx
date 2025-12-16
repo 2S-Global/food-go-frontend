@@ -54,22 +54,6 @@ export default function MyOrder() {
 
   return (
     <>
-      {/* Header */}
-      {/* Month Dropdown */}
-      <div className={styles.monthRow}>
-        <select
-          className={styles.monthDropdown}
-          value={currentMonth}
-          onChange={onMonthChange}
-        >
-          {MONTHS.map((m, i) => (
-            <option key={m} value={i}>
-              {m}
-            </option>
-          ))}
-        </select>
-      </div>
-
       {/* Date Slider */}
       <div className={styles.dateSlider}>
         <button onClick={prevWeek} className={styles.arrow}>
