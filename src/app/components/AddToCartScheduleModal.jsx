@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Modal from "./Modal";
+import { useRouter } from "next/navigation";
 
 const SCHEDULES = [
   "Daily",
@@ -17,6 +18,7 @@ export default function AddToCartScheduleModal({
   onClose,
   onConfirm,
 }) {
+    const router = useRouter();
   const [schedule, setSchedule] = useState("Daily");
   const [startDate, setStartDate] = useState("");
 
