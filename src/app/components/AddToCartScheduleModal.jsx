@@ -37,6 +37,7 @@ export default function AddToCartScheduleModal({
     });
 
     onClose();
+    router.push("/cart");
   };
 
   return (
