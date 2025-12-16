@@ -13,6 +13,8 @@ export default function AddToCartDateModal({ open, onClose }) {
 
   const today = new Date().toISOString().split("T")[0];
 
+  const [hover, setHover] = useState(false);
+
   // When start date changes → calculate min end date (start + 6 days)
   useEffect(() => {
     if (!startDate) {
@@ -47,10 +49,7 @@ export default function AddToCartDateModal({ open, onClose }) {
       return;
     }
 
-    localStorage.setItem(
-      "cartDates",
-      JSON.stringify({ startDate, endDate })
-    );
+    localStorage.setItem("cartDates", JSON.stringify({ startDate, endDate }));
 
     onClose();
     router.push("/cart");
@@ -97,13 +96,16 @@ export default function AddToCartDateModal({ open, onClose }) {
       <div style={{ textAlign: "right", marginTop: "24px" }}>
         <button
           onClick={handleSave}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
           style={{
             padding: "10px 20px",
-            backgroundColor: "#ea1b25",
+            backgroundColor: hover ? "#c8102e" : "#012169",
             color: "#fff",
             border: "none",
             borderRadius: "6px",
             cursor: "pointer",
+            transition: "background-color 0.3s ease",
           }}
         >
           Save & Go to Cart

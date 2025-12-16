@@ -3,6 +3,7 @@
 import { useState } from "react";
 import MenuCard from "./MenuCard";
 import AddToCartDateModal from "./AddToCartDateModal";
+import AddToCartScheduleModal from "./AddToCartScheduleModal";
 
 export default function FoodMenu({
   items,
@@ -39,7 +40,7 @@ export default function FoodMenu({
           )}
 
           {/* MENU & ADDITIONAL GRID */}
-          {(isMenu || isAdditional) ? (
+          {isMenu || isAdditional ? (
             <div className="sec-box">
               <div className="remove-ext">
                 <div className="row">
@@ -50,8 +51,10 @@ export default function FoodMenu({
                       variant={variant}
                       delay={`${0.2 + index * 0.1}s`}
                       onAddToCart={(food) => {
-                        setSelectedItem(food);
-                        setOpenCartModal(true);
+                        if (isAdditional) {
+                          setSelectedItem(food);
+                          setOpenCartModal(true);
+                        }
                       }}
                     />
                   ))}
@@ -74,7 +77,7 @@ export default function FoodMenu({
                     onMouseLeave={() => setIsHover(false)}
                     style={{
                       padding: "14px 30px",
-                      backgroundColor: isHover ? "#c8102e" : "#012169",
+                      backgroundColor: isHover ? "#012169" : "#c8102e",
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
@@ -103,14 +106,33 @@ export default function FoodMenu({
       </div>
 
       {/* DATE MODAL */}
-      <AddToCartDateModal
-        open={openCartModal}
-        item={selectedItem}
-        onClose={() => {
-          setOpenCartModal(false);
-          setSelectedItem(null);
-        }}
-      />
+      {/* ADDITIONAL ITEMS → SCHEDULE MODAL */}
+      {isAdditional && (
+        <AddToCartScheduleModal
+          open={openCartModal}
+          item={selectedItem}
+          onClose={() => {
+            setOpenCartModal(false);
+            setSelectedItem(null);
+          }}
+          onConfirm={(data) => {
+            console.log("Additional item added:", data);
+            // addToCart(data)
+          }}
+        />
+      )}
+
+      {/* MENU PAGE → DATE MODAL */}
+      {isMenu && (
+        <AddToCartDateModal
+          open={openCartModal}
+          item={selectedItem}
+          onClose={() => {
+            setOpenCartModal(false);
+            setSelectedItem(null);
+          }}
+        />
+      )}
     </section>
   );
 }

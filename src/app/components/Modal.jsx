@@ -22,7 +22,7 @@ export default function Modal({ open, onClose, children }) {
         style={{
           background: "#fff",
           borderRadius: "14px",
-          maxWidth: "900px",
+          maxWidth: "700px",
           width: "100%",
           maxHeight: "90vh",
           overflowY: "auto",
