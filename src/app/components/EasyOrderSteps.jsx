@@ -5,7 +5,7 @@ import React from "react";
 const EasyOrderSteps = () => {
   return (
     <section>
-      <div className="block blackish low-opacity">
+      <div className="block blue-overlay low-opacity">
         <div
           className="fixed-bg"
           style={{ backgroundImage: "url(/assets/images/group-1.jpg)" }}
