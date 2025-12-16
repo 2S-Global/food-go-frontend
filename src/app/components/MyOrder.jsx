@@ -1,29 +1,109 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "@/app/components/MyOrder.module.css";
 
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export default function MyOrder() {
+  const today = new Date();
+
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [weekStart, setWeekStart] = useState(getWeekStart(today));
+  const [selectedDate, setSelectedDate] = useState(today.toDateString());
+
+  /* Generate 7 days */
+  const weekDates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + i);
+    return d;
+  });
+
+  function prevWeek() {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() - 7);
+    setWeekStart(d);
+  }
+
+  function nextWeek() {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + 7);
+    setWeekStart(d);
+  }
+
+  function onMonthChange(e) {
+    const monthIndex = Number(e.target.value);
+    setCurrentMonth(monthIndex);
+
+    const newDate = new Date(today.getFullYear(), monthIndex, 1);
+    setWeekStart(getWeekStart(newDate));
+  }
+
   return (
     <>
-      <h4 className={styles.heading}>Today’s Order</h4>
-
-      {/* Date Row */}
-      <div className={styles.dateRow}>
-        {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map((day, i) => (
-          <div
-            key={day}
-            className={`${styles.dateBox} ${
-              day === "THU" ? styles.active : ""
-            }`}
-          >
-            <span className={styles.day}>{day}</span>
-            <span className={styles.date}>{17 + i}</span>
-          </div>
-        ))}
+      {/* Header */}
+      {/* Month Dropdown */}
+      <div className={styles.monthRow}>
+        <select
+          className={styles.monthDropdown}
+          value={currentMonth}
+          onChange={onMonthChange}
+        >
+          {MONTHS.map((m, i) => (
+            <option key={m} value={i}>
+              {m}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Orders */}
+      {/* Date Slider */}
+      <div className={styles.dateSlider}>
+        <button onClick={prevWeek} className={styles.arrow}>
+          ‹
+        </button>
+
+        <div className={styles.dateRow}>
+          {weekDates.map((date) => (
+            <div
+              key={date.toDateString()}
+              className={`${styles.dateBox} ${
+                selectedDate === date.toDateString() ? styles.active : ""
+              }`}
+              onClick={() => setSelectedDate(date.toDateString())}
+            >
+              <span className={styles.day}>
+                {date
+                  .toLocaleDateString("en-US", { weekday: "short" })
+                  .toUpperCase()}
+              </span>
+              <span className={styles.date}>{date.getDate()}</span>
+            </div>
+          ))}
+        </div>
+
+        <button onClick={nextWeek} className={styles.arrow}>
+          ›
+        </button>
+      </div>
+
+      {/* Title */}
+      <h4 className={styles.heading}>Today’s Order</h4>
+
+      {/* Orders (static for now) */}
       <OrderCard
         title="Lunch Menu"
         desc="Steamed Rice, Masoor Dal, Palak Paneer (Spinach & Cottage Cheese) and Mughlai Chicken"
@@ -47,7 +127,15 @@ export default function MyOrder() {
   );
 }
 
-/* Order Card */
+/* Utils */
+function getWeekStart(date) {
+  const d = new Date(date);
+  const day = d.getDay() || 7; // Monday first
+  d.setDate(d.getDate() - day + 1);
+  return d;
+}
+
+/* Card */
 function OrderCard({ title, desc, badge, type, qty }) {
   return (
     <div className={styles.orderCard}>
@@ -72,8 +160,6 @@ function OrderCard({ title, desc, badge, type, qty }) {
           {badge}
         </span>
       </div>
-
-      <i className={`fa fa-calendar ${styles.calendarIcon}`} />
     </div>
   );
 }
