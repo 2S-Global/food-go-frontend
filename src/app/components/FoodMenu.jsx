@@ -8,20 +8,28 @@ export default function FoodMenu({
   items,
   limit,
   showTitle = true,
-  variant = "home", // "home" | "menu"
+  variant = "home", // home | menu | additional
 }) {
   const visibleItems = limit ? items.slice(0, limit) : items;
   const isMenu = variant === "menu";
+  const isAdditional = variant === "additional";
 
-  const [isHover, setIsHover] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isHover, setIsHover] = useState(false);
 
   return (
     <section>
-      <div className={isMenu ? "block less-spacing gray-bg top-padd30" : "block"}>
+      <div
+        className={
+          isMenu || isAdditional
+            ? "block less-spacing gray-bg top-padd30"
+            : "block"
+        }
+      >
         <div className="container">
-          {/* HOME PAGE TITLE */}
-          {showTitle && !isMenu && (
+          {/* HOME TITLE */}
+          {showTitle && !isMenu && !isAdditional && (
             <div className="title1-wrapper text-center">
               <div className="title1-inner">
                 <span>Your Favourite Food</span>
@@ -30,8 +38,8 @@ export default function FoodMenu({
             </div>
           )}
 
-          {/* MENU PAGE */}
-          {isMenu ? (
+          {/* MENU & ADDITIONAL GRID */}
+          {(isMenu || isAdditional) ? (
             <div className="sec-box">
               <div className="remove-ext">
                 <div className="row">
@@ -39,42 +47,48 @@ export default function FoodMenu({
                     <MenuCard
                       key={item.id}
                       item={item}
-                      variant="menu"
+                      variant={variant}
                       delay={`${0.2 + index * 0.1}s`}
+                      onAddToCart={(food) => {
+                        setSelectedItem(food);
+                        setOpenCartModal(true);
+                      }}
                     />
                   ))}
                 </div>
               </div>
 
-              {/* ✅ ADD TO CART BUTTON (BOTTOM RIGHT) */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "30px",
-                }}
-              >
-                <button
-                  onClick={() => setOpenCartModal(true)}
-                  className="brd-rd4"
-                  onMouseEnter={() => setIsHover(true)}
-                  onMouseLeave={() => setIsHover(false)}
+              {/* ✅ BOTTOM ADD TO CART — ONLY FOR MENU */}
+              {isMenu && (
+                <div
                   style={{
-                    padding: "14px 30px",
-                    backgroundColor: isHover ? "#c8102e " : "#012169",
-                    color: "#fff",
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: "16px",
-                    borderRadius: "6px",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "30px",
                   }}
                 >
-                  Add to Cart
-                </button>
-              </div>
+                  <button
+                    onClick={() => setOpenCartModal(true)}
+                    className="brd-rd4"
+                    onMouseEnter={() => setIsHover(true)}
+                    onMouseLeave={() => setIsHover(false)}
+                    style={{
+                      padding: "14px 30px",
+                      backgroundColor: isHover ? "#c8102e" : "#012169",
+                      color: "#fff",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "16px",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
-            /* HOME PAGE GRID */
+            /* HOME GRID */
             <div className="row">
               {visibleItems.map((item, index) => (
                 <MenuCard
@@ -91,7 +105,11 @@ export default function FoodMenu({
       {/* DATE MODAL */}
       <AddToCartDateModal
         open={openCartModal}
-        onClose={() => setOpenCartModal(false)}
+        item={selectedItem}
+        onClose={() => {
+          setOpenCartModal(false);
+          setSelectedItem(null);
+        }}
       />
     </section>
   );

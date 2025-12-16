@@ -4,22 +4,29 @@ import Link from "next/link";
 import { useState } from "react";
 import FoodDetailsModal from "./FoodDetailsModal";
 
-export default function MenuCard({ item, delay = 0, variant = "home" }) {
+export default function MenuCard({
+  item,
+  delay = 0,
+  variant = "home", // home | menu | additional
+  onAddToCart,
+}) {
   const [isHover, setIsHover] = useState(false);
+  const [isAddHover, setIsAddHover] = useState(false);
   const [open, setOpen] = useState(false);
 
   const cardClass =
-    variant === "menu"
+    variant === "menu" || variant === "additional"
       ? "popular-dish-box style2 wow fadeIn"
       : "popular-dish-box wow fadeIn";
 
-  const orderBtnClass = variant === "menu" ? "brd-rd4" : "brd-rd2";
+  const btnClass =
+    variant === "menu" || variant === "additional" ? "brd-rd4" : "brd-rd2";
 
   return (
     <>
       <div className="col-md-4 col-sm-6 col-lg-4">
-        <div className={cardClass} data-wow-delay={`${delay}s`}>
-          {/* THUMBNAIL */}
+        <div className={cardClass} data-wow-delay={delay}>
+          {/* IMAGE */}
           <div className="popular-dish-thumb">
             <Link
               href="#"
@@ -50,9 +57,6 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
               </Link>
             </h4>
 
-            {/* <p>{item.description}</p> */}
-            
-            {/* DESCRIPTION (2 lines only) */}
             <p
               style={{
                 display: "-webkit-box",
@@ -65,31 +69,50 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
               {item.description}
             </p>
 
-            
-
-            {/* BUTTON – SAME STYLE & HOVER */}
+            {/* BUTTONS */}
             <div
-              className="button-group"
               style={{
                 display: "flex",
-                gap: "8px",
+                justifyContent:
+                  variant === "additional" ? "space-between" : "flex-end",
+                alignItems: "center",
                 marginBottom: "12px",
-                float: "right",
               }}
             >
+              {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
+              {variant === "additional" && (
+                <button
+                  onClick={() => onAddToCart(item)}
+                  className={btnClass}
+                  onMouseEnter={() => setIsAddHover(true)}
+                  onMouseLeave={() => setIsAddHover(false)}
+                  style={{
+                    padding: "10px 14px",
+                    backgroundColor: isAddHover ? "#012169" : "#c8102e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    transition: "background-color 160ms ease",
+                  }}
+                >
+                  Add to Cart
+                </button>
+              )}
+
+              {/* VIEW DETAILS — RIGHT */}
               <button
                 onClick={() => setOpen(true)}
-                className={orderBtnClass}
+                className={btnClass}
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 style={{
-                  flex: 1,
-                  padding: "10px 15px",
+                  padding: "10px 14px",
                   backgroundColor: isHover ? "#c8102e" : "#012169",
-                  color: "white",
+                  color: "#fff",
                   border: "none",
-                  cursor: "pointer",
                   borderRadius: "6px",
+                  cursor: "pointer",
                   transition: "background-color 160ms ease",
                 }}
               >

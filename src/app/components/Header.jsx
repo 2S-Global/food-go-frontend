@@ -115,6 +115,11 @@ const Header = () => {
                           NON-VEG MENU
                         </a>
                       </li>
+                      <li>
+                        <a href="/menu/additional-items" title="FOOD MENU" itemProp="url">
+                          ADDITIONAL ITEMS
+                        </a>
+                      </li>
                     </ul>
                   </li>
                   {/* <li className="menu-item-has-children">
