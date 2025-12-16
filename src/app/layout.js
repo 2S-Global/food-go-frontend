@@ -52,7 +52,6 @@ export default function RootLayout({ children }) {
 
         {/* JS SCRIPTS */}
         <Script src="/assets/js/jquery.min.js" strategy="beforeInteractive" />
-        {/* Popper is required by Bootstrap's JS for dropdowns/tooltips — load before bootstrap */}
         <Script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" strategy="beforeInteractive" />
         <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" />
         <Script src="/assets/js/plugins.js" strategy="afterInteractive" />

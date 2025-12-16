@@ -3,6 +3,7 @@
 import React from "react";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
+import MyOrder from "../components/MyOrder";
 
 export default function DashboardPage() {
   return (
@@ -17,7 +18,7 @@ export default function DashboardPage() {
       <BreadCrumbs
         items={[
           { label: "Home", href: "/" },
-        //   { label: "Cart", href: "/cart" },
+          //   { label: "Cart", href: "/cart" },
           { label: "Dashboard" },
         ]}
       />
@@ -95,7 +96,8 @@ export default function DashboardPage() {
                                 aria-selected="false"
                               >
                                 <a href="#my-bookings">
-                                  <i className="fa fa-file-text" /> MY BOOKINGS
+                                  <i className="fa fa-file-text" /> MY
+                                  SUBSCRIPTIONS
                                 </a>
                               </button>
                               <button
@@ -170,7 +172,6 @@ export default function DashboardPage() {
                                 </a>
                               </button>
                             </div>
-            
                           </div>
                         </div>
                       </div>
@@ -380,151 +381,8 @@ export default function DashboardPage() {
                             aria-labelledby="v-pills-profile-tab"
                           >
                             <div className="tabs-wrp brd-rd5">
-                              <h4 itemProp="headline">MY BOOKINGS</h4>
-                              <div className="select-wrap-inner">
-                                <div className="select-wrp2">
-                                  <select>
-                                    <option>Select Booking Status</option>
-                                    <option>Select Booking Status</option>
-                                    <option>Select Booking Status</option>
-                                  </select>
-                                </div>
-                                <div className="select-wrp2">
-                                  <select>
-                                    <option>Select Date Range</option>
-                                    <option>Select Date Range</option>
-                                    <option>Select Date Range</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="booking-table">
-                                <table>
-                                  <thead>
-                                    <tr>
-                                      <th>RESTAURANT NAME</th>
-                                      <th>DATE</th>
-                                      <th>STATUS</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>
-                                        <h5 itemProp="headline">
-                                          <a href="#" title="" itemProp="url">
-                                            Jet's Kitchen ( #8589 )
-                                          </a>
-                                        </h5>
-                                      </td>
-                                      <td>Aug 17,2017</td>
-                                      <td>
-                                        <span className="brd-rd3 processing">
-                                          PROCESSING
-                                        </span>{" "}
-                                        <a
-                                          className="detail-link brd-rd50"
-                                          href="#"
-                                          title=""
-                                          itemProp="url"
-                                        >
-                                          <i className="fa fa-chain" />
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <h5 itemProp="headline">
-                                          <a href="#" title="" itemProp="url">
-                                            Jet's Kitchen ( #8589 )
-                                          </a>
-                                        </h5>
-                                      </td>
-                                      <td>Aug 17,2017</td>
-                                      <td>
-                                        <span className="brd-rd3 processing">
-                                          PROCESSING
-                                        </span>{" "}
-                                        <a
-                                          className="detail-link brd-rd50"
-                                          href="#"
-                                          title=""
-                                          itemProp="url"
-                                        >
-                                          <i className="fa fa-chain" />
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <h5 itemProp="headline">
-                                          <a href="#" title="" itemProp="url">
-                                            Jet's Kitchen ( #8589 )
-                                          </a>
-                                        </h5>
-                                      </td>
-                                      <td>Aug 17,2017</td>
-                                      <td>
-                                        <span className="brd-rd3 completed">
-                                          COMPLETED
-                                        </span>{" "}
-                                        <a
-                                          className="detail-link brd-rd50"
-                                          href="#"
-                                          title=""
-                                          itemProp="url"
-                                        >
-                                          <i className="fa fa-chain" />
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <h5 itemProp="headline">
-                                          <a href="#" title="" itemProp="url">
-                                            Jet's Kitchen ( #8589 )
-                                          </a>
-                                        </h5>
-                                      </td>
-                                      <td>Aug 17,2017</td>
-                                      <td>
-                                        <span className="brd-rd3 processing">
-                                          PROCESSING
-                                        </span>{" "}
-                                        <a
-                                          className="detail-link brd-rd50"
-                                          href="#"
-                                          title=""
-                                          itemProp="url"
-                                        >
-                                          <i className="fa fa-chain" />
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <h5 itemProp="headline">
-                                          <a href="#" title="" itemProp="url">
-                                            Jet's Kitchen ( #8589 )
-                                          </a>
-                                        </h5>
-                                      </td>
-                                      <td>Aug 17,2017</td>
-                                      <td>
-                                        <span className="brd-rd3 completed">
-                                          COMPLETED
-                                        </span>{" "}
-                                        <a
-                                          className="detail-link brd-rd50"
-                                          href="#"
-                                          title=""
-                                          itemProp="url"
-                                        >
-                                          <i className="fa fa-chain" />
-                                        </a>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
+                              {/* 👇 NEW COMPONENT GOES HERE */}
+                              <MyOrder />
                             </div>
                           </div>
                           <div

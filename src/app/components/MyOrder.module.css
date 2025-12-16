@@ -1,0 +1,108 @@
+.heading {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Date Row */
+.dateRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.dateBox {
+  width: 44px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px 0;
+  background: #f2f2f2;
+}
+
+.day {
+  display: block;
+  font-size: 11px;
+  color: #666;
+}
+
+.date {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.active {
+  background: #e63946;
+}
+
+.active .day,
+.active .date {
+  color: #fff;
+}
+
+/* Order Card */
+.orderCard {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.orderImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.orderContent {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.orderTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.orderDesc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.qty {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.badgeSubscription {
+  background: #1d3557;
+  color: #fff;
+}
+
+.badgeAdditional {
+  background: #457b9d;
+  color: #fff;
+}
+
+/* Calendar Icon */
+.calendarIcon {
+  font-size: 18px;
+  color: #333;
+}
