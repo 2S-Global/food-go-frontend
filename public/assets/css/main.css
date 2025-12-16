@@ -237,7 +237,7 @@ form.dark-red-bg {
   background-color: #fbfbfb;
 }
 .dark-bg {
-  background-color: #1b1b1b;
+  background-color: #012169 ;
 }
 .overlape-110,
 .overlape-45,
@@ -711,7 +711,7 @@ header {
   box-shadow: 0 4px 2px rgba(0, 0, 0, 0.18);
 }
 .topbar {
-  background-color: #161616;
+  background-color: #012169;
   float: left;
   width: 100%;
   height: 46px;
@@ -2130,7 +2130,7 @@ footer {
   float: left;
   width: 100%;
   font-size: 13px;
-  color: #999;
+  color: #E5E4E2;
   line-height: 26px;
   margin-bottom: 6px;
 }
@@ -2143,7 +2143,7 @@ footer {
   margin: 10px 4px 0;
   line-height: 27px;
   width: 27px;
-  color: #999;
+  color: #E5E4E2;
   background-color: rgba(255, 255, 255, 0.05);
   font-size: 12px;
 }
@@ -2167,7 +2167,7 @@ footer {
 }
 .widget ul li {
   font-size: 13px;
-  color: #999;
+  color: #E5E4E2;
   float: left;
   width: 100%;
   position: relative;
@@ -2222,7 +2222,7 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 .bottom-bar p {
-  color: #999;
+  color: #E5E4E2;
   margin-bottom: 0;
   padding: 22px;
   font-weight: 700;
@@ -2945,7 +2945,7 @@ footer {
 }
 .contact-info-box > i {
   font-size: 40px;
-  color: #999;
+  color: #E5E4E2;
   margin-bottom: 10px;
 }
 .contact-info-box > h5 {
@@ -3001,7 +3001,7 @@ footer {
   float: left;
   width: 100%;
   font-size: 14px;
-  color: #999;
+  color: #E5E4E2;
   height: 56px;
   padding: 20px 40px;
   background-color: #f6f6f6;
@@ -4435,7 +4435,7 @@ blockquote {
 .reply-form input,
 .reply-form textarea {
   background: #f6f6f6 none repeat scroll 0 0;
-  color: #999;
+  color: #E5E4E2;
   float: left;
   font-family: lato;
   font-size: 14px;
@@ -7724,7 +7724,7 @@ a.thanks-close:focus {
   margin-bottom: 5px;
 }
 .upcoming-event .title1-inner > span {
-  color: #999;
+  color: #E5E4E2;
   font-family: poppins;
   font-size: 12px;
 }

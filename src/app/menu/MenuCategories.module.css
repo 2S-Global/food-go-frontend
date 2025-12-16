@@ -15,7 +15,7 @@
 
 .menuCategorySection p {
   font-size: 1.1rem;
-  color: #666;
+  color: #999;
   max-width: 770px;
   margin: 0 auto 30px;
   line-height: 1.6;
@@ -88,7 +88,7 @@
 
 .menuBox p {
   font-size: 1.8rem;
-  color: #f15a24;
+  color: #c8102e;
   font-weight: 800;
   margin: 0;
 }

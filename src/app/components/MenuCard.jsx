@@ -85,7 +85,7 @@ export default function MenuCard({ item, delay = 0, variant = "home" }) {
                 style={{
                   flex: 1,
                   padding: "10px 15px",
-                  backgroundColor: isHover ? "#ea1b25" : "#015a8e",
+                  backgroundColor: isHover ? "#c8102e" : "#012169",
                   color: "white",
                   border: "none",
                   cursor: "pointer",

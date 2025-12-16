@@ -61,7 +61,7 @@ export default function FoodMenu({
                   onMouseLeave={() => setIsHover(false)}
                   style={{
                     padding: "14px 30px",
-                    backgroundColor: isHover ? "#ea1b25" : "#015a8e",
+                    backgroundColor: isHover ? "#c8102e " : "#012169",
                     color: "#fff",
                     border: "none",
                     cursor: "pointer",
