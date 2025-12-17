@@ -47,7 +47,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
         {steps[step]}
 
         <div style={nav}>
-          <div>
+          <div style={{ display: "flex" , gap: "10px" }}>
             {step > 0 && (
               <button
                 type="button"
