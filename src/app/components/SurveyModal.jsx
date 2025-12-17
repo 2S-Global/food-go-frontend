@@ -73,7 +73,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
   );
 }
 
-// ====================== STEP COMPONENTS ======================
+// ============ STEP COMPONENTS ====================
 
 function Step1() {
   return (
@@ -357,7 +357,7 @@ function Step6() {
   );
 }
 
-// ====================== STYLES ======================
+// =========== STYLES ============
 
 const overlay = {
   position: "fixed",

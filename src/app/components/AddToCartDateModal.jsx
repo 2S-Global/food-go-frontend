@@ -72,6 +72,9 @@ export default function AddToCartDateModal({ open, onClose }) {
               width: "100%",
               padding: "10px",
               marginTop: "6px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              transition: "border-color 0.3s ease",
             }}
           />
         </div>
@@ -88,6 +91,9 @@ export default function AddToCartDateModal({ open, onClose }) {
               width: "100%",
               padding: "10px",
               marginTop: "6px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              transition: "border-color 0.3s ease",
             }}
           />
         </div>
