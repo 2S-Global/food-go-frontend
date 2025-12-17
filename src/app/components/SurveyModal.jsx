@@ -27,7 +27,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <div style={overlay}>
       <form
         style={box}
-        className="survey-modal"
+        className="survey-modal survey-isolated"
         onSubmit={(e) => e.preventDefault()}
       >
         <div style={headerContainer}>
@@ -459,6 +459,18 @@ const skipBtn = {
 };
 
 const formStyles = `
+/* 🔒 HARD ISOLATION */
+    .survey-isolated {
+    all: initial;
+    font-family: inherit;
+    color: #333;
+    }
+
+    .survey-isolated * {
+    box-sizing: border-box;
+    font-family: inherit;
+    }
+
   .survey-modal h2 {
     font-size: 24px;
     color: #333;
@@ -633,6 +645,26 @@ const formStyles = `
       font-size: 20px;
     }
   }
+
+  /* ✅ NATIVE SELECT – PRODUCTION SAFE */
+    .survey-isolated select {
+        all: revert !important;
+        appearance: menulist !important;
+        -webkit-appearance: menulist !important;
+        -moz-appearance: menulist !important;
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #fff;
+    }
+
+    /* KILL THEME PSEUDO ELEMENTS */
+    .survey-isolated select::before,
+    .survey-isolated select::after {
+        content: none !important;
+        display: none !important;
+    }
 `;
 
 // Inject styles
