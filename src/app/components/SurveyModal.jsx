@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Select from 'react-select';
 
 export default function SurveyModal({ onSkip, onComplete }) {
   const [step, setStep] = useState(0);
@@ -13,6 +14,8 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <Step5 key="5" />,
     <Step6 key="6" />,
   ];
+
+  
 
   const next = () => {
     if (step < steps.length - 1) setStep(step + 1);
@@ -76,6 +79,15 @@ export default function SurveyModal({ onSkip, onComplete }) {
 // ============ STEP COMPONENTS ====================
 
 function Step1() {
+    const options = [
+  { value: '1', label: 'Beit Hall' },
+  { value: '2', label: 'Wilson House' },
+  { value: '3', label: 'Xenia' },
+  { value: '4', label: 'Parsons House' },
+  { value: '5', label: 'Kemp Porter Buildings' },
+  { value: '6', label: 'Woodward Buildings' },
+  { value: '7', label: 'Other (Please Specify)' },
+];
   return (
     <>
       <h2>Basic Information</h2>
@@ -89,7 +101,11 @@ function Step1() {
       <label>
         Which Imperial College accommodation/hostel do you currently live in?
       </label>
-      <select required>
+      <Select
+        options={options}
+        required
+      />
+      {/* <select required>
         <option value="">Select accommodation</option>
         <option>Beit Hall</option>
         <option>Wilson House</option>
@@ -98,7 +114,7 @@ function Step1() {
         <option>Kemp Porter Buildings</option>
         <option>Woodward Buildings</option>
         <option>Other (Please Specify)</option>
-      </select>
+      </select> */}
 
       <label>What year of study are you in?</label>
       {[
