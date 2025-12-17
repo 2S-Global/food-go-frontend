@@ -27,7 +27,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <div style={overlay}>
       <form
         style={box}
-        className="survey-modal survey-isolated"
+        className="survey-modal"
         onSubmit={(e) => e.preventDefault()}
       >
         <div style={headerContainer}>
@@ -73,7 +73,8 @@ export default function SurveyModal({ onSkip, onComplete }) {
   );
 }
 
-// Section 1: Basic Information
+// ====================== STEP COMPONENTS ======================
+
 function Step1() {
   return (
     <>
@@ -108,7 +109,7 @@ function Step1() {
         "Postgraduate",
         "PhD / Research",
       ].map((year) => (
-        <div key={year}>
+        <div className="option-row" key={year}>
           <input type="radio" name="year" id={year} />
           <label htmlFor={year}>{year}</label>
         </div>
@@ -117,7 +118,6 @@ function Step1() {
   );
 }
 
-// Section 2: Eating & Food Preferences
 function Step2() {
   return (
     <>
@@ -126,14 +126,12 @@ function Step2() {
       <label>
         How often do you currently eat homemade or fresh cooked meals?
       </label>
-      {["Daily", "4–6 times a week", "2–3 times a week", "Rarely", "Never"].map(
-        (opt) => (
-          <div key={opt}>
-            <input type="radio" name="homemadeFrequency" id={opt} />
-            <label htmlFor={opt}>{opt}</label>
-          </div>
-        )
-      )}
+      {["Daily", "4–6 times a week", "2–3 times a week", "Rarely", "Never"].map((opt) => (
+        <div className="option-row" key={opt}>
+          <input type="radio" name="homemadeFrequency" id={opt} />
+          <label htmlFor={opt}>{opt}</label>
+        </div>
+      ))}
 
       <label>What is your preferred meal type? (Select all that apply)</label>
       {[
@@ -144,7 +142,7 @@ function Step2() {
         "Dairy-free",
         "Gluten-free",
       ].map((opt) => (
-        <div key={opt}>
+        <div className="option-row" key={opt}>
           <input type="checkbox" id={opt} />
           <label htmlFor={opt}>{opt}</label>
         </div>
@@ -163,7 +161,7 @@ function Step2() {
         "Italian / Pizza / Pasta",
         "Mexican / Latin American",
       ].map((cuisine) => (
-        <div key={cuisine}>
+        <div className="option-row" key={cuisine}>
           <input type="checkbox" id={cuisine} />
           <label htmlFor={cuisine}>{cuisine}</label>
         </div>
@@ -178,7 +176,7 @@ function Step2() {
         "Sweet and savory",
         "Balanced / No strong flavors",
       ].map((flavor) => (
-        <div key={flavor}>
+        <div className="option-row" key={flavor}>
           <input type="radio" name="flavor" id={flavor} />
           <label htmlFor={flavor}>{flavor}</label>
         </div>
@@ -187,7 +185,6 @@ function Step2() {
   );
 }
 
-// Section 3: Meal Requirements
 function Step3() {
   return (
     <>
@@ -195,35 +192,27 @@ function Step3() {
 
       <label>How many meal boxes would you require per week?</label>
       {["1–2", "3–4", "5–6", "7–10", "11+ meals"].map((num) => (
-        <div key={num}>
+        <div className="option-row" key={num}>
           <input type="radio" name="mealsPerWeek" id={num} />
           <label htmlFor={num}>{num}</label>
         </div>
       ))}
 
       <label>Which meals are you interested in?</label>
-
       {["Lunch", "Dinner", "Both lunch and dinner"].map((meal) => (
-        <div key={meal}>
-          <input
-            type="radio"
-            name="mealPreference" // 👈 SAME name = single select
-            id={meal}
-            value={meal}
-          />
+        <div className="option-row" key={meal}>
+          <input type="radio" name="mealPreference" id={meal} />
           <label htmlFor={meal}>{meal}</label>
         </div>
       ))}
 
       <label>What portion size do you prefer?</label>
-      {["Regular", "Large / High-protein", "Small / Budget option"].map(
-        (size) => (
-          <div key={size}>
-            <input type="radio" name="portion" id={size} />
-            <label htmlFor={size}>{size}</label>
-          </div>
-        )
-      )}
+      {["Regular", "Large / High-protein", "Small / Budget option"].map((size) => (
+        <div className="option-row" key={size}>
+          <input type="radio" name="portion" id={size} />
+          <label htmlFor={size}>{size}</label>
+        </div>
+      ))}
 
       <label>Do you prefer weekly meal plans or order-per-meal?</label>
       {[
@@ -231,7 +220,7 @@ function Step3() {
         "Order whenever needed",
         "Not sure yet",
       ].map((pref) => (
-        <div key={pref}>
+        <div className="option-row" key={pref}>
           <input type="radio" name="planType" id={pref} />
           <label htmlFor={pref}>{pref}</label>
         </div>
@@ -240,7 +229,6 @@ function Step3() {
   );
 }
 
-// Section 4: Delivery & Drop-off Points
 function Step4() {
   return (
     <>
@@ -253,7 +241,7 @@ function Step4() {
         "Outside main entrance",
         "On-campus pickup point",
       ].map((point) => (
-        <div key={point}>
+        <div className="option-row" key={point}>
           <input type="radio" name="dropoff" id={point} />
           <label htmlFor={point}>{point}</label>
         </div>
@@ -269,7 +257,7 @@ function Step4() {
         "6:00 PM – 7:30 PM (Dinner)",
         "7:30 PM – 9:00 PM (Late dinner)",
       ].map((time) => (
-        <div key={time}>
+        <div className="option-row" key={time}>
           <input type="checkbox" id={time} />
           <label htmlFor={time}>{time}</label>
         </div>
@@ -278,7 +266,6 @@ function Step4() {
   );
 }
 
-// Section 5: Price Sensitivity
 function Step5() {
   return (
     <>
@@ -288,15 +275,14 @@ function Step5() {
         What is a reasonable price for one healthy homemade meal box?
       </label>
       {["£3–£4", "£4–£5", "£5–£6", "£6–£7", "£7+"].map((price) => (
-        <div key={price}>
+        <div className="option-row" key={price}>
           <input type="radio" name="priceRange" id={price} />
           <label htmlFor={price}>{price}</label>
         </div>
       ))}
 
       <label>
-        Would you pay slightly more for any of the following? (tick all that
-        apply)
+        Would you pay slightly more for any of the following? (tick all that apply)
       </label>
       {[
         "Organic ingredients",
@@ -305,7 +291,7 @@ function Step5() {
         "Chef-special / rotating menu",
         "Dessert add-on",
       ].map((extra) => (
-        <div key={extra}>
+        <div className="option-row" key={extra}>
           <input type="checkbox" id={extra} />
           <label htmlFor={extra}>{extra}</label>
         </div>
@@ -314,7 +300,6 @@ function Step5() {
   );
 }
 
-// Section 6: Experience & Feedback + Reward Confirmation
 function Step6() {
   return (
     <>
@@ -329,7 +314,7 @@ function Step6() {
         "Dietary restrictions not met",
         "Missing homemade taste",
       ].map((struggle) => (
-        <div key={struggle}>
+        <div className="option-row" key={struggle}>
           <input type="checkbox" id={struggle} />
           <label htmlFor={struggle}>{struggle}</label>
         </div>
@@ -340,7 +325,7 @@ function Step6() {
         Would you be willing to recommend UniEat to friends if you like it?
       </label>
       {["Definitely", "Maybe", "Probably not"].map((rec) => (
-        <div key={rec}>
+        <div className="option-row" key={rec}>
           <input type="radio" name="recommend" id={rec} />
           <label htmlFor={rec}>{rec}</label>
         </div>
@@ -363,8 +348,8 @@ function Step6() {
         <label
           style={{ display: "flex", alignItems: "center", fontWeight: "600" }}
         >
-          <input type="checkbox" required style={{ marginRight: "10px" }} />I
-          acknowledge that I will receive a free UniEat homemade meal box after
+          <input type="checkbox" required style={{ marginRight: "10px" }} />
+          I acknowledge that I will receive a free UniEat homemade meal box after
           successfully completing this survey.
         </label>
       </div>
@@ -372,7 +357,8 @@ function Step6() {
   );
 }
 
-// Styles remain unchanged
+// ====================== STYLES ======================
+
 const overlay = {
   position: "fixed",
   inset: 0,
@@ -428,8 +414,7 @@ const nextBtn = {
   fontWeight: "600",
   fontSize: "14px",
   letterSpacing: "0.3px",
-  transition:
-    "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
+  transition: "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
 };
 
 const prevBtn = {
@@ -442,8 +427,7 @@ const prevBtn = {
   fontWeight: "600",
   fontSize: "14px",
   letterSpacing: "0.3px",
-  transition:
-    "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
+  transition: "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
 };
 
 const skipBtn = {
@@ -459,17 +443,11 @@ const skipBtn = {
 };
 
 const formStyles = `
-/* 🔒 HARD ISOLATION */
-    .survey-isolated {
-    all: initial;
-    font-family: inherit;
-    color: #333;
-    }
-
-    .survey-isolated * {
-    box-sizing: border-box;
-    font-family: inherit;
-    }
+  .survey-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   .survey-modal h2 {
     font-size: 24px;
@@ -511,7 +489,21 @@ const formStyles = `
     box-shadow: 0 0 0 3px rgba(1, 33, 105, 0.1);
   }
 
-  /* Radio & Checkbox Custom Styling - Imperial Red #c8102e */
+  /* Scoped only to option rows */
+  .survey-modal .option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .survey-modal .option-row > label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+  }
+
+  /* Custom red radio & checkbox */
   .survey-modal input[type="radio"],
   .survey-modal input[type="checkbox"] {
     -webkit-appearance: none;
@@ -520,7 +512,6 @@ const formStyles = `
     height: 18px;
     border: 2px solid #999;
     border-radius: 4px;
-    margin-right: 10px;
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
@@ -531,14 +522,12 @@ const formStyles = `
     border-radius: 50%;
   }
 
-  /* Checked state - fill with #c8102e */
   .survey-modal input[type="radio"]:checked,
   .survey-modal input[type="checkbox"]:checked {
     border-color: #c8102e;
     background-color: #c8102e;
   }
 
-  /* Inner checkmark/dot */
   .survey-modal input[type="radio"]:checked::before {
     content: "";
     position: absolute;
@@ -562,31 +551,16 @@ const formStyles = `
     transform: translate(-50%, -50%);
   }
 
-  /* Hover state */
   .survey-modal input[type="radio"]:hover,
   .survey-modal input[type="checkbox"]:hover {
     border-color: #c8102e;
     box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.15);
   }
 
-  /* Focus state for accessibility */
   .survey-modal input[type="radio"]:focus-visible,
   .survey-modal input[type="checkbox"]:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.3);
-  }
-
-  .survey-modal div {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .survey-modal div > label {
-    margin: 0;
-    cursor: pointer;
-    font-weight: normal;
   }
 
   .survey-modal textarea {
@@ -594,13 +568,12 @@ const formStyles = `
     min-height: 80px;
   }
 
-  /* Button Hover Effects */
+  /* Button hover effects */
   .survey-modal .survey-next:hover,
   .survey-modal .survey-next:focus-visible {
     background: #0a2f8f;
     transform: translateY(-1.5px);
     box-shadow: 0 6px 14px rgba(1, 33, 105, 0.35);
-    outline: none;
   }
 
   .survey-modal .survey-prev:hover,
@@ -609,26 +582,33 @@ const formStyles = `
     border-color: #a9b9dc;
     transform: translateY(-1.5px);
     box-shadow: 0 4px 10px rgba(1, 33, 105, 0.18);
-    outline: none;
   }
 
   .survey-modal .survey-skip:hover,
   .survey-modal .survey-skip:focus-visible {
     color: #8b0000 !important;
     text-decoration: none;
-    outline: none;
   }
 
-  /* Select styling reset */
+  /* Strong native select (works on Vercel) */
   .survey-modal select {
-    appearance: auto !important;
-    -webkit-appearance: menulist !important;
-    background: #ffffff !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
     border: 1px solid #ddd !important;
     border-radius: 5px !important;
     padding: 10px 12px !important;
+    padding-right: 36px !important;
     font-size: 14px !important;
     color: #333 !important;
+  }
+
+  .survey-modal select::before,
+  .survey-modal select::after {
+    content: none !important;
+    display: none !important;
   }
 
   .survey-modal select:focus {
@@ -645,26 +625,6 @@ const formStyles = `
       font-size: 20px;
     }
   }
-
-  /* ✅ NATIVE SELECT – PRODUCTION SAFE */
-    .survey-isolated select {
-        all: revert !important;
-        appearance: menulist !important;
-        -webkit-appearance: menulist !important;
-        -moz-appearance: menulist !important;
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background: #fff;
-    }
-
-    /* KILL THEME PSEUDO ELEMENTS */
-    .survey-isolated select::before,
-    .survey-isolated select::after {
-        content: none !important;
-        display: none !important;
-    }
 `;
 
 // Inject styles
