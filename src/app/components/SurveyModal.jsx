@@ -15,8 +15,6 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <Step6 key="6" />,
   ];
 
-  
-
   const next = () => {
     if (step < steps.length - 1) setStep(step + 1);
     else onComplete();
@@ -101,20 +99,11 @@ function Step1() {
       <label>
         Which Imperial College accommodation/hostel do you currently live in?
       </label>
+      
       <Select
         options={options}
         required
       />
-      {/* <select required>
-        <option value="">Select accommodation</option>
-        <option>Beit Hall</option>
-        <option>Wilson House</option>
-        <option>Xenia</option>
-        <option>Parsons House</option>
-        <option>Kemp Porter Buildings</option>
-        <option>Woodward Buildings</option>
-        <option>Other (Please Specify)</option>
-      </select> */}
 
       <label>What year of study are you in?</label>
       {[
