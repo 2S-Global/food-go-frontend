@@ -2,9 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import Header from "./components/Header";
-import AppDownloadSection from "./components/AppDownloadSection";
 import Footer from "./components/Footer";
 import { CartContextProvider } from "@/app/context/CartContext";
+import SurveyGate from "@/app/components/SurveyGate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,29 +33,36 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="/assets/css/yellow-color.css" />
         <link rel="stylesheet" href="/assets/css/responsive.css" />
       </head>
+
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
 
-        {/* WRAP ENTIRE APP WITH CART PROVIDER */}
+        {/* 🔒 SURVEY OVERLAY — BLOCKS ENTIRE SITE */}
+        <SurveyGate />
+
+        {/* APP STATE PROVIDERS */}
         <CartContextProvider>
+
           {/* GLOBAL HEADER */}
           <Header />
 
           {/* PAGE CONTENT */}
           {children}
 
-          {/* DOWNLOAD APP SECTION */}
-          {/* <AppDownloadSection /> */}
-
           {/* GLOBAL FOOTER */}
           <Footer />
+
         </CartContextProvider>
 
         {/* JS SCRIPTS */}
         <Script src="/assets/js/jquery.min.js" strategy="beforeInteractive" />
-        <Script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" strategy="beforeInteractive" />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+          strategy="beforeInteractive"
+        />
         <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" />
         <Script src="/assets/js/plugins.js" strategy="afterInteractive" />
         <Script src="/assets/js/main.js" strategy="afterInteractive" />
+
       </body>
     </html>
   );
