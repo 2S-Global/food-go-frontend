@@ -78,13 +78,13 @@ export default function SurveyModal({ onSkip, onComplete }) {
 
 function Step1() {
     const options = [
-  { value: '1', label: 'Beit Hall' },
-  { value: '2', label: 'Wilson House' },
-  { value: '3', label: 'Xenia' },
-  { value: '4', label: 'Parsons House' },
-  { value: '5', label: 'Kemp Porter Buildings' },
-  { value: '6', label: 'Woodward Buildings' },
-  { value: '7', label: 'Other (Please Specify)' },
+  { value: 'Beit Hall', label: 'Beit Hall' },
+  { value: 'Wilson House', label: 'Wilson House' },
+  { value: 'Xenia', label: 'Xenia' },
+  { value: 'Parsons House', label: 'Parsons House' },
+  { value: 'Kemp Porter Buildings', label: 'Kemp Porter Buildings' },
+  { value: 'Woodward Buildings', label: 'Woodward Buildings' },
+  { value: 'Other', label: 'Other' },
 ];
   return (
     <>
@@ -99,7 +99,7 @@ function Step1() {
       <label>
         Which Imperial College accommodation/hostel do you currently live in?
       </label>
-      
+
       <Select
         options={options}
         required
