@@ -35,45 +35,53 @@ export default function SurveyModal({ onSkip, onComplete }) {
         className="survey-modal"
         onSubmit={(e) => e.preventDefault()}
       >
-        <div style={headerContainer}>
-          <div style={progress}>
-            Step {step + 1} of {steps.length}
-          </div>
-          <button
-            type="button"
-            className="survey-skip"
-            onClick={onSkip}
-            style={skipBtn}
-          >
-            Skip
-          </button>
-        </div>
-
-        {isSubmitted ? <SuccessScreen onClose={onComplete} /> : steps[step]}
-
-        {!isSubmitted && (
-          <div style={nav}>
-            <div style={{ display: "flex", gap: "10px" }}>
-              {step > 0 && (
-                <button
-                  type="button"
-                  className="survey-prev"
-                  onClick={prev}
-                  style={prevBtn}
-                >
-                  Prev
-                </button>
-              )}
+        {/* ✅ HARD EXIT: SUCCESS SCREEN */}
+        {isSubmitted ? (
+          <SuccessScreen onClose={onComplete} />
+        ) : (
+          <>
+            {/* HEADER ONLY DURING SURVEY */}
+            <div style={headerContainer}>
+              <div style={progress}>
+                Step {step + 1} of {steps.length}
+              </div>
               <button
                 type="button"
-                className="survey-next"
-                onClick={next}
-                style={nextBtn}
+                className="survey-skip"
+                onClick={onSkip}
+                style={skipBtn}
               >
-                {step === steps.length - 1 ? "Submit" : "Next"}
+                Skip
               </button>
             </div>
-          </div>
+
+            {/* CURRENT STEP */}
+            {steps[step]}
+
+            {/* NAVIGATION */}
+            <div style={nav}>
+              <div style={{ display: "flex", gap: "10px" }}>
+                {step > 0 && (
+                  <button
+                    type="button"
+                    className="survey-prev"
+                    onClick={prev}
+                    style={prevBtn}
+                  >
+                    Prev
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="survey-next"
+                  onClick={next}
+                  style={nextBtn}
+                >
+                  {step === steps.length - 1 ? "Submit" : "Next"}
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </form>
     </div>
@@ -399,9 +407,7 @@ function SuccessScreen({ onClose }) {
         />
       </svg>
 
-      <h2 style={{ color: "#012169", marginBottom: "10px" }}>
-        Thank You!
-      </h2>
+      <h2 style={{ color: "#012169", marginBottom: "10px" }}>Thank You!</h2>
 
       <p style={{ fontSize: "16px", color: "#333", marginBottom: "6px" }}>
         Your survey has been successfully submitted.
@@ -519,14 +525,6 @@ const skipBtn = {
   padding: "10px 0",
   transition: "all 0.3s ease",
 };
-
-// const successBox = {
-//   textAlign: "center",
-//   padding: "40px 20px",
-//   background: "#f6f9ff",
-//   borderRadius: "12px",
-//   border: "1px solid #dbe4ff",
-// };
 
 const formStyles = `
   .survey-modal {
