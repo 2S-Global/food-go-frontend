@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Select from 'react-select';
+import Select from "react-select";
 
 export default function SurveyModal({ onSkip, onComplete }) {
   const [step, setStep] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const steps = [
     <Step1 key="1" />,
@@ -16,8 +17,11 @@ export default function SurveyModal({ onSkip, onComplete }) {
   ];
 
   const next = () => {
-    if (step < steps.length - 1) setStep(step + 1);
-    else onComplete();
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    } else {
+      setIsSubmitted(true);
+    }
   };
 
   const prev = () => {
@@ -45,30 +49,32 @@ export default function SurveyModal({ onSkip, onComplete }) {
           </button>
         </div>
 
-        {steps[step]}
+        {isSubmitted ? <SuccessScreen onClose={onComplete} /> : steps[step]}
 
-        <div style={nav}>
-          <div style={{ display: "flex" , gap: "10px" }}>
-            {step > 0 && (
+        {!isSubmitted && (
+          <div style={nav}>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {step > 0 && (
+                <button
+                  type="button"
+                  className="survey-prev"
+                  onClick={prev}
+                  style={prevBtn}
+                >
+                  Prev
+                </button>
+              )}
               <button
                 type="button"
-                className="survey-prev"
-                onClick={prev}
-                style={prevBtn}
+                className="survey-next"
+                onClick={next}
+                style={nextBtn}
               >
-                Prev
+                {step === steps.length - 1 ? "Submit" : "Next"}
               </button>
-            )}
-            <button
-              type="button"
-              className="survey-next"
-              onClick={next}
-              style={nextBtn}
-            >
-              {step === steps.length - 1 ? "Submit" : "Next"}
-            </button>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );
@@ -77,15 +83,15 @@ export default function SurveyModal({ onSkip, onComplete }) {
 // ============ STEP COMPONENTS ====================
 
 function Step1() {
-    const options = [
-  { value: 'Beit Hall', label: 'Beit Hall' },
-  { value: 'Wilson House', label: 'Wilson House' },
-  { value: 'Xenia', label: 'Xenia' },
-  { value: 'Parsons House', label: 'Parsons House' },
-  { value: 'Kemp Porter Buildings', label: 'Kemp Porter Buildings' },
-  { value: 'Woodward Buildings', label: 'Woodward Buildings' },
-  { value: 'Other', label: 'Other' },
-];
+  const options = [
+    { value: "Beit Hall", label: "Beit Hall" },
+    { value: "Wilson House", label: "Wilson House" },
+    { value: "Xenia", label: "Xenia" },
+    { value: "Parsons House", label: "Parsons House" },
+    { value: "Kemp Porter Buildings", label: "Kemp Porter Buildings" },
+    { value: "Woodward Buildings", label: "Woodward Buildings" },
+    { value: "Other", label: "Other" },
+  ];
   return (
     <>
       <h2>Basic Information</h2>
@@ -100,10 +106,7 @@ function Step1() {
         Which Imperial College accommodation/hostel do you currently live in?
       </label>
 
-      <Select
-        options={options}
-        required
-      />
+      <Select options={options} required />
 
       <label>What year of study are you in?</label>
       {[
@@ -131,12 +134,14 @@ function Step2() {
       <label>
         How often do you currently eat homemade or fresh cooked meals?
       </label>
-      {["Daily", "4–6 times a week", "2–3 times a week", "Rarely", "Never"].map((opt) => (
-        <div className="option-row" key={opt}>
-          <input type="radio" name="homemadeFrequency" id={opt} />
-          <label htmlFor={opt}>{opt}</label>
-        </div>
-      ))}
+      {["Daily", "4–6 times a week", "2–3 times a week", "Rarely", "Never"].map(
+        (opt) => (
+          <div className="option-row" key={opt}>
+            <input type="radio" name="homemadeFrequency" id={opt} />
+            <label htmlFor={opt}>{opt}</label>
+          </div>
+        )
+      )}
 
       <label>What is your preferred meal type? (Select all that apply)</label>
       {[
@@ -212,12 +217,14 @@ function Step3() {
       ))}
 
       <label>What portion size do you prefer?</label>
-      {["Regular", "Large / High-protein", "Small / Budget option"].map((size) => (
-        <div className="option-row" key={size}>
-          <input type="radio" name="portion" id={size} />
-          <label htmlFor={size}>{size}</label>
-        </div>
-      ))}
+      {["Regular", "Large / High-protein", "Small / Budget option"].map(
+        (size) => (
+          <div className="option-row" key={size}>
+            <input type="radio" name="portion" id={size} />
+            <label htmlFor={size}>{size}</label>
+          </div>
+        )
+      )}
 
       <label>Do you prefer weekly meal plans or order-per-meal?</label>
       {[
@@ -287,7 +294,8 @@ function Step5() {
       ))}
 
       <label>
-        Would you pay slightly more for any of the following? (tick all that apply)
+        Would you pay slightly more for any of the following? (tick all that
+        apply)
       </label>
       {[
         "Organic ingredients",
@@ -353,12 +361,75 @@ function Step6() {
         <label
           style={{ display: "flex", alignItems: "center", fontWeight: "600" }}
         >
-          <input type="checkbox" required style={{ marginRight: "10px" }} />
-          I acknowledge that I will receive a free UniEat homemade meal box after
+          <input type="checkbox" required style={{ marginRight: "10px" }} />I
+          acknowledge that I will receive a free UniEat homemade meal box after
           successfully completing this survey.
         </label>
       </div>
     </>
+  );
+}
+
+function SuccessScreen({ onClose }) {
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {/* Success Icon */}
+      <svg
+        width="120"
+        height="120"
+        viewBox="0 0 24 24"
+        fill="none"
+        style={{ marginBottom: "20px" }}
+      >
+        <circle cx="12" cy="12" r="10" stroke="#7ED37E" strokeWidth="2" />
+        <path
+          d="M7 12.5L10.5 16L17 9"
+          stroke="#7ED37E"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+
+      <h2 style={{ color: "#012169", marginBottom: "10px" }}>
+        Thank You!
+      </h2>
+
+      <p style={{ fontSize: "16px", color: "#333", marginBottom: "6px" }}>
+        Your survey has been successfully submitted.
+      </p>
+
+      <p style={{ fontSize: "14px", color: "#555", maxWidth: "420px" }}>
+        We appreciate your time. Your free UniEat homemade meal box will be
+        arranged soon.
+      </p>
+
+      {/* Centered Button */}
+      <button
+        onClick={onClose}
+        style={{
+          marginTop: "30px",
+          background: "#012169",
+          color: "#fff",
+          border: "none",
+          padding: "12px 32px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontWeight: "600",
+          fontSize: "14px",
+        }}
+      >
+        Close
+      </button>
+    </div>
   );
 }
 
@@ -419,7 +490,8 @@ const nextBtn = {
   fontWeight: "600",
   fontSize: "14px",
   letterSpacing: "0.3px",
-  transition: "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
+  transition:
+    "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
 };
 
 const prevBtn = {
@@ -432,7 +504,8 @@ const prevBtn = {
   fontWeight: "600",
   fontSize: "14px",
   letterSpacing: "0.3px",
-  transition: "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
+  transition:
+    "background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease",
 };
 
 const skipBtn = {
@@ -446,6 +519,14 @@ const skipBtn = {
   padding: "10px 0",
   transition: "all 0.3s ease",
 };
+
+// const successBox = {
+//   textAlign: "center",
+//   padding: "40px 20px",
+//   background: "#f6f9ff",
+//   borderRadius: "12px",
+//   border: "1px solid #dbe4ff",
+// };
 
 const formStyles = `
   .survey-modal {
