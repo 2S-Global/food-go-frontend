@@ -1,27 +1,35 @@
 "use client";
-import React from "react";
 
-const Loader = () => {
+export default function Loader({ height = "60vh" }) {
   return (
-    <div className="preloader">
-      <div id="cooking">
-        <div className="bubble" />
-        <div className="bubble" />
-        <div className="bubble" />
-        <div className="bubble" />
-        <div className="bubble" />
-        <div id="area">
-          <div id="sides">
-            <div id="pan" />
-            <div id="handle" />
-          </div>
-          <div id="pancake">
-            <div id="pastry" />
-          </div>
-        </div>
-      </div>
+    <div className="loader-wrapper">
+      <div className="spinner" />
+
+      {/* Scoped CSS */}
+      <style jsx>{`
+        .loader-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: ${height};
+          width: 100%;
+        }
+
+        .spinner {
+          width: 56px;
+          height: 56px;
+          border: 6px solid rgba(0, 0, 0, 0.1);
+          border-top-color: #ea1b25;
+          border-radius: 50%;
+          animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
-};
-
-export default Loader;
+}
