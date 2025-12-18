@@ -43,7 +43,7 @@ export default function FoodMenu({
           {isMenu || isAdditional ? (
             <div className="sec-box">
               <div className="remove-ext">
-                <div className="row">
+                <div className="row gy-4">
                   {visibleItems.map((item, index) => (
                     <MenuCard
                       key={item.id}

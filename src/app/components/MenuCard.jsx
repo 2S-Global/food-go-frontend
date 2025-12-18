@@ -27,7 +27,7 @@ export default function MenuCard({
       <div className="col-md-4 col-sm-6 col-lg-4">
         <div className={cardClass} data-wow-delay={delay}>
           {/* IMAGE */}
-          <div className="popular-dish-thumb">
+          <div className="popular-dish-thumb fixed-thumb">
             <Link
               href="#"
               onClick={(e) => {
@@ -44,7 +44,7 @@ export default function MenuCard({
           </div>
 
           {/* INFO */}
-          <div className="popular-dish-info">
+          <div className="popular-dish-info card-content">
             <h4>
               <Link
                 href="#"
@@ -64,6 +64,7 @@ export default function MenuCard({
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 textAlign: "justify",
+                marginBottom: "5px",
               }}
             >
               {item.description}

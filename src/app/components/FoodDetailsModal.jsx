@@ -47,7 +47,7 @@ export default function FoodDetailsModal({ item, open, onClose }) {
         alt={item.menuName}
         style={{
           width: "100%",
-          height: "500px",
+          height: "450px",
           objectFit: "cover",
           borderRadius: "12px",
           marginBottom: "12px",
@@ -69,6 +69,7 @@ export default function FoodDetailsModal({ item, open, onClose }) {
                 objectFit: "cover",
                 borderRadius: "8px",
                 cursor: "pointer",
+                display: "none",
                 border:
                   activeImage === img ? "2px solid #ea1b25" : "1px solid #ddd",
               }}
