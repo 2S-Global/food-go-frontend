@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Modal from "./Modal";
 
 const stripHtml = (html = "") =>
-  html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  html
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
 export default function FoodDetailsModal({ item, open, onClose }) {
   const [activeImage, setActiveImage] = useState("");
@@ -44,46 +47,54 @@ export default function FoodDetailsModal({ item, open, onClose }) {
       </h2>
 
       {/* IMAGE */}
-      <img
-        src={
-          activeImage || item.images?.[0] || "/assets/images/placeholder.jpg"
-        }
-        alt={item.menuName || item.itemName}
-        style={{
-          width: "100%",
-          height: "450px",
-          objectFit: "cover",
-          borderRadius: "12px",
-          marginBottom: "10px",
-        }}
-      />
+      <div className="row align-items-center">
+        <div className="col-md-6">
+          <img
+            src={
+              activeImage ||
+              item.images?.[0] ||
+              "/assets/images/placeholder.jpg"
+            }
+            alt={item.menuName || item.itemName}
+            style={{
+              width: "100%",
+              // height: "450px",
+              objectFit: "cover",
+              borderRadius: "12px",
+              marginBottom: "10px",
+            }}
+          />
+        </div>
 
-      {/* PRICE — ONLY ADDITIONAL ITEMS */}
-      {isAdditionalItem && (
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "600",
-            color: "#c8102e",
-            marginBottom: "16px",
-          }}
-        >
-          £{item.itemPrice}
-        </p>
-      )}
+        {/* PRICE — ONLY ADDITIONAL ITEMS */}
+        <div className="col-md-6">
+          {isAdditionalItem && (
+            <p
+              style={{
+                fontSize: "20px",
+                fontWeight: "600",
+                color: "#c8102e",
+                marginBottom: "16px",
+              }}
+            >
+              £{item.itemPrice}
+            </p>
+          )}
 
-      {/* DESCRIPTION */}
-      {item.description && (
-        <p
-          style={{
-            lineHeight: "1.6",
-            marginBottom: "16px",
-            textAlign: "justify",
-          }}
-        >
-          {stripHtml(item.description)}
-        </p>
-      )}
+          {/* DESCRIPTION */}
+          {item.description && (
+            <p
+              style={{
+                lineHeight: "1.6",
+                marginBottom: "16px",
+                textAlign: "justify",
+              }}
+            >
+              {stripHtml(item.description)}
+            </p>
+          )}
+        </div>
+      </div>
 
       {/* MEAL INCLUDES — ONLY VEG & NON-VEG */}
       {!isAdditionalItem && mealItems.length > 0 && (
