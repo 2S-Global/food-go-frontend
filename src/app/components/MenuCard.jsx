@@ -55,8 +55,7 @@ export default function MenuCard({
               <img src={item.image} alt={item.title} />
             </Link>
             {item.menuType &&
-            <span className="post-rate  brd-rd2">
-              
+            <span className="post-rate  brd-rd2">  
               <VegNonVegIcon type={item.menuType} />
              {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
             </span>
