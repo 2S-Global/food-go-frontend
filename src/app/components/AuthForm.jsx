@@ -18,6 +18,7 @@ export default function AuthForm({ type }) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -74,7 +75,6 @@ export default function AuthForm({ type }) {
 
         <form className="sign-form" onSubmit={handleSubmit}>
           <div className="row">
-
             {/* NAME (REGISTER ONLY) */}
             {!isLogin && (
               <div className="col-md-12">
@@ -119,16 +119,33 @@ export default function AuthForm({ type }) {
             )}
 
             {/* PASSWORD */}
-            <div className="col-md-12">
+            <div className="col-md-12" style={{ position: "relative" }}>
               <input
                 className="brd-rd3"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
+
+              {/* EYE ICON */}
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "25px",
+                  top: "40%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#999",
+                }}
+              >
+                <i
+                  className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </span>
             </div>
 
             {/* ERROR */}
@@ -140,7 +157,11 @@ export default function AuthForm({ type }) {
 
             {/* SUBMIT */}
             <div className="col-md-12">
-              <button className="red-bg brd-rd3" type="submit" disabled={loading}>
+              <button
+                className="red-bg brd-rd3"
+                type="submit"
+                disabled={loading}
+              >
                 {loading
                   ? "Please wait..."
                   : isLogin
@@ -152,16 +173,21 @@ export default function AuthForm({ type }) {
             {/* FOOTER LINKS */}
             <div className="col-md-12">
               {isLogin ? (
-                <Link className="sign-btn" href="/register">
-                  Not a member? Sign up
-                </Link>
+                <>
+                  <Link className="sign-btn" href="/register">
+                    Not a member? Sign up
+                  </Link>
+                  <a className="recover-btn" href="#">
+                    {" "}
+                    Forgot your password?{" "}
+                  </a>
+                </>
               ) : (
                 <Link className="sign-btn" href="/login">
                   Already Registered? Sign in
                 </Link>
               )}
             </div>
-
           </div>
         </form>
       </div>
