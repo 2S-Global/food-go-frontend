@@ -46,11 +46,11 @@ export default function FoodDetailsModal({ item, open, onClose }) {
       <h2 className="modal-title">
         {isAdditionalItem ? item.itemName : item.menuName}
       </h2>
-       <button
+       {/* <button
                 type="button"
                 className="btn-close"
                 onClick={onClose}
-              ></button>
+              ></button> */}
       </div>
   <div className="modal-body">
       {/* IMAGE */}
