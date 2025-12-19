@@ -27,7 +27,8 @@ export default function AdditionalItemsPage() {
           ...item,
 
           id: item._id,
-          title: item.menuName,
+          title: item.itemName,
+          price: item.itemPrice,
           description: stripHtml(item.description),
 
           images:
