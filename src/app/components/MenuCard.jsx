@@ -70,6 +70,21 @@ export default function MenuCard({
               {item.description}
             </p>
 
+            {/* PRICE — ONLY FOR ADDITIONAL ITEMS */}
+            {variant === "additional" && item.itemPrice && (
+              <span
+                className="price"
+                style={{
+                  display: "block",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                  color: "#c8102e",
+                }}
+              >
+                £{item.itemPrice}
+              </span>
+            )}
+
             {/* BUTTONS */}
             <div
               style={{
