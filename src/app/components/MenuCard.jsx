@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 import FoodDetailsModal from "./FoodDetailsModal";
 
+
+
+
 export default function MenuCard({
   item,
   delay = 0,
@@ -22,6 +25,19 @@ export default function MenuCard({
   const btnClass =
     variant === "menu" || variant === "additional" ? "brd-rd4" : "brd-rd2";
 
+
+    const VegNonVegIcon = ({ type }) => {
+  const color = type === "Veg" ? "green" : "red";
+
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <rect x="1" y="1" width="14" height="14" rx="2" stroke={color} fill="none" strokeWidth="2" />
+      <circle cx="8" cy="8" r="3" fill={color} />
+    </svg>
+  );
+};
+
+
   return (
     <>
       <div className="col-md-4 col-sm-6 col-lg-4">
@@ -38,10 +54,13 @@ export default function MenuCard({
             >
               <img src={item.image} alt={item.title} />
             </Link>
-
-            <span className="post-rate yellow-bg brd-rd2">
-              <i className="fa fa-star-o" /> {item.rating}
+            {item.menuType &&
+            <span className="post-rate  brd-rd2">
+              
+              <VegNonVegIcon type={item.menuType} />
+             {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
             </span>
+            }
           </div>
 
           {/* INFO */}
@@ -59,7 +78,7 @@ export default function MenuCard({
                   setOpen(true);
                 }}
               >
-                {item.title}
+                {item.title} 
               </Link>
             </h4>
 
