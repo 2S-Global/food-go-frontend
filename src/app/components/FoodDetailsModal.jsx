@@ -41,11 +41,18 @@ export default function FoodDetailsModal({ item, open, onClose }) {
 
   return (
     <Modal open={open} onClose={onClose}>
-      {/* TITLE */}
-      <h2 style={{ marginBottom: "12px" }}>
+    <div className="modal-header">
+      
+      <h2 className="modal-title">
         {isAdditionalItem ? item.itemName : item.menuName}
       </h2>
-
+       <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+              ></button>
+      </div>
+  <div className="modal-body">
       {/* IMAGE */}
       <div className="row align-items-center">
         <div className="col-md-6">
@@ -88,6 +95,7 @@ export default function FoodDetailsModal({ item, open, onClose }) {
                 lineHeight: "1.6",
                 marginBottom: "16px",
                 textAlign: "justify",
+                color: "rgba(0, 0, 0, 1)",
               }}
             >
               {stripHtml(item.description)}
@@ -129,7 +137,9 @@ export default function FoodDetailsModal({ item, open, onClose }) {
             ))}
           </ul>
         </div>
+
       )}
+      </div>
     </Modal>
   );
 }
