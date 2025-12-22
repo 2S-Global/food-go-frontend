@@ -12,7 +12,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [authLoaded, setAuthLoaded] = useState(false);
 
-  // 🔄 Load user + listen for auth changes
+  // Load user + listen for auth changes
   useEffect(() => {
     const loadUser = () => {
       const storedUser = localStorage.getItem("auth_user");
@@ -28,7 +28,7 @@ const Header = () => {
     };
   }, []);
 
-  // 🚪 Logout
+  // Logout
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_user");
@@ -96,8 +96,31 @@ const Header = () => {
                 <li>
                   <Link href="/about-us">ABOUT US</Link>
                 </li>
-                <li>
-                  <Link href="/menu">MENU</Link>
+                <li className="menu-item-has-children">
+                  <a href="/menu" title="MENU" itemProp="url">
+                    MENU
+                  </a>
+                  <ul>
+                    <li>
+                      <a href="/menu/veg" title="FOOD MENU" itemProp="url">
+                        VEG MENU
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/menu/non-veg" title="FOOD MENU" itemProp="url">
+                        NON-VEG MENU
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/menu/additional-items"
+                        title="FOOD MENU"
+                        itemProp="url"
+                      >
+                        ADDITIONAL ITEMS
+                      </a>
+                    </li>
+                  </ul>
                 </li>
                 <li>
                   <Link href="/blog">BLOG</Link>

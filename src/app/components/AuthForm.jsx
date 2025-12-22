@@ -41,14 +41,14 @@ export default function AuthForm({ type }) {
           password: formData.password,
         });
 
-        // ✅ Save auth data
+        // Save auth data
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("auth_user", JSON.stringify(data.data));
 
-        // 🔔 notify header instantly
+        // notify header instantly
         window.dispatchEvent(new Event("authChange"));
 
-        // ✅ Show success message
+        // Show success message
         setSuccess("Login successfully! Redirecting...");
 
         // ⏳ Redirect after delay
@@ -76,11 +76,30 @@ export default function AuthForm({ type }) {
       <div className="sign-popup-inner brd-rd5">
         <div className="sign-popup-title text-center">
           <h4>{isLogin ? "SIGN IN" : "SIGN UP"}</h4>
-          <span>
+          <span
+            style={{
+              display: "block",
+              marginTop: "5px",
+            }}
+          >
             {isLogin
               ? "Please enter your credentials to log in."
               : "Please fill in all fields to create your account."}
           </span>
+
+          {/* ✅ SUCCESS MESSAGE */}
+          {success && (
+            <p style={{ color: "green", marginTop: "12px", marginBottom:"0", fontWeight: 500 }}>
+              {success}
+            </p>
+          )}
+
+          {/* ❌ ERROR MESSAGE */}
+          {error && (
+            <p style={{ color: "red", marginTop: "12px", marginBottom:"0", fontWeight: 500 }}>
+              {error}
+            </p>
+          )}
         </div>
 
         <form className="sign-form" onSubmit={handleSubmit}>
@@ -155,20 +174,6 @@ export default function AuthForm({ type }) {
                 ></i>
               </span>
             </div>
-
-            {/* SUCCESS MESSAGE */}
-            {success && (
-              <div className="col-md-12">
-                <p style={{ color: "green", marginTop: "10px" }}>{success}</p>
-              </div>
-            )}
-
-            {/* ERROR MESSAGE */}
-            {error && (
-              <div className="col-md-12">
-                <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
-              </div>
-            )}
 
             {/* SUBMIT */}
             <div className="col-md-12">
