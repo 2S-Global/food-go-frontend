@@ -18,6 +18,7 @@ export default function AuthForm({ type }) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -30,32 +31,41 @@ export default function AuthForm({ type }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
 
     try {
       if (isLogin) {
-        // 🔐 LOGIN
         const data = await customerLogin({
           email: formData.email,
           password: formData.password,
         });
 
-        // ✅ save token if backend sends it
-        if (data.token) {
-          localStorage.setItem("auth_token", data.token);
-        }
+        // ✅ Save auth data
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("auth_user", JSON.stringify(data.data));
 
-        // redirect after login
-        router.push("/");
+        // 🔔 notify header instantly
+        window.dispatchEvent(new Event("authChange"));
+
+        // ✅ Show success message
+        setSuccess("Login successfully! Redirecting...");
+
+        // ⏳ Redirect after delay
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
       } else {
-        // 📝 REGISTER
         await customerRegister(formData);
 
-        // redirect after register
-        router.push("/login");
+        setSuccess("Registration successful! Redirecting to login...");
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -75,7 +85,7 @@ export default function AuthForm({ type }) {
 
         <form className="sign-form" onSubmit={handleSubmit}>
           <div className="row">
-            {/* NAME (REGISTER ONLY) */}
+            {/* NAME */}
             {!isLogin && (
               <div className="col-md-12">
                 <input
@@ -103,7 +113,7 @@ export default function AuthForm({ type }) {
               />
             </div>
 
-            {/* PHONE (REGISTER ONLY) */}
+            {/* PHONE */}
             {!isLogin && (
               <div className="col-md-12">
                 <input
@@ -129,8 +139,6 @@ export default function AuthForm({ type }) {
                 onChange={handleChange}
                 required
               />
-
-              {/* EYE ICON */}
               <span
                 onClick={() => setShowPassword(!showPassword)}
                 style={{
@@ -148,7 +156,14 @@ export default function AuthForm({ type }) {
               </span>
             </div>
 
-            {/* ERROR */}
+            {/* SUCCESS MESSAGE */}
+            {success && (
+              <div className="col-md-12">
+                <p style={{ color: "green", marginTop: "10px" }}>{success}</p>
+              </div>
+            )}
+
+            {/* ERROR MESSAGE */}
             {error && (
               <div className="col-md-12">
                 <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
@@ -170,18 +185,12 @@ export default function AuthForm({ type }) {
               </button>
             </div>
 
-            {/* FOOTER LINKS */}
+            {/* FOOTER */}
             <div className="col-md-12">
               {isLogin ? (
-                <>
-                  <Link className="sign-btn" href="/register">
-                    Not a member? Sign up
-                  </Link>
-                  <a className="recover-btn" href="#">
-                    {" "}
-                    Forgot your password?{" "}
-                  </a>
-                </>
+                <Link className="sign-btn" href="/register">
+                  Not a member? Sign up
+                </Link>
               ) : (
                 <Link className="sign-btn" href="/login">
                   Already Registered? Sign in
