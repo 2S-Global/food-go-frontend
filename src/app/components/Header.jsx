@@ -15,30 +15,10 @@ const Header = () => {
         {/* Topbar */}
         <div className="topbar">
           <div className="container">
-            <div className="select-wrp">
-              <select data-placeholder="Feel Like Eating">
-                <option>FEEL LIKE EATING</option>
-                <option>Burger</option>
-                <option>Pizza</option>
-                <option>Fried Rice</option>
-                <option>Chicken Shots</option>
-              </select>
-            </div>
-            <div className="select-wrp">
-              <select data-placeholder="Choose Location">
-                <option>CHOOSE LOCATION</option>
-                <option>New york</option>
-                <option>Washington</option>
-                <option>Chicago</option>
-                <option>Los Angeles</option>
-              </select>
-            </div>
             <div className="topbar-register">
               <a
                 className="auth-login-link"
                 href="/login"
-                title="Login"
-                itemProp="url"
                 onClick={(e) => {
                   e.preventDefault();
                   router.push("/login");
@@ -50,8 +30,6 @@ const Header = () => {
               <a
                 className="auth-register-link"
                 href="/register"
-                title="Register"
-                itemProp="url"
                 onClick={(e) => {
                   e.preventDefault();
                   router.push("/register");
@@ -60,19 +38,21 @@ const Header = () => {
                 REGISTER
               </a>
             </div>
+
             <div className="social1">
-              <a href="#" title="Facebook" itemProp="url" target="_blank">
+              <a href="#" title="Facebook" target="_blank">
                 <i className="fa fa-facebook-square" />
               </a>
-              <a href="#" title="Twitter" itemProp="url" target="_blank">
+              <a href="#" title="Twitter" target="_blank">
                 <i className="fa fa-twitter" />
               </a>
-              <a href="#" title="Google Plus" itemProp="url" target="_blank">
+              <a href="#" title="Google Plus" target="_blank">
                 <i className="fa fa-google-plus" />
               </a>
             </div>
           </div>
         </div>
+
         {/* Topbar */}
         <div className="logo-menu-sec">
           <div className="container">
@@ -111,12 +91,20 @@ const Header = () => {
                         </a>
                       </li>
                       <li>
-                        <a href="/menu/non-veg" title="FOOD MENU" itemProp="url">
+                        <a
+                          href="/menu/non-veg"
+                          title="FOOD MENU"
+                          itemProp="url"
+                        >
                           NON-VEG MENU
                         </a>
                       </li>
                       <li>
-                        <a href="/menu/additional-items" title="FOOD MENU" itemProp="url">
+                        <a
+                          href="/menu/additional-items"
+                          title="FOOD MENU"
+                          itemProp="url"
+                        >
                           ADDITIONAL ITEMS
                         </a>
                       </li>
@@ -127,7 +115,7 @@ const Header = () => {
                       SERVICES
                     </a>
                   </li> */}
- 
+
                   {/* <li className="menu-item-has-children">
                     <a href="/how-it-works" title="HOW IT WORKS" itemProp="url">
                       HOW IT WORKS
@@ -161,7 +149,8 @@ const Header = () => {
                   <div className="cart-icon">
                     <Link href="/cart">
                       <i
-                        className="fa fa-shopping-cart" title="CART"
+                        className="fa fa-shopping-cart"
+                        title="CART"
                         style={{ fontSize: "26px" }}
                       ></i>
                       <span className="cart-count">3</span>

@@ -304,3 +304,27 @@ html {
 .card-content > div:last-child {
   margin-top: auto;
 }
+
+.social1 a:hover {
+  color: #ffbe00 !important;
+}
+
+.topbar-register a:hover {
+  color: #ffbe00 !important;
+}
+
+.bottom-bar.dark-bg {
+  background-color: #c8102e;
+}
+
+.footer-company {
+  color: #ffbe00;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-company:hover {
+  color: #ffd24d;
+  text-decoration: underline;
+}
+

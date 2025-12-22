@@ -698,6 +698,7 @@ nav > div > ul > li:before,
 /*===== Chosen Container Style =====*/
 .chosen-container {
   width: 100% !important;
+  display: none;
 }
 /*===== Header =====*/
 header {
@@ -711,7 +712,7 @@ header {
   box-shadow: 0 4px 2px rgba(0, 0, 0, 0.18);
 }
 .topbar {
-  background-color: #012169;
+  background-color: #c8102e;
   float: left;
   width: 100%;
   height: 46px;
