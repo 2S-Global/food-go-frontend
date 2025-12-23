@@ -1,15 +1,28 @@
 "use client";
 
+import { useState } from "react";
+import ConfirmModal from "../components/ConfirmModal";
 import { useContext } from "react";
 import { CartContext } from "@/app/context/CartContext";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import Loader from "../components/Loader";
 import Link from "next/link";
+import {
+  Trash2,
+  CalendarDays,
+  Utensils,
+  ShoppingCart,
+  ArrowRight,
+} from "lucide-react";
 
 export default function CartPage() {
-  const { cart, loading, initialized, clearCart } =
-    useContext(CartContext);
+  const {
+    cart,
+    loading,
+    initialized,
+    removeCartItem,
+  } = useContext(CartContext);
 
   /* ==========================
      LOADING STATE
@@ -52,12 +65,8 @@ export default function CartPage() {
         />
 
         <div className="container text-center py-5">
-          <img
-            src="/assets/images/empty-cart.svg"
-            alt="Empty Cart"
-            className="empty-cart-img"
-          />
-          <h3 className="mt-4">Your cart is empty</h3>
+          <ShoppingCart size={72} className="text-muted mb-3" />
+          <h3>Your cart is empty</h3>
           <p className="text-muted">
             Looks like you haven’t added any meals yet.
           </p>
@@ -65,13 +74,6 @@ export default function CartPage() {
             Browse Menu
           </Link>
         </div>
-
-        <style jsx>{`
-          .empty-cart-img {
-            max-width: 220px;
-            opacity: 0.9;
-          }
-        `}</style>
       </section>
     );
   }
@@ -101,24 +103,39 @@ export default function CartPage() {
                 <div className="card-body d-flex justify-content-between align-items-center">
                   <div>
                     <h5 className="mb-2 text-capitalize">
-                       {item.subscription_type} Subscription
+                      {item.subscription_type} Subscription
                     </h5>
 
-                    <div className="text-muted small">
-                      <span className="me-3">
-                        📅 {item.weeks} Weeks
+                    <div className="text-muted small d-flex gap-3">
+                      <span className="d-flex align-items-center gap-1">
+                        <CalendarDays size={16} />
+                        {item.weeks} Weeks
                       </span>
-                      <span>🍽 {item.meal_count} Meals</span>
+
+                      <span className="d-flex align-items-center gap-1">
+                        <Utensils size={16} />
+                        {item.meal_count} Meals
+                      </span>
                     </div>
                   </div>
 
-                  <div className="text-end">
+                  <div className="text-end d-flex align-items-center gap-3">
                     <div className="price">
-                      ₹{item.item_total_price}
+                      £{item.item_total_price}
                     </div>
-                    {/* <span className="badge bg-success mt-2">
-                      Active
-                    </span> */}
+
+                    <button
+                      className="delete-btn"
+                      disabled={loading}
+                      onClick={() => {
+                        if (confirm("Remove this item from cart?")) {
+                          removeCartItem(item._id);
+                        }
+                      }}
+                      aria-label="Remove item"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -133,7 +150,7 @@ export default function CartPage() {
               <ul className="summary-list">
                 <li>
                   Subtotal
-                  <span>₹{cart.total_cart_amount}</span>
+                  <span>£{cart.total_cart_amount}</span>
                 </li>
 
                 <li>
@@ -143,7 +160,7 @@ export default function CartPage() {
 
                 <li className="total">
                   Total
-                  <span>₹{cart.total_cart_amount}</span>
+                  <span>£{cart.total_cart_amount}</span>
                 </li>
               </ul>
 
@@ -153,24 +170,9 @@ export default function CartPage() {
                   !canCheckout ? "disabled" : ""
                 }`}
               >
-                Proceed to Checkout →
+                Proceed to Checkout
+                <ArrowRight size={18} className="ms-2" />
               </Link>
-
-              <button
-                className="btn btn-outline-secondary w-100 mt-2"
-                disabled={loading}
-                onClick={() => {
-                  if (
-                    confirm(
-                      "Are you sure you want to clear your cart?"
-                    )
-                  ) {
-                    clearCart();
-                  }
-                }}
-              >
-                {loading ? "Clearing..." : "Clear Cart"}
-              </button>
             </div>
           </div>
         </div>
@@ -192,7 +194,27 @@ export default function CartPage() {
         .price {
           font-size: 22px;
           font-weight: 700;
+          color: #012169;
+        }
+
+        .delete-btn {
+          background: transparent;
+          border: none;
           color: #dc3545;
+          padding: 6px;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+          background: rgba(220, 53, 69, 0.1);
+          transform: scale(1.1);
+        }
+
+        .delete-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
 
         .cart-summary {

@@ -1,11 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import {
-  addToCart,
-  getUserCart,
-  deleteCartItem,
-} from "@/app/lib/api";
+import { addToCart, getUserCart, clearUserCart } from "@/app/lib/api";
 
 export const CartContext = createContext(null);
 
@@ -19,9 +15,9 @@ export function CartContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
 
-  /* =====================
+  /* ==========================
      FETCH CART
-  =======================*/
+  ========================== */
   const fetchCart = async () => {
     try {
       const token = localStorage.getItem("auth_token");
@@ -45,7 +41,7 @@ export function CartContextProvider({ children }) {
     }
   };
 
-  /* =======================
+  /* ==========================
      ADD TO CART
   ========================== */
   const handleAddToCart = async (payload) => {
@@ -60,19 +56,16 @@ export function CartContextProvider({ children }) {
     }
   };
 
-  /* =====================
-   DELETE CART ITEM
-========================== */
-  const handleRemoveCartItem = async (cartItemId) => {
+  /* ==========================
+     CLEAR CART
+  ========================== */
+  const handleClearCart = async () => {
     try {
       setLoading(true);
-
-      await deleteCartItem(cartItemId);
-
-      // ALWAYS refetch cart after delete
-      await fetchCart();
+      await clearUserCart();
+      setCart(emptyCart);
     } catch (err) {
-      alert(err.message || "Unable to remove item");
+      alert(err.message);
     } finally {
       setLoading(false);
     }
@@ -89,7 +82,7 @@ export function CartContextProvider({ children }) {
         loading,
         initialized,
         addToCart: handleAddToCart,
-        removeCartItem: handleRemoveCartItem,
+        clearCart: handleClearCart,
         refreshCart: fetchCart,
       }}
     >

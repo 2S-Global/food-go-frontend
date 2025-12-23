@@ -15,23 +15,21 @@ export default function AddToCartDateModal({
   const [endDate, setEndDate] = useState("");
   const [minEndDate, setMinEndDate] = useState("");
   const [hover, setHover] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(""); // <-- new
 
   const today = new Date().toISOString().split("T")[0];
 
-  /* ==========================
-     RESET STATE ON CLOSE
-  ========================== */
+  // RESET STATE ON CLOSE
   useEffect(() => {
     if (!open) {
       setStartDate("");
       setEndDate("");
       setMinEndDate("");
+      setSuccessMessage(""); // <-- reset success message
     }
   }, [open]);
 
-  /* ==========================
-     CALCULATE MIN END DATE
-  ========================== */
+  // CALCULATE MIN END DATE
   useEffect(() => {
     if (!startDate) {
       setEndDate("");
@@ -49,9 +47,7 @@ export default function AddToCartDateModal({
     setEndDate(formattedMinEnd);
   }, [startDate]);
 
-  /* ==========================
-     SUBMIT TO CART API
-  ========================== */
+  // SUBMIT TO CART API
   const handleSave = async () => {
     if (loading) return;
 
@@ -77,7 +73,12 @@ export default function AddToCartDateModal({
         end_date: endDate,
       });
 
-      onClose(); 
+      setSuccessMessage(
+        `Your ${subscriptionType === "veg" ? "veg" : "non-veg"} menu added to the cart successfully!`
+      );
+
+      // Optional: auto-close after 2 seconds
+      // setTimeout(() => onClose(), 2000);
     } catch (err) {
       // addToCart already alerts
     }
@@ -112,6 +113,13 @@ export default function AddToCartDateModal({
           />
         </div>
       </div>
+
+      {/* SUCCESS MESSAGE */}
+      {successMessage && (
+        <p style={{ marginTop: "16px", color: "green", fontWeight: "bold" }}>
+          {successMessage}
+        </p>
+      )}
 
       <div style={{ textAlign: "right", marginTop: "24px" }}>
         <button

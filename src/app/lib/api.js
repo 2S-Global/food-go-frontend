@@ -142,21 +142,22 @@ export async function getUserCart() {
 }
 
 /* ====================
-   CLEAR USER CART
-===================== */
-export async function clearUserCart() {
+   DELETE CART ITEM
+==================== */
+export async function deleteCartItem(cartItemId) {
   const res = await fetch(
     `${BASE_URL}/api/usercart/delete-usercart`,
     {
       method: "DELETE",
       headers: getAuthHeaders(),
+      body: JSON.stringify({ cartItemId }),
     }
   );
 
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.message || "Failed to clear cart");
+    throw new Error(data.message || "Failed to delete cart item");
   }
 
   return data;
