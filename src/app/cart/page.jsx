@@ -67,7 +67,7 @@ export default function CartPage() {
         <div className="container text-center py-5">
           <ShoppingCart size={72} className="text-muted mb-3" />
           <h3>Your cart is empty</h3>
-          <p className="text-muted">
+          <p className="text-muted" style={{display: "inherit"}}>
             Looks like you haven’t added any meals yet.
           </p>
           <Link href="/menu" className="btn btn-danger mt-3">

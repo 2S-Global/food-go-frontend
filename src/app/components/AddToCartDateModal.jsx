@@ -78,7 +78,7 @@ export default function AddToCartDateModal({
       );
 
       // Optional: auto-close after 2 seconds
-      // setTimeout(() => onClose(), 2000);
+      setTimeout(() => onClose(), 2000);
     } catch (err) {
       // addToCart already alerts
     }
