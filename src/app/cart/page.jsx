@@ -33,11 +33,8 @@ export default function CartPage() {
     );
   }
 
-  // const hasSubscription = !!cart?.subscription;
-  // const hasAddons = cart?.additional_items?.length > 0;
-  // const hasCart = hasSubscription || hasAddons;
-
   const hasCart = cart?.items?.length > 0;
+
   /* ==========================
      EMPTY CART
   ========================== */
@@ -53,30 +50,31 @@ export default function CartPage() {
         <BreadCrumbs
           items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
         />
+
         <div className="container text-center py-5">
-          <h3>Your cart is empty</h3>
+          <img
+            src="/assets/images/empty-cart.svg"
+            alt="Empty Cart"
+            className="empty-cart-img"
+          />
+          <h3 className="mt-4">Your cart is empty</h3>
+          <p className="text-muted">
+            Looks like you haven’t added any meals yet.
+          </p>
           <Link href="/menu" className="btn btn-danger mt-3">
-            Continue Shopping
+            Browse Menu
           </Link>
         </div>
+
+        <style jsx>{`
+          .empty-cart-img {
+            max-width: 220px;
+            opacity: 0.9;
+          }
+        `}</style>
       </section>
     );
   }
-
-  /* ==========================
-     HELPERS
-  ========================== */
-  const formatDate = (date) =>
-    new Date(date).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-
-  // const canCheckout =
-  //   cart?.totals?.grand_total &&
-  //   Number(cart.totals.grand_total) > 0;
-
 
   const canCheckout =
     cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
@@ -90,60 +88,86 @@ export default function CartPage() {
         showSearchForm={false}
       />
 
-      <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
+      <BreadCrumbs
+        items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
+      />
 
       <div className="container py-5">
         <div className="row">
-          {/* LEFT SIDE */}
+          {/* ================= LEFT SIDE ================= */}
           <div className="col-md-8">
             {cart.items.map((item) => (
-              <div key={item._id} className="card mb-3">
-                <div className="card-body">
-                  <h5 className="text-capitalize">
-                    {item.subscription_type} Subscription
-                  </h5>
+              <div key={item._id} className="card cart-item mb-3">
+                <div className="card-body d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 className="mb-2 text-capitalize">
+                       {item.subscription_type} Subscription
+                    </h5>
 
-                  <p className="mb-1">
-                    <strong>Weeks:</strong> {item.weeks}
-                  </p>
+                    <div className="text-muted small">
+                      <span className="me-3">
+                        📅 {item.weeks} Weeks
+                      </span>
+                      <span>🍽 {item.meal_count} Meals</span>
+                    </div>
+                  </div>
 
-                  <p className="mb-1">
-                    <strong>Meals:</strong> {item.meal_count}
-                  </p>
-
-                  <p className="mb-1">
-                    <strong>Price:</strong> ₹{item.item_total_price}
-                  </p>
+                  <div className="text-end">
+                    <div className="price">
+                      ₹{item.item_total_price}
+                    </div>
+                    {/* <span className="badge bg-success mt-2">
+                      Active
+                    </span> */}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* ================= RIGHT SIDE ================= */}
           <div className="col-md-4">
-            <div className="cart-summary">
-              <h4>Order Summary</h4>
+            <div className="cart-summary sticky-top">
+              <h4 className="mb-4">Order Summary</h4>
 
-              <ul>
+              <ul className="summary-list">
+                <li>
+                  Subtotal
+                  <span>₹{cart.total_cart_amount}</span>
+                </li>
+
+                <li>
+                  Delivery
+                  <span className="text-success">FREE</span>
+                </li>
+
                 <li className="total">
-                  Total Amount
+                  Total
                   <span>₹{cart.total_cart_amount}</span>
                 </li>
               </ul>
 
               <Link
                 href={canCheckout ? "/checkout" : "#"}
-                className={`btn btn-danger w-100 mt-3 ${
+                className={`btn btn-danger btn-lg w-100 mt-3 ${
                   !canCheckout ? "disabled" : ""
                 }`}
               >
-                Proceed to Checkout
+                Proceed to Checkout →
               </Link>
 
               <button
-                className="btn btn-outline-danger w-100 mt-2"
+                className="btn btn-outline-secondary w-100 mt-2"
                 disabled={loading}
-                onClick={clearCart}
+                onClick={() => {
+                  if (
+                    confirm(
+                      "Are you sure you want to clear your cart?"
+                    )
+                  ) {
+                    clearCart();
+                  }
+                }}
               >
                 {loading ? "Clearing..." : "Clear Cart"}
               </button>
@@ -152,27 +176,52 @@ export default function CartPage() {
         </div>
       </div>
 
+      {/* ================= STYLES ================= */}
       <style jsx>{`
+        .cart-item {
+          border-radius: 14px;
+          transition: all 0.2s ease;
+          border: 1px solid #eee;
+        }
+
+        .cart-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        .price {
+          font-size: 22px;
+          font-weight: 700;
+          color: #dc3545;
+        }
+
         .cart-summary {
           background: #fff;
-          padding: 25px;
-          border-radius: 10px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+          padding: 30px;
+          border-radius: 16px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+          top: 100px;
         }
-        .cart-summary ul {
+
+        .summary-list {
           list-style: none;
           padding: 0;
           margin: 0;
         }
-        .cart-summary ul li {
+
+        .summary-list li {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 10px;
-          font-size: 16px;
+          margin-bottom: 14px;
+          font-size: 15px;
         }
-        .cart-summary ul li.total {
+
+        .summary-list li.total {
+          font-size: 20px;
           font-weight: bold;
-          font-size: 18px;
+          border-top: 1px solid #eee;
+          padding-top: 14px;
+          margin-top: 10px;
         }
       `}</style>
     </section>
