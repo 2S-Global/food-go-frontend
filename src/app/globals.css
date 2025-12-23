@@ -328,3 +328,11 @@ html {
   text-decoration: underline;
 }
 
+.setp-box-inner > h4{
+  color: #ffffff !important;
+}
+
+/* .setp-box-inner > p {
+  color: #666;
+} */
+
