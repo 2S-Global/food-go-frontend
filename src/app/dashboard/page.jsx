@@ -1,11 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import MyOrder from "../components/MyOrder";
+import { getUserDetails } from "../lib/api";
 
 export default function DashboardPage() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 👇 Fetch user details on component mount
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getUserDetails();
+        setUser(data?.data || null); // assuming API returns { data: { ...user } }
+      } catch (error) {
+        console.error("Failed to load user info:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <PageBanner
@@ -40,28 +60,30 @@ export default function DashboardPage() {
                             <div className="user-info red-bg">
                               <img
                                 className="brd-rd50"
-                                src="/assets/images/user-avatar.jpg"
-                                alt="user-avatar.jpg"
-                                itemProp="image"
+                                src={
+                                  user?.avatar ||
+                                  "/assets/images/user-avatar.jpg"
+                                }
+                                alt="User Avatar"
                               />
                               <div className="user-info-inner">
-                                <h5 itemProp="headline">
-                                  <a href="#" title="" itemProp="url">
-                                    BUYER DEMO
+                                <h5>
+                                  <a href="#" title="">
+                                    {loading
+                                      ? "Loading..."
+                                      : user?.name || "Guest User"}
                                   </a>
                                 </h5>
                                 <span>
-                                  <a href="#" title="" itemProp="url">
-                                    dum3@chimpgroou.com
+                                  <a href="#" title="">
+                                    {user?.email || "email@example.com"}
                                   </a>
                                 </span>
                                 <a
                                   className="brd-rd3 sign-out-btn yellow-bg"
                                   href="#"
-                                  title=""
-                                  itemProp="url"
                                 >
-                                  <i className="fa fa-sign-out" /> SIGN OUT
+                                  <i className="fa fa-sign-out"></i> SIGN OUT
                                 </a>
                               </div>
                             </div>

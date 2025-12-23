@@ -8,7 +8,7 @@ const EasyOrderSteps = () => {
       <div className="block blue-overlay low-opacity">
         <div
           className="fixed-bg"
-          style={{ backgroundImage: "url(/assets/images/group-1.jpg)" }}
+          style={{ backgroundImage: "url(/assets/images/group-1.jpeg)" }}
         />
         <div className="container">
           <div className="row">

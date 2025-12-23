@@ -69,6 +69,25 @@ export async function customerLogin(payload) {
 }
 
 /* ====================
+   GET USER DETAILS
+===================== */
+export async function getUserDetails() {
+  const res = await fetch(`${BASE_URL}/api/userdata/user-details`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+    cache: "no-store", // optional: prevents caching in Next.js 14+
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch user details");
+  }
+
+  return data;
+}
+
+/* ====================
    ADD TO CART
 ===================== */
 export async function addToCart(payload) {
