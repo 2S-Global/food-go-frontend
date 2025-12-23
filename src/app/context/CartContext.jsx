@@ -6,9 +6,8 @@ import { addToCart, getUserCart, clearUserCart } from "@/app/lib/api";
 export const CartContext = createContext(null);
 
 const emptyCart = {
-  subscription: null,
-  additional_items: [],
-  totals: {},
+  items: [],
+  total_cart_amount: 0,
 };
 
 export function CartContextProvider({ children }) {
@@ -16,6 +15,9 @@ export function CartContextProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
 
+  /* ==========================
+     FETCH CART
+  ========================== */
   const fetchCart = async () => {
     try {
       const token = localStorage.getItem("auth_token");
@@ -25,13 +27,11 @@ export function CartContextProvider({ children }) {
         return;
       }
 
-      const data = await getUserCart();
-      const cartData = data.data ?? data;
+      const res = await getUserCart();
 
       setCart({
-        subscription: cartData.subscription ?? null,
-        additional_items: cartData.additional_items ?? [],
-        totals: cartData.totals ?? {},
+        items: res?.data?.items || [],
+        total_cart_amount: res?.data?.total_cart_amount || 0,
       });
     } catch (err) {
       console.warn("Fetch cart failed:", err.message);
@@ -41,6 +41,9 @@ export function CartContextProvider({ children }) {
     }
   };
 
+  /* ==========================
+     ADD TO CART
+  ========================== */
   const handleAddToCart = async (payload) => {
     try {
       setLoading(true);
@@ -53,6 +56,9 @@ export function CartContextProvider({ children }) {
     }
   };
 
+  /* ==========================
+     CLEAR CART
+  ========================== */
   const handleClearCart = async () => {
     try {
       setLoading(true);
