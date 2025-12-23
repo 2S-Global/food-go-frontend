@@ -1,104 +1,83 @@
 "use client";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
+import { addToCart, getUserCart, clearUserCart } from "@/app/lib/api";
 
 export const CartContext = createContext(null);
 
+const emptyCart = {
+  subscription: null,
+  additional_items: [],
+  totals: {},
+};
+
 export function CartContextProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [cart, setCart] = useState(emptyCart);
+  const [loading, setLoading] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedCart = localStorage.getItem("foodAppCart");
-      if (savedCart) {
-        try {
-          setCartItems(JSON.parse(savedCart));
-        } catch (error) {
-          console.error("Error loading cart from localStorage:", error);
-        }
+  const fetchCart = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+
+      if (!token) {
+        setCart(emptyCart);
+        return;
       }
-      setIsHydrated(true);
+
+      const data = await getUserCart();
+      const cartData = data.data ?? data;
+
+      setCart({
+        subscription: cartData.subscription ?? null,
+        additional_items: cartData.additional_items ?? [],
+        totals: cartData.totals ?? {},
+      });
+    } catch (err) {
+      console.warn("Fetch cart failed:", err.message);
+      setCart(emptyCart);
+    } finally {
+      setInitialized(true);
     }
+  };
+
+  const handleAddToCart = async (payload) => {
+    try {
+      setLoading(true);
+      await addToCart(payload);
+      await fetchCart();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      setLoading(true);
+      await clearUserCart();
+      setCart(emptyCart);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
   }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    if (isHydrated && typeof window !== "undefined") {
-      localStorage.setItem("foodAppCart", JSON.stringify(cartItems));
-    }
-  }, [cartItems, isHydrated]);
-
-  const addToCart = (item) => {
-    const normalized = {
-      id: String(item.id),
-      name: item.name,
-      price: Number(item.price),
-      image: item.image,
-      qty: 1,
-    };
-
-    setCartItems((prev) => {
-      const exists = prev.find((x) => x.id === normalized.id);
-
-      if (exists) {
-        return prev.map((x) =>
-          x.id === normalized.id ? { ...x, qty: x.qty + 1 } : x
-        );
-      }
-
-      return [...prev, normalized];
-    });
-  };
-
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const increaseQty = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, qty: item.qty + 1 } : item
-      )
-    );
-  };
-
-  const decreaseQty = (id) => {
-    setCartItems((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, qty: item.qty - 1 } : item
-        )
-        .filter((item) => item.qty > 0)
-    );
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.removeItem("foodAppCart");
-      } catch (e) {
-        console.warn("Could not remove cart from localStorage", e);
-      }
-    }
-  };
-
-  const getCartTotal = () =>
-    cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   return (
     <CartContext.Provider
       value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        increaseQty,
-        decreaseQty,
-        getCartTotal,
-        isHydrated,
-        clearCart,
+        cart,
+        loading,
+        initialized,
+        addToCart: handleAddToCart,
+        clearCart: handleClearCart,
+        refreshCart: fetchCart,
       }}
     >
       {children}

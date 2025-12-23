@@ -4,9 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import FoodDetailsModal from "./FoodDetailsModal";
 
-
-
-
 export default function MenuCard({
   item,
   delay = 0,

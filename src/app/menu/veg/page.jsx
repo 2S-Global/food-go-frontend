@@ -74,7 +74,7 @@ export default function VegMenuPage() {
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
       {!loading && !error && (
-        <FoodMenu items={vegItems} variant="menu" showTitle={false} />
+        <FoodMenu items={vegItems} variant="menu" subscriptionType="veg" showTitle={false} />
       )}
     </>
   );

@@ -10,6 +10,7 @@ export default function FoodMenu({
   limit,
   showTitle = true,
   variant = "home", // home | menu | additional
+  subscriptionType,
 }) {
   const visibleItems = limit ? items.slice(0, limit) : items;
   const isMenu = variant === "menu";
@@ -49,6 +50,7 @@ export default function FoodMenu({
                       key={item.id}
                       item={item}
                       variant={variant}
+                      subscriptionType={subscriptionType}
                       delay={`${0.2 + index * 0.1}s`}
                       onAddToCart={(food) => {
                         if (isAdditional) {
@@ -126,7 +128,8 @@ export default function FoodMenu({
       {isMenu && (
         <AddToCartDateModal
           open={openCartModal}
-          item={selectedItem}
+          subscriptionType={subscriptionType}
+          // item={selectedItem}
           onClose={() => {
             setOpenCartModal(false);
             setSelectedItem(null);

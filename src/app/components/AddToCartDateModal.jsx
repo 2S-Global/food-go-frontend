@@ -1,21 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useContext } from "react";
 import Modal from "./Modal";
+import { CartContext } from "@/app/context/CartContext";
 
-export default function AddToCartDateModal({ open, onClose }) {
-  const router = useRouter();
+export default function AddToCartDateModal({
+  open,
+  onClose,
+  subscriptionType, // "veg" | "non_veg"
+}) {
+  const { addToCart, loading } = useContext(CartContext);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [minEndDate, setMinEndDate] = useState("");
+  const [hover, setHover] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [hover, setHover] = useState(false);
+  /* ==========================
+     RESET STATE ON CLOSE
+  ========================== */
+  useEffect(() => {
+    if (!open) {
+      setStartDate("");
+      setEndDate("");
+      setMinEndDate("");
+    }
+  }, [open]);
 
-  // When start date changes → calculate min end date (start + 6 days)
+  /* ==========================
+     CALCULATE MIN END DATE
+  ========================== */
   useEffect(() => {
     if (!startDate) {
       setEndDate("");
@@ -25,15 +41,20 @@ export default function AddToCartDateModal({ open, onClose }) {
 
     const start = new Date(startDate);
     const minEnd = new Date(start);
-    minEnd.setDate(start.getDate() + 6);
+    minEnd.setDate(start.getDate() + 6); // 7 days total
 
     const formattedMinEnd = minEnd.toISOString().split("T")[0];
 
     setMinEndDate(formattedMinEnd);
-    setEndDate(formattedMinEnd); // default selection
+    setEndDate(formattedMinEnd);
   }, [startDate]);
 
-  const handleSave = () => {
+  /* ==========================
+     SUBMIT TO CART API
+  ========================== */
+  const handleSave = async () => {
+    if (loading) return;
+
     if (!startDate || !endDate) {
       alert("Please select start and end date");
       return;
@@ -45,14 +66,21 @@ export default function AddToCartDateModal({ open, onClose }) {
     }
 
     if (new Date(endDate) < new Date(minEndDate)) {
-      alert("End date must be at least 6 days after start date");
+      alert("End date must be at least 7 days");
       return;
     }
 
-    localStorage.setItem("cartDates", JSON.stringify({ startDate, endDate }));
+    try {
+      await addToCart({
+        subscription_type: subscriptionType,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
-    onClose();
-    router.push("/cart");
+      onClose(); 
+    } catch (err) {
+      // addToCart already alerts
+    }
   };
 
   return (
@@ -68,14 +96,7 @@ export default function AddToCartDateModal({ open, onClose }) {
             value={startDate}
             min={today}
             onChange={(e) => setStartDate(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "6px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              transition: "border-color 0.3s ease",
-            }}
+            style={inputStyle}
           />
         </div>
 
@@ -87,14 +108,7 @@ export default function AddToCartDateModal({ open, onClose }) {
             value={endDate}
             min={minEndDate}
             onChange={(e) => setEndDate(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "6px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              transition: "border-color 0.3s ease",
-            }}
+            style={inputStyle}
           />
         </div>
       </div>
@@ -102,6 +116,7 @@ export default function AddToCartDateModal({ open, onClose }) {
       <div style={{ textAlign: "right", marginTop: "24px" }}>
         <button
           onClick={handleSave}
+          disabled={loading}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           style={{
@@ -110,13 +125,24 @@ export default function AddToCartDateModal({ open, onClose }) {
             color: "#fff",
             border: "none",
             borderRadius: "6px",
-            cursor: "pointer",
-            transition: "background-color 0.3s ease",
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.7 : 1,
           }}
         >
-          Save & Go to Cart
+          {loading ? "Adding..." : "Add to Cart"}
         </button>
       </div>
     </Modal>
   );
 }
+
+/* ==========================
+   STYLES
+========================== */
+const inputStyle = {
+  width: "100%",
+  padding: "10px",
+  marginTop: "6px",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+};

@@ -1,8 +1,9 @@
 const BASE_URL = "https://food-delivery-backend-mocha.vercel.app";
 
 function getAuthHeaders() {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("authtoken") : null;
+  if (typeof window === "undefined") return {};
+
+  const token = localStorage.getItem("auth_token");
 
   return {
     "Content-Type": "application/json",
@@ -91,11 +92,23 @@ export async function getUserDetails() {
    ADD TO CART
 ===================== */
 export async function addToCart(payload) {
-  const res = await fetch(`${BASE_URL}/api/usercart/user-addtocart`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(payload),
-  });
+  console.log("API addToCart payload", payload);
+  if (
+    !payload?.subscription_type &&
+    (!payload?.additional_items ||
+      payload.additional_items.length === 0)
+  ) {
+    throw new Error("Invalid add to cart payload");
+  }
+
+  const res = await fetch(
+    `${BASE_URL}/api/usercart/user-addtocart`,
+    {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    }
+  );
 
   const data = await res.json();
 
@@ -110,11 +123,14 @@ export async function addToCart(payload) {
    LIST USER CART
 ===================== */
 export async function getUserCart() {
-  const res = await fetch(`${BASE_URL}/api/usercart/list-usercart`, {
-    method: "GET",
-    headers: getAuthHeaders(),
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${BASE_URL}/api/usercart/list-usercart`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    }
+  );
 
   const data = await res.json();
 
@@ -126,19 +142,21 @@ export async function getUserCart() {
 }
 
 /* ====================
-   DELETE CART ITEM
+   CLEAR USER CART
 ===================== */
-export async function deleteCartItem(cartItemId) {
-  const res = await fetch(`${BASE_URL}/api/usercart/delete-usercart`, {
-    method: "DELETE",
-    headers: getAuthHeaders(),
-    body: JSON.stringify({ cartItemId }),
-  });
+export async function clearUserCart() {
+  const res = await fetch(
+    `${BASE_URL}/api/usercart/delete-usercart`,
+    {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    }
+  );
 
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.message || "Failed to delete cart item");
+    throw new Error(data.message || "Failed to clear cart");
   }
 
   return data;

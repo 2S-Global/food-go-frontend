@@ -73,7 +73,7 @@ export default function NonVegMenuPage() {
       )}
 
       {!loading && !error && (
-          <FoodMenu items={nonVegItems} variant="menu" showTitle={false} />
+          <FoodMenu items={nonVegItems} variant="menu" subscriptionType="non_veg" showTitle={false} />
       )}
 
     </>

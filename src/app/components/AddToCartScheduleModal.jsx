@@ -1,45 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Modal from "./Modal";
-import { useRouter } from "next/navigation";
+import { CartContext } from "@/app/context/CartContext";
 
 const SCHEDULES = [
-  "Daily",
-  "Alternative Days",
-  "Every 3 Days",
-  "Weekly",
-  "Monthly",
+  { label: "Daily", value: "daily" },
+  { label: "Alternative Days", value: "alternate" },
+  { label: "Every 3 Days", value: "every_3_days" },
+  { label: "Weekly", value: "weekly" },
+  { label: "Monthly", value: "monthly" },
 ];
 
 export default function AddToCartScheduleModal({
   open,
   item,
   onClose,
-  onConfirm,
 }) {
-    const router = useRouter();
-  const [schedule, setSchedule] = useState("Daily");
+  const { addToCart, loading } = useContext(CartContext);
+
+  const [schedule, setSchedule] = useState(SCHEDULES[0]);
   const [startDate, setStartDate] = useState("");
+  const [hover, setHover] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [hover, setHover] = useState(false);
+  /* ==========================
+     RESET STATE ON CLOSE
+  ========================== */
+  useEffect(() => {
+    if (!open) {
+      setSchedule(SCHEDULES[0]);
+      setStartDate("");
+    }
+  }, [open]);
 
-  const handleSave = () => {
+  /* ==========================
+     SUBMIT ADDON TO CART
+  ========================== */
+  const handleSave = async () => {
+    if (loading) return;
+
     if (!startDate) {
       alert("Please select start date");
       return;
     }
 
-    onConfirm({
-      item,
-      schedule,
-      startDate,
-    });
+    try {
+      await addToCart({
+        additional_items: [
+          {
+            item_id: item._id,
+            quantity: 1,
+            addon_start_date: startDate,
+            addon_schedule_type: schedule.value,
+          },
+        ],
+      });
 
-    onClose();
-    router.push("/cart");
+      onClose(); // ✅ close only on success
+    } catch (err) {
+      // handled inside addToCart
+    }
   };
 
   return (
@@ -57,23 +79,25 @@ export default function AddToCartScheduleModal({
         }}
       >
         {SCHEDULES.map((s) => {
-          const active = schedule === s;
+          const active = schedule.value === s.value;
 
           return (
             <button
-              key={s}
+              key={s.value}
               onClick={() => setSchedule(s)}
+              disabled={loading}
               style={{
                 padding: "8px 14px",
                 borderRadius: "20px",
                 border: "1px solid #c8102e",
                 backgroundColor: active ? "#c8102e" : "#fff",
                 color: active ? "#fff" : "#c8102e",
-                cursor: "pointer",
+                cursor: loading ? "not-allowed" : "pointer",
                 fontSize: "14px",
+                opacity: loading ? 0.6 : 1,
               }}
             >
-              {s}
+              {s.label}
             </button>
           );
         })}
@@ -87,14 +111,7 @@ export default function AddToCartScheduleModal({
           min={today}
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginTop: "6px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            transition: "border-color 0.3s ease",
-          }}
+          style={inputStyle}
         />
       </div>
 
@@ -102,7 +119,7 @@ export default function AddToCartScheduleModal({
       <div style={{ textAlign: "right", marginTop: "24px" }}>
         <button
           onClick={handleSave}
-          disabled={!startDate}
+          disabled={!startDate || loading}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           style={{
@@ -115,13 +132,26 @@ export default function AddToCartScheduleModal({
             color: "#fff",
             border: "none",
             borderRadius: "6px",
-            cursor: startDate ? "pointer" : "not-allowed",
+            cursor:
+              !startDate || loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.7 : 1,
             transition: "background-color 0.3s ease",
           }}
         >
-          Add to Cart
+          {loading ? "Adding..." : "Add to Cart"}
         </button>
       </div>
     </Modal>
   );
 }
+
+/* ==========================
+   STYLES
+========================== */
+const inputStyle = {
+  width: "100%",
+  padding: "10px",
+  marginTop: "6px",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+};
