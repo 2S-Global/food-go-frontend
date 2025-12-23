@@ -33,10 +33,11 @@ export default function CartPage() {
     );
   }
 
-  const hasSubscription = !!cart?.subscription;
-  const hasAddons = cart?.additional_items?.length > 0;
-  const hasCart = hasSubscription || hasAddons;
+  // const hasSubscription = !!cart?.subscription;
+  // const hasAddons = cart?.additional_items?.length > 0;
+  // const hasCart = hasSubscription || hasAddons;
 
+  const hasCart = cart?.items?.length > 0;
   /* ==========================
      EMPTY CART
   ========================== */
@@ -72,9 +73,13 @@ export default function CartPage() {
       year: "numeric",
     });
 
+  // const canCheckout =
+  //   cart?.totals?.grand_total &&
+  //   Number(cart.totals.grand_total) > 0;
+
+
   const canCheckout =
-    cart?.totals?.grand_total &&
-    Number(cart.totals.grand_total) > 0;
+    cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
 
   return (
     <section>
@@ -85,60 +90,33 @@ export default function CartPage() {
         showSearchForm={false}
       />
 
-      <BreadCrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-      />
+      <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
 
       <div className="container py-5">
         <div className="row">
           {/* LEFT SIDE */}
           <div className="col-md-8">
-            {/* SUBSCRIPTION */}
-            {hasSubscription && (
-              <div className="card mb-4">
+            {cart.items.map((item) => (
+              <div key={item._id} className="card mb-3">
                 <div className="card-body">
-                  <h5 className="mb-2 text-capitalize">
-                    {cart.subscription.subscription_type} Subscription
+                  <h5 className="text-capitalize">
+                    {item.subscription_type} Subscription
                   </h5>
+
                   <p className="mb-1">
-                    <strong>Start:</strong>{" "}
-                    {formatDate(cart.subscription.start_date)}
+                    <strong>Weeks:</strong> {item.weeks}
                   </p>
+
                   <p className="mb-1">
-                    <strong>End:</strong>{" "}
-                    {formatDate(cart.subscription.end_date)}
+                    <strong>Meals:</strong> {item.meal_count}
+                  </p>
+
+                  <p className="mb-1">
+                    <strong>Price:</strong> ₹{item.item_total_price}
                   </p>
                 </div>
               </div>
-            )}
-
-            {/* ADDITIONAL ITEMS */}
-            {hasAddons && (
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="mb-3">Additional Items</h5>
-
-                  {cart.additional_items.map((item) => (
-                    <div
-                      key={item._id}
-                      className="d-flex justify-content-between align-items-center border-bottom py-2"
-                    >
-                      <div>
-                        <p className="mb-1">{item.item_name}</p>
-                        <small className="text-muted">
-                          {item.addon_schedule_type
-                            .replaceAll("_", " ")}{" "}
-                          • Starts{" "}
-                          {formatDate(item.addon_start_date)}
-                        </small>
-                      </div>
-
-                      <div>Qty: {item.quantity}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            ))}
           </div>
 
           {/* RIGHT SIDE */}
@@ -147,23 +125,9 @@ export default function CartPage() {
               <h4>Order Summary</h4>
 
               <ul>
-                <li>
-                  Subtotal
-                  <span>
-                    ₹{cart?.totals?.subtotal ?? "-"}
-                  </span>
-                </li>
-                <li>
-                  Delivery Charge
-                  <span>
-                    ₹{cart?.totals?.delivery_charge ?? "-"}
-                  </span>
-                </li>
                 <li className="total">
-                  Grand Total
-                  <span>
-                    ₹{cart?.totals?.grand_total ?? "-"}
-                  </span>
+                  Total Amount
+                  <span>₹{cart.total_cart_amount}</span>
                 </li>
               </ul>
 
