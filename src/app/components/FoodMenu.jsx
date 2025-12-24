@@ -1,9 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import MenuCard from "./MenuCard";
-import AddToCartDateModal from "./AddToCartDateModal";
-import AddToCartScheduleModal from "./AddToCartScheduleModal";
 
 export default function FoodMenu({
   items,
@@ -11,14 +8,11 @@ export default function FoodMenu({
   showTitle = true,
   variant = "home", // home | menu | additional
   subscriptionType,
+  onAddToCart, // ✅ controlled by page
 }) {
   const visibleItems = limit ? items.slice(0, limit) : items;
   const isMenu = variant === "menu";
   const isAdditional = variant === "additional";
-
-  const [openCartModal, setOpenCartModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isHover, setIsHover] = useState(false);
 
   return (
     <section>
@@ -30,7 +24,6 @@ export default function FoodMenu({
         }
       >
         <div className="container">
-          {/* HOME TITLE */}
           {showTitle && !isMenu && !isAdditional && (
             <div className="title1-wrapper text-center">
               <div className="title1-inner">
@@ -40,8 +33,7 @@ export default function FoodMenu({
             </div>
           )}
 
-          {/* MENU & ADDITIONAL GRID */}
-          {isMenu || isAdditional ? (
+          {(isMenu || isAdditional) ? (
             <div className="sec-box">
               <div className="remove-ext">
                 <div className="row gy-4">
@@ -52,39 +44,24 @@ export default function FoodMenu({
                       variant={variant}
                       subscriptionType={subscriptionType}
                       delay={`${0.2 + index * 0.1}s`}
-                      onAddToCart={(food) => {
-                        if (isAdditional) {
-                          setSelectedItem(food);
-                          setOpenCartModal(true);
-                        }
-                      }}
+                      onAddToCart={onAddToCart} // ✅ delegate
                     />
                   ))}
                 </div>
               </div>
 
-              {/* ✅ BOTTOM ADD TO CART — ONLY FOR MENU */}
+              {/* MENU PAGE BUTTON */}
               {isMenu && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "30px",
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 30 }}>
                   <button
-                    onClick={() => setOpenCartModal(true)}
+                    onClick={() => onAddToCart?.(null)}
                     className="brd-rd4"
-                    onMouseEnter={() => setIsHover(true)}
-                    onMouseLeave={() => setIsHover(false)}
                     style={{
                       padding: "14px 30px",
-                      backgroundColor: isHover ? "#012169" : "#c8102e",
+                      backgroundColor: "#c8102e",
                       color: "#fff",
                       border: "none",
-                      cursor: "pointer",
-                      fontSize: "16px",
-                      borderRadius: "6px",
+                      borderRadius: 6,
                     }}
                   >
                     Add to Cart
@@ -93,49 +70,14 @@ export default function FoodMenu({
               )}
             </div>
           ) : (
-            /* HOME GRID */
             <div className="row">
               {visibleItems.map((item, index) => (
-                <MenuCard
-                  key={item.id}
-                  item={item}
-                  delay={`${0.2 + index * 0.2}s`}
-                />
+                <MenuCard key={item.id} item={item} delay={`${0.2 + index * 0.2}s`} />
               ))}
             </div>
           )}
         </div>
       </div>
-
-      {/* DATE MODAL */}
-      {/* ADDITIONAL ITEMS → SCHEDULE MODAL */}
-      {isAdditional && (
-        <AddToCartScheduleModal
-          open={openCartModal}
-          item={selectedItem}
-          onClose={() => {
-            setOpenCartModal(false);
-            setSelectedItem(null);
-          }}
-          onConfirm={(data) => {
-            console.log("Additional item added:", data);
-            // addToCart(data)
-          }}
-        />
-      )}
-
-      {/* MENU PAGE → DATE MODAL */}
-      {isMenu && (
-        <AddToCartDateModal
-          open={openCartModal}
-          subscriptionType={subscriptionType}
-          // item={selectedItem}
-          onClose={() => {
-            setOpenCartModal(false);
-            setSelectedItem(null);
-          }}
-        />
-      )}
     </section>
   );
 }

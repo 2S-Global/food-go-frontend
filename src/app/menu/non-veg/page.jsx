@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import PageBanner from "../../components/PageBanner";
 import BreadCrumbs from "../../components/Breadcrumbs";
 import FoodMenu from "../../components/FoodMenu";
+import AddToCartDateModal from "@/app/components/AddToCartDateModal";
+import LoginRequiredModal from "@/app/components/LoginRequiredModal";
 import Loader from "../../components/Loader";
 import { getMenuByType } from "../../lib/api";
+import { isLoggedIn } from "@/app/lib/auth";
 
 const stripHtml = (html = "") =>
   html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -15,6 +18,11 @@ export default function NonVegMenuPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 🔹 modal states
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [openDateModal, setOpenDateModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
   useEffect(() => {
     async function fetchNonVegMenu() {
       try {
@@ -22,16 +30,13 @@ export default function NonVegMenuPage() {
 
         const mappedItems = (data.data || data).map((item) => ({
           ...item,
-
           id: item._id,
           title: item.menuName,
           description: stripHtml(item.description),
-
           images:
             item.images && item.images.length > 0
               ? item.images
               : ["/assets/images/placeholder.jpg"],
-
           image: item.images?.[0] || "/assets/images/placeholder.jpg",
         }));
 
@@ -46,6 +51,17 @@ export default function NonVegMenuPage() {
 
     fetchNonVegMenu();
   }, []);
+
+  // ✅ guarded add to cart
+  const handleAddToCart = (item) => {
+    if (!isLoggedIn()) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    setSelectedItem(item);
+    setOpenDateModal(true);
+  };
 
   return (
     <>
@@ -67,15 +83,32 @@ export default function NonVegMenuPage() {
       {loading && <Loader />}
 
       {error && (
-        <p style={{ color: "red", textAlign: "center" }}>
-          {error}
-        </p>
+        <p style={{ color: "red", textAlign: "center" }}>{error}</p>
       )}
 
       {!loading && !error && (
-          <FoodMenu items={nonVegItems} variant="menu" subscriptionType="non_veg" showTitle={false} />
+        <FoodMenu
+          items={nonVegItems}
+          variant="menu"
+          subscriptionType="non_veg"
+          showTitle={false}
+          onAddToCart={handleAddToCart} // ✅ IMPORTANT
+        />
       )}
 
+      {/* DATE MODAL */}
+      <AddToCartDateModal
+        open={openDateModal}
+        onClose={() => setOpenDateModal(false)}
+        item={selectedItem}
+        subscriptionType="non_veg"
+      />
+
+      {/* LOGIN REQUIRED MODAL */}
+      <LoginRequiredModal
+        open={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </>
   );
 }

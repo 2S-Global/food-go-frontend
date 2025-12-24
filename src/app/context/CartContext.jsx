@@ -21,7 +21,7 @@ export function CartContextProvider({ children }) {
 
   /* =====================
      FETCH CART
-  =======================*/
+  ====================== */
   const fetchCart = async () => {
     try {
       const token = localStorage.getItem("auth_token");
@@ -38,45 +38,52 @@ export function CartContextProvider({ children }) {
         total_cart_amount: res?.data?.total_cart_amount || 0,
       });
     } catch (err) {
-      console.warn("Fetch cart failed:", err.message);
+      console.warn("Fetch cart failed:", err);
       setCart(emptyCart);
     } finally {
       setInitialized(true);
     }
   };
 
-  /* =======================
-     ADD TO CART
-  ========================== */
+  /* =====================
+     ADD TO CART (GUARDED)
+  ====================== */
   const handleAddToCart = async (payload) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+      throw new Error("Please log in to add items to your cart");
+    }
+
     try {
       setLoading(true);
       await addToCart(payload);
       await fetchCart();
-    } catch (err) {
-      alert(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   /* =====================
-     DELETE CART ITEM
-     WITH OPTIMISTIC UI
-  ===================== */
+     REMOVE CART ITEM
+  ====================== */
   const handleRemoveCartItem = async (cartItemId) => {
     if (!cartItemId) return;
 
     try {
       setLoading(true);
 
-      // 1️⃣ Optimistic UI: remove item immediately
+      // Optimistic UI
       setCart((prev) => {
-        const updatedItems = prev.items.filter(item => item._id !== cartItemId);
+        const updatedItems = prev.items.filter(
+          (item) => item._id !== cartItemId
+        );
+
         const updatedTotal = updatedItems.reduce(
           (sum, item) => sum + item.item_total_price,
           0
         );
+
         return {
           ...prev,
           items: updatedItems,
@@ -84,13 +91,10 @@ export function CartContextProvider({ children }) {
         };
       });
 
-      // 2️⃣ Call API
       await deleteCartItem(cartItemId);
-      // no need to fetchCart() unless you want fresh server data
     } catch (err) {
-      alert(err.message || "Unable to remove item");
-      // Optional: Rollback cart here if needed
-      await fetchCart();
+      console.error("Remove cart item failed:", err);
+      await fetchCart(); // rollback
     } finally {
       setLoading(false);
     }

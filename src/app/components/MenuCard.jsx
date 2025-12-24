@@ -22,18 +22,29 @@ export default function MenuCard({
   const btnClass =
     variant === "menu" || variant === "additional" ? "brd-rd4" : "brd-rd2";
 
+  const VegNonVegIcon = ({ type }) => {
+    const color = type === "Veg" ? "green" : "red";
 
-    const VegNonVegIcon = ({ type }) => {
-  const color = type === "Veg" ? "green" : "red";
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16">
+        <rect
+          x="1"
+          y="1"
+          width="14"
+          height="14"
+          rx="2"
+          stroke={color}
+          fill="none"
+          strokeWidth="2"
+        />
+        <circle cx="8" cy="8" r="3" fill={color} />
+      </svg>
+    );
+  };
 
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16">
-      <rect x="1" y="1" width="14" height="14" rx="2" stroke={color} fill="none" strokeWidth="2" />
-      <circle cx="8" cy="8" r="3" fill={color} />
-    </svg>
-  );
-};
-
+  const handleAddToCart = () => {
+    onAddToCart?.(item);
+  };
 
   return (
     <>
@@ -51,12 +62,12 @@ export default function MenuCard({
             >
               <img src={item.image} alt={item.title} />
             </Link>
-            {item.menuType &&
-            <span className="post-rate  brd-rd2">  
-              <VegNonVegIcon type={item.menuType} />
-             {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
-            </span>
-            }
+            {item.menuType && (
+              <span className="post-rate  brd-rd2">
+                <VegNonVegIcon type={item.menuType} />
+                {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
+              </span>
+            )}
           </div>
 
           {/* INFO */}
@@ -74,7 +85,7 @@ export default function MenuCard({
                   setOpen(true);
                 }}
               >
-                {item.title} 
+                {item.title}
               </Link>
             </h4>
 
@@ -119,7 +130,8 @@ export default function MenuCard({
               {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
               {variant === "additional" && (
                 <button
-                  onClick={() => onAddToCart(item)}
+                  // onClick={() => onAddToCart(item)}
+                  onClick={handleAddToCart}
                   className={btnClass}
                   onMouseEnter={() => setIsAddHover(true)}
                   onMouseLeave={() => setIsAddHover(false)}
