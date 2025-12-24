@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import ConfirmModal from "../components/ConfirmModal";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { CartContext } from "@/app/context/CartContext";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import Loader from "../components/Loader";
+import ConfirmModal from "../components/ConfirmModal";
 import Link from "next/link";
 import {
   Trash2,
@@ -17,16 +16,31 @@ import {
 } from "lucide-react";
 
 export default function CartPage() {
-  const {
-    cart,
-    loading,
-    initialized,
-    removeCartItem,
-  } = useContext(CartContext);
+  const { cart, loading, initialized, removeCartItem } = useContext(CartContext);
 
-  /* ==========================
-     LOADING STATE
-  ========================== */
+  // ================== Confirm Modal State ==================
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  const handleDeleteClick = (itemId) => {
+    setItemToDelete(itemId);
+    setModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    setModalOpen(false);
+    await removeCartItem(itemToDelete); // context handles optimistic removal
+    setItemToDelete(null);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setItemToDelete(null);
+  };
+
+  // ================== LOADING STATE ==================
   if (!initialized) {
     return (
       <section>
@@ -36,9 +50,7 @@ export default function CartPage() {
           background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
-        <BreadCrumbs
-          items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-        />
+        <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
         <div className="container text-center py-5">
           <Loader />
         </div>
@@ -48,9 +60,7 @@ export default function CartPage() {
 
   const hasCart = cart?.items?.length > 0;
 
-  /* ==========================
-     EMPTY CART
-  ========================== */
+  // ================== EMPTY CART ==================
   if (!hasCart) {
     return (
       <section>
@@ -60,14 +70,12 @@ export default function CartPage() {
           background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
-        <BreadCrumbs
-          items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-        />
+        <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
 
         <div className="container text-center py-5">
           <ShoppingCart size={72} className="text-muted mb-3" />
           <h3>Your cart is empty</h3>
-          <p className="text-muted" style={{display: "inherit"}}>
+          <p className="text-muted" style={{ display: "inherit" }}>
             Looks like you haven’t added any meals yet.
           </p>
           <Link href="/menu" className="btn btn-danger mt-3">
@@ -78,8 +86,7 @@ export default function CartPage() {
     );
   }
 
-  const canCheckout =
-    cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
+  const canCheckout = cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
 
   return (
     <section>
@@ -90,9 +97,7 @@ export default function CartPage() {
         showSearchForm={false}
       />
 
-      <BreadCrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-      />
+      <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
 
       <div className="container py-5">
         <div className="row">
@@ -102,36 +107,26 @@ export default function CartPage() {
               <div key={item._id} className="card cart-item mb-3">
                 <div className="card-body d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-2 text-capitalize">
-                      {item.subscription_type} Subscription
-                    </h5>
+                    <h5 className="mb-2 text-capitalize">{item.subscription_type} Subscription</h5>
 
                     <div className="text-muted small d-flex gap-3">
                       <span className="d-flex align-items-center gap-1">
-                        <CalendarDays size={16} />
-                        {item.weeks} Weeks
+                        <CalendarDays size={16} /> {item.weeks} Weeks
                       </span>
 
                       <span className="d-flex align-items-center gap-1">
-                        <Utensils size={16} />
-                        {item.meal_count} Meals
+                        <Utensils size={16} /> {item.meal_count} Meals
                       </span>
                     </div>
                   </div>
 
                   <div className="text-end d-flex align-items-center gap-3">
-                    <div className="price">
-                      £{item.item_total_price}
-                    </div>
+                    <div className="price">£{item.item_total_price}</div>
 
                     <button
                       className="delete-btn"
                       disabled={loading}
-                      onClick={() => {
-                        if (confirm("Remove this item from cart?")) {
-                          removeCartItem(item._id);
-                        }
-                      }}
+                      onClick={() => handleDeleteClick(item._id)}
                       aria-label="Remove item"
                     >
                       <Trash2 size={18} />
@@ -178,6 +173,14 @@ export default function CartPage() {
         </div>
       </div>
 
+      {/* ================= CONFIRM MODAL ================= */}
+      <ConfirmModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        message="Are you sure you want to remove this subscription from your cart?"
+      />
+
       {/* ================= STYLES ================= */}
       <style jsx>{`
         .cart-item {
@@ -223,6 +226,7 @@ export default function CartPage() {
           border-radius: 16px;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
           top: 100px;
+          z-index: 1;
         }
 
         .summary-list {
