@@ -68,13 +68,16 @@ export default function AddToCartDateModal({
 
     try {
       await addToCart({
+        item_type: "subscription",
         subscription_type: subscriptionType,
         start_date: startDate,
         end_date: endDate,
       });
 
       setSuccessMessage(
-        `Your ${subscriptionType === "veg" ? "veg" : "non-veg"} menu added to the cart successfully!`
+        `Your ${
+          subscriptionType === "veg" ? "veg" : "non-veg"
+        } menu added to the cart successfully!`
       );
 
       // auto-close after 1 seconds

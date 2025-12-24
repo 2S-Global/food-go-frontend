@@ -93,30 +93,12 @@ export async function getUserDetails() {
 ===================== */
 export async function addToCart(payload) {
   console.log("API addToCart payload", payload);
-
-  if (!payload?.item_type) {
-    throw new Error("item_type is required");
-  }
-
-  // Subscription validation
-  if (payload.item_type === "subscription") {
-    if (
-      !payload.subscription_type ||
-      !payload.start_date ||
-      !payload.end_date
-    ) {
-      throw new Error("Invalid subscription payload");
-    }
-  }
-
-  // Additional item validation
-  if (payload.item_type === "additional_item") {
-    if (
-      !Array.isArray(payload.additional_items) ||
-      payload.additional_items.length === 0
-    ) {
-      throw new Error("Invalid additional items payload");
-    }
+  if (
+    !payload?.subscription_type &&
+    (!payload?.additional_items ||
+      payload.additional_items.length === 0)
+  ) {
+    throw new Error("Invalid add to cart payload");
   }
 
   const res = await fetch(
@@ -136,7 +118,6 @@ export async function addToCart(payload) {
 
   return data;
 }
-
 
 /* ====================
    LIST USER CART
