@@ -33,13 +33,14 @@ export default function FoodMenu({
             </div>
           )}
 
-          {(isMenu || isAdditional) ? (
+          {isMenu || isAdditional ? (
             <div className="sec-box">
               <div className="remove-ext">
                 <div className="row gy-4">
                   {visibleItems.map((item, index) => (
                     <MenuCard
-                      key={item.id}
+                      // key={item.id}
+                      key={item.id ?? item._id ?? index}
                       item={item}
                       variant={variant}
                       subscriptionType={subscriptionType}
@@ -52,7 +53,13 @@ export default function FoodMenu({
 
               {/* MENU PAGE BUTTON */}
               {isMenu && (
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 30 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: 30,
+                  }}
+                >
                   <button
                     onClick={() => onAddToCart?.(null)}
                     className="brd-rd4"
@@ -72,7 +79,11 @@ export default function FoodMenu({
           ) : (
             <div className="row">
               {visibleItems.map((item, index) => (
-                <MenuCard key={item.id} item={item} delay={`${0.2 + index * 0.2}s`} />
+                <MenuCard
+                  key={item._id}
+                  item={item}
+                  delay={`${0.2 + index * 0.2}s`}
+                />
               ))}
             </div>
           )}

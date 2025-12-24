@@ -130,8 +130,11 @@ export default function MenuCard({
               {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
               {variant === "additional" && (
                 <button
-                  // onClick={() => onAddToCart(item)}
-                  onClick={handleAddToCart}
+                  type="button" // prevent default submit
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent parent click
+                    handleAddToCart(); // call handler passed from FoodMenu
+                  }}
                   className={btnClass}
                   onMouseEnter={() => setIsAddHover(true)}
                   onMouseLeave={() => setIsAddHover(false)}

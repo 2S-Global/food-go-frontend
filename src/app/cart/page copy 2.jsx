@@ -16,8 +16,7 @@ import {
 } from "lucide-react";
 
 export default function CartPage() {
-  const { cart, loading, initialized, removeCartItem } =
-    useContext(CartContext);
+  const { cart, loading, initialized, removeCartItem } = useContext(CartContext);
 
   // ================== Confirm Modal State ==================
   const [modalOpen, setModalOpen] = useState(false);
@@ -51,9 +50,7 @@ export default function CartPage() {
           background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
-        <BreadCrumbs
-          items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-        />
+        <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
         <div className="container text-center py-5">
           <Loader />
         </div>
@@ -73,9 +70,7 @@ export default function CartPage() {
           background="/assets/images/group-2.jpg"
           showSearchForm={false}
         />
-        <BreadCrumbs
-          items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
-        />
+        <BreadCrumbs items={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
 
         <div className="container text-center py-5">
           <ShoppingCart size={72} className="text-muted mb-3" />
@@ -91,8 +86,7 @@ export default function CartPage() {
     );
   }
 
-  const canCheckout =
-    cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
+  const canCheckout = cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
 
   return (
     <section>
@@ -113,13 +107,7 @@ export default function CartPage() {
               <div key={item._id} className="card cart-item mb-3">
                 <div className="card-body d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-2 text-capitalize">
-                      {item.subscription_type
-                        ? `${
-                            item.subscription_type === "veg" ? "Veg" : "Non Veg"
-                          } Subscription`
-                        : "Additional Items"}
-                    </h5>
+                    <h5 className="mb-2 text-capitalize">{item.subscription_type} Subscription</h5>
 
                     <div className="text-muted small d-flex gap-3">
                       <span className="d-flex align-items-center gap-1">

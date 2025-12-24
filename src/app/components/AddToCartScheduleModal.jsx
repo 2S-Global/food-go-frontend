@@ -12,32 +12,30 @@ const SCHEDULES = [
   { label: "Monthly", value: "monthly" },
 ];
 
-export default function AddToCartScheduleModal({
-  open,
-  item,
-  onClose,
-}) {
+export default function AddToCartScheduleModal({ open, item, onClose }) {
   const { addToCart, loading } = useContext(CartContext);
 
+  // local state
   const [schedule, setSchedule] = useState(SCHEDULES[0]);
   const [startDate, setStartDate] = useState("");
   const [hover, setHover] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
 
-  /* ==========================
-     RESET STATE ON CLOSE
-  ========================== */
+  // Reset state when modal closes
   useEffect(() => {
     if (!open) {
       setSchedule(SCHEDULES[0]);
       setStartDate("");
+      setSuccessMessage("");
     }
   }, [open]);
 
-  /* ==========================
-     SUBMIT ADDON TO CART
-  ========================== */
+  // Guard: do not render modal if no item
+  if (!open || !item) return null;
+
+  // Add additional item to cart
   const handleSave = async () => {
     if (loading) return;
 
@@ -48,6 +46,7 @@ export default function AddToCartScheduleModal({
 
     try {
       await addToCart({
+        item_type: "additional_item",
         additional_items: [
           {
             item_id: item._id,
@@ -58,18 +57,24 @@ export default function AddToCartScheduleModal({
         ],
       });
 
-      onClose(); // ✅ close only on success
+      // Show success message
+      setSuccessMessage(
+        `Your ${item.name || "item"} menu added to the cart successfully!`
+      );
+
+      // Auto-close after 2 second
+      setTimeout(() => onClose(), 2000);
     } catch (err) {
-      // handled inside addToCart
+      console.error(err);
+      // error is already handled in addToCart
     }
   };
 
   return (
     <Modal open={open} onClose={onClose}>
-      {/* TITLE */}
       <h3 style={{ marginBottom: "16px" }}>Pick Schedule</h3>
 
-      {/* SCHEDULE OPTIONS */}
+      {/* Schedule options */}
       <div
         style={{
           display: "flex",
@@ -84,6 +89,7 @@ export default function AddToCartScheduleModal({
           return (
             <button
               key={s.value}
+              type="button"
               onClick={() => setSchedule(s)}
               disabled={loading}
               style={{
@@ -93,7 +99,6 @@ export default function AddToCartScheduleModal({
                 backgroundColor: active ? "#c8102e" : "#fff",
                 color: active ? "#fff" : "#c8102e",
                 cursor: loading ? "not-allowed" : "pointer",
-                fontSize: "14px",
                 opacity: loading ? 0.6 : 1,
               }}
             >
@@ -103,7 +108,7 @@ export default function AddToCartScheduleModal({
         })}
       </div>
 
-      {/* START DATE */}
+      {/* Start date input */}
       <div>
         <label>Subscription Start Date</label>
         <input
@@ -115,9 +120,17 @@ export default function AddToCartScheduleModal({
         />
       </div>
 
-      {/* ACTION BUTTON */}
+      {/* Success message */}
+      {successMessage && (
+        <p style={{ marginTop: "16px", color: "green", fontWeight: "bold" }}>
+          {successMessage}
+        </p>
+      )}
+
+      {/* Action button */}
       <div style={{ textAlign: "right", marginTop: "24px" }}>
         <button
+          type="button"
           onClick={handleSave}
           disabled={!startDate || loading}
           onMouseEnter={() => setHover(true)}
@@ -132,8 +145,7 @@ export default function AddToCartScheduleModal({
             color: "#fff",
             border: "none",
             borderRadius: "6px",
-            cursor:
-              !startDate || loading ? "not-allowed" : "pointer",
+            cursor: !startDate || loading ? "not-allowed" : "pointer",
             opacity: loading ? 0.7 : 1,
             transition: "background-color 0.3s ease",
           }}
@@ -145,9 +157,7 @@ export default function AddToCartScheduleModal({
   );
 }
 
-/* ==========================
-   STYLES
-========================== */
+/* Styles */
 const inputStyle = {
   width: "100%",
   padding: "10px",

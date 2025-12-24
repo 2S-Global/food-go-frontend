@@ -80,8 +80,8 @@ export default function AddToCartDateModal({
         } menu added to the cart successfully!`
       );
 
-      // auto-close after 1 seconds
-      setTimeout(() => onClose(), 1000);
+      // auto-close after 2 seconds
+      setTimeout(() => onClose(), 2000);
     } catch (err) {
       // addToCart already alerts
     }
