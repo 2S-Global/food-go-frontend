@@ -119,12 +119,6 @@ export async function addToCart(payload) {
     }
   }
 
-  // 🔴 THE ONLY REQUIRED FIX
-  // Backend expects items[]
-  const formattedPayload = {
-    items: [payload],
-  };
-
   const res = await fetch(
     `${BASE_URL}/api/usercart/user-addtocart`,
     {
@@ -133,7 +127,7 @@ export async function addToCart(payload) {
         "Content-Type": "application/json",
         ...getAuthHeaders(),
       },
-      body: JSON.stringify(formattedPayload),
+      body: JSON.stringify(payload), // ✅ FLAT PAYLOAD
     }
   );
 
