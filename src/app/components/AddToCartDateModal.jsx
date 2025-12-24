@@ -15,7 +15,7 @@ export default function AddToCartDateModal({
   const [endDate, setEndDate] = useState("");
   const [minEndDate, setMinEndDate] = useState("");
   const [hover, setHover] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); // <-- new
+  const [successMessage, setSuccessMessage] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -25,7 +25,7 @@ export default function AddToCartDateModal({
       setStartDate("");
       setEndDate("");
       setMinEndDate("");
-      setSuccessMessage(""); // <-- reset success message
+      setSuccessMessage("");
     }
   }, [open]);
 
@@ -77,8 +77,8 @@ export default function AddToCartDateModal({
         `Your ${subscriptionType === "veg" ? "veg" : "non-veg"} menu added to the cart successfully!`
       );
 
-      // Optional: auto-close after 2 seconds
-      setTimeout(() => onClose(), 2000);
+      // auto-close after 1 seconds
+      setTimeout(() => onClose(), 1000);
     } catch (err) {
       // addToCart already alerts
     }
