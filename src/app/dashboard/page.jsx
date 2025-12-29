@@ -57,7 +57,7 @@ export default function DashboardPage() {
                           data-wow-delay="0.2s"
                         >
                           <div className="profile-sidebar-inner brd-rd5">
-                            <div className="user-info red-bg">
+                            <div className="user-info red-bg" style={{ display: "flex" }}>
                               <img
                                 className="brd-rd50"
                                 src={
