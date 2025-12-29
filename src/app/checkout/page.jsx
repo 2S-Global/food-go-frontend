@@ -153,6 +153,26 @@ export default function CheckoutPage() {
     if (name === "cardNumber") {
       updatedValue = value.replace(/\D/g, "").slice(0, 16);
     }
+    // ✅ CARD EXPIRY (MM/YY)
+    if (name === "cardExpiry") {
+      // Remove non-digits
+      let digits = value.replace(/\D/g, "");
+
+      // Limit to 4 digits (MMYY)
+      digits = digits.slice(0, 4);
+
+      // Auto add slash
+      if (digits.length > 2) {
+        updatedValue = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+      } else {
+        updatedValue = digits;
+      }
+    }
+    if (name === "cardCVV") {
+      // Only numbers, max 4 digits
+      updatedValue = value.replace(/\D/g, "").slice(0, 4);
+    }
+
 
     setFormData((prev) => ({
       ...prev,
@@ -263,7 +283,7 @@ export default function CheckoutPage() {
       toast.success("🎉 Order placed successfully!", { id: toastId });
 
       setTimeout(() => {
-        router.push("/orders");
+        router.push("/dashboard#statement");
       }, 2000);
     } catch (error) {
       console.error("ORDER ERROR ❌", error);
