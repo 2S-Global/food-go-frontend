@@ -37,14 +37,22 @@ export default function MenuPage() {
             <Link href="/menu/veg" className={styles.menuBox}>
               <img src="/assets/images/veg-menu.jpg" alt="Veg Menu" />
               <h3>Veg Menu</h3>
-              <p>£70</p>
+              <p>£70 <span style={{ fontSize: "28px", color: "#666" }}>/week</span></p>
+              {/* <p>
+                £70{" "}
+                <span style={{ fontSize: "14px", color: "#666" }}>/week</span>
+              </p> */}
             </Link>
 
             {/* NON-VEG MENU BLOCK */}
             <Link href="/menu/non-veg" className={styles.menuBox}>
               <img src="/assets/images/nonveg-menu.jpg" alt="Non Veg Menu" />
               <h3>Non-Veg Menu</h3>
-              <p>£80</p>
+              <p>£80 <span style={{ fontSize: "28px", color: "#666" }}>/week</span></p>
+              {/* <p>
+                £80{" "}
+                <span style={{ fontSize: "14px", color: "#666" }}>/week</span>
+              </p> */}
             </Link>
 
             {/* ADDITIONAL ITEMS MENU BLOCK */}

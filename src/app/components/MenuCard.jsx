@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import FoodDetailsModal from "./FoodDetailsModal";
+
+const stripHtml = (html = "") =>
+  html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 
 export default function MenuCard({
   item,
@@ -10,6 +14,7 @@ export default function MenuCard({
   variant = "home", // home | menu | additional
   onAddToCart,
 }) {
+  const router = useRouter();
   const [isHover, setIsHover] = useState(false);
   const [isAddHover, setIsAddHover] = useState(false);
   const [open, setOpen] = useState(false);
@@ -46,6 +51,12 @@ export default function MenuCard({
     onAddToCart?.(item);
   };
 
+  const handleViewAll = () => {
+    if (item.menuType === "Veg") router.push("/menu/veg");
+    else if (item.menuType === "Non-Veg") router.push("/menu/non-veg");
+    else router.push("/menu/additional-items");
+  };
+
   return (
     <div className="col-md-4 col-sm-6 col-lg-4">
       <div className={cardClass} data-wow-delay={delay}>
@@ -59,7 +70,12 @@ export default function MenuCard({
               setOpen(true);
             }}
           >
-            <img src={item.image} alt={item.title} />
+            {/* <img src={item.image} alt={item.title} /> */}
+            <img
+              src={item.images?.[0]}
+              alt={item.menuName || item.itemName}
+              loading="lazy"
+            />
           </Link>
           {item.menuType && (
             <span className="post-rate  brd-rd2">
@@ -84,7 +100,8 @@ export default function MenuCard({
                 setOpen(true);
               }}
             >
-              {item.title}
+              {/* {item.title} */}
+              {item.menuName || item.itemName}
             </Link>
           </h4>
 
@@ -98,7 +115,8 @@ export default function MenuCard({
               marginBottom: "5px",
             }}
           >
-            {item.description}
+            {/* {item.description} */}
+           {stripHtml(item.description)}
           </p>
 
           {/* PRICE — ONLY FOR ADDITIONAL ITEMS */}
@@ -126,6 +144,27 @@ export default function MenuCard({
               marginBottom: "12px",
             }}
           >
+
+            {/* ✅ HOME PAGE → VIEW ALL */}
+            {variant === "home" && (
+              <button
+                onClick={handleViewAll}
+                className={btnClass}
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
+                style={{
+                  padding: "10px 14px",
+                  backgroundColor: isHover ? "#c8102e" : "#012169",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 6,
+                  cursor: "pointer",
+                }}
+              >
+                View All
+              </button>
+            )}
+
             {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
             {variant === "additional" && (
               <button
@@ -152,6 +191,7 @@ export default function MenuCard({
             )}
 
             {/* VIEW DETAILS — RIGHT */}
+             {variant !== "home" && (
             <button
               onClick={() => setOpen(true)}
               className={btnClass}
@@ -169,16 +209,19 @@ export default function MenuCard({
             >
               View Details
             </button>
+          )}
           </div>
         </div>
       </div>
 
-      {/* MODAL */}
-      <FoodDetailsModal
-        item={item}
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      {/* DETAILS MODAL */}
+      {variant !== "home" && (
+        <FoodDetailsModal
+          item={item}
+          open={open}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </div>
   );
 }

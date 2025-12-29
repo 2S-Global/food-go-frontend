@@ -3,14 +3,20 @@
 import MenuCard from "./MenuCard";
 
 export default function FoodMenu({
-  items,
+  items = [], // ✅ default
   limit,
   showTitle = true,
-  variant = "home", // home | menu | additional
+  variant = "home",
   subscriptionType,
-  onAddToCart, // ✅ controlled by page
+  onAddToCart,
 }) {
-  const visibleItems = limit ? items.slice(0, limit) : items;
+  // ✅ SAFETY: ensure array
+  const safeItems = Array.isArray(items) ? items : [];
+
+  const visibleItems = limit
+    ? safeItems.slice(0, limit)
+    : safeItems;
+
   const isMenu = variant === "menu";
   const isAdditional = variant === "additional";
 
@@ -39,19 +45,17 @@ export default function FoodMenu({
                 <div className="row gy-4">
                   {visibleItems.map((item, index) => (
                     <MenuCard
-                      // key={item.id}
                       key={item.id ?? item._id ?? index}
                       item={item}
                       variant={variant}
                       subscriptionType={subscriptionType}
                       delay={`${0.2 + index * 0.1}s`}
-                      onAddToCart={onAddToCart} // ✅ delegate
+                      onAddToCart={onAddToCart}
                     />
                   ))}
                 </div>
               </div>
 
-              {/* MENU PAGE BUTTON */}
               {isMenu && (
                 <div
                   style={{
@@ -80,7 +84,7 @@ export default function FoodMenu({
             <div className="row">
               {visibleItems.map((item, index) => (
                 <MenuCard
-                  key={item._id}
+                  key={item._id ?? index}
                   item={item}
                   delay={`${0.2 + index * 0.2}s`}
                 />

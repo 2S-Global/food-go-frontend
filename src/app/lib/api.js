@@ -185,3 +185,23 @@ export async function deleteCartItem(cartItemId) {
 
   return data;
 }
+
+/* ======================
+   LIST MEAL TYPES (PUBLIC)
+====================== */
+export async function getMealTypes() {
+  const res = await fetch(
+    `${BASE_URL}/api/usermenu/list-meal-type`,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch meal types");
+  }
+
+  return res.json();
+}
+
