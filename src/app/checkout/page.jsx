@@ -9,9 +9,26 @@ import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const context = useContext(CartContext);
 
-  // Safety check if context is missing
+  // === ALL HOOKS AT THE TOP - UNCONDITIONAL ===
+  const context = useContext(CartContext);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    cardName: "",
+    cardNumber: "",
+    cardExpiry: "",
+    cardCVV: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // === EARLY RETURNS AFTER HOOKS ===
   if (!context) {
     return (
       <section>
@@ -33,7 +50,6 @@ export default function CheckoutPage() {
 
   const { cart, initialized, loading } = context;
 
-  // Loading state
   if (!initialized || loading) {
     return (
       <section>
@@ -54,7 +70,6 @@ export default function CheckoutPage() {
   const cartItems = cart?.items || [];
   const subtotal = Number(cart?.total_cart_amount || 0);
 
-  // Empty cart
   if (cartItems.length === 0) {
     return (
       <section>
@@ -82,24 +97,7 @@ export default function CheckoutPage() {
     );
   }
 
-  // Form state - CORRECT use of useState
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    cardName: "",
-    cardNumber: "",
-    cardExpiry: "",
-    cardCVV: "",
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  // === HELPER FUNCTIONS ===
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -112,7 +110,6 @@ export default function CheckoutPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simple required field validation
     const required = [
       "firstName", "lastName", "email", "phone",
       "address", "city", "state", "zipCode",
@@ -127,7 +124,6 @@ export default function CheckoutPage() {
       }
     }
 
-    // Basic email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       alert("Please enter a valid email address.");
       setIsSubmitting(false);
@@ -138,9 +134,7 @@ export default function CheckoutPage() {
       console.log("Order placed:", { formData, cart, total });
       alert(`Order placed successfully! 🎉\nOrder ID: #${Date.now()}`);
 
-      // Clear cart from localStorage (adjust key if different in your CartContext)
-      localStorage.removeItem("foodAppCart");
-
+      localStorage.removeItem("foodAppCart"); // adjust key if different
       router.push("/");
     } catch (error) {
       alert("Order failed. Please try again.");
@@ -149,6 +143,7 @@ export default function CheckoutPage() {
     }
   };
 
+  // === MAIN RENDER ===
   return (
     <section>
       <PageBanner
@@ -168,12 +163,13 @@ export default function CheckoutPage() {
 
       <div className="container" style={{ paddingTop: "40px", paddingBottom: "80px" }}>
         <div className="row">
-          {/* Form */}
+          {/* Checkout Form */}
           <div className="col-md-8">
             <div className="checkout-form">
               <h3 style={{ marginBottom: "30px" }}>Delivery Information</h3>
 
               <form onSubmit={handleSubmit}>
+                {/* Name */}
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">First Name *</label>
@@ -185,6 +181,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* Contact */}
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Email Address *</label>
@@ -196,6 +193,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* Address */}
                 <div className="mb-3">
                   <label className="form-label">Delivery Address *</label>
                   <input type="text" className="form-control" name="address" value={formData.address} onChange={handleInputChange} required />
@@ -216,6 +214,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* Payment */}
                 <h3 style={{ marginTop: "50px", marginBottom: "30px" }}>Payment Information</h3>
 
                 <div className="mb-3">
@@ -308,7 +307,8 @@ export default function CheckoutPage() {
       </div>
 
       <style jsx>{`
-        .checkout-form, .order-summary {
+        .checkout-form,
+        .order-summary {
           background: #fff;
           padding: 35px;
           border-radius: 16px;
