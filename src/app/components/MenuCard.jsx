@@ -47,12 +47,36 @@ export default function MenuCard({
   };
 
   return (
-    <>
-      <div className="col-md-4 col-sm-6 col-lg-4">
-        <div className={cardClass} data-wow-delay={delay}>
-          {/* IMAGE */}
-          {/* <div className="popular-dish-thumb fixed-thumb"> */}
-          <div className="popular-dish-thumb ">
+    <div className="col-md-4 col-sm-6 col-lg-4">
+      <div className={cardClass} data-wow-delay={delay}>
+        {/* IMAGE */}
+        {/* <div className="popular-dish-thumb fixed-thumb"> */}
+        <div className="popular-dish-thumb ">
+          <Link
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(true);
+            }}
+          >
+            <img src={item.image} alt={item.title} />
+          </Link>
+          {item.menuType && (
+            <span className="post-rate  brd-rd2">
+              <VegNonVegIcon type={item.menuType} />
+              {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
+            </span>
+          )}
+        </div>
+
+        {/* INFO */}
+        <div
+          className="popular-dish-info card-content"
+          style={{
+            padding: "10px 10px",
+          }}
+        >
+          <h4>
             <Link
               href="#"
               onClick={(e) => {
@@ -60,107 +84,62 @@ export default function MenuCard({
                 setOpen(true);
               }}
             >
-              <img src={item.image} alt={item.title} />
+              {item.title}
             </Link>
-            {item.menuType && (
-              <span className="post-rate  brd-rd2">
-                <VegNonVegIcon type={item.menuType} />
-                {/*  <i className="fa fa-star-o ms-2" /> {item.rating} */}
-              </span>
-            )}
-          </div>
+          </h4>
 
-          {/* INFO */}
-          <div
-            className="popular-dish-info card-content"
+          <p
             style={{
-              padding: "10px 10px",
+              // display: "-webkit-box",
+              // WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textAlign: "justify",
+              marginBottom: "5px",
             }}
           >
-            <h4>
-              <Link
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpen(true);
-                }}
-              >
-                {item.title}
-              </Link>
-            </h4>
+            {item.description}
+          </p>
 
-            <p
+          {/* PRICE — ONLY FOR ADDITIONAL ITEMS */}
+          {variant === "additional" && item.itemPrice && (
+            <span
+              className="price"
               style={{
-                // display: "-webkit-box",
-                // WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-                textAlign: "justify",
-                marginBottom: "5px",
+                display: "block",
+                fontWeight: "700",
+                fontSize: "20px",
+                color: "#c8102e",
               }}
             >
-              {item.description}
-            </p>
+              £{item.itemPrice}
+            </span>
+          )}
 
-            {/* PRICE — ONLY FOR ADDITIONAL ITEMS */}
-            {variant === "additional" && item.itemPrice && (
-              <span
-                className="price"
-                style={{
-                  display: "block",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                  color: "#c8102e",
-                }}
-              >
-                £{item.itemPrice}
-              </span>
-            )}
-
-            {/* BUTTONS */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent:
-                  variant === "additional" ? "space-between" : "flex-end",
-                alignItems: "center",
-                marginBottom: "12px",
-              }}
-            >
-              {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
-              {variant === "additional" && (
-                <button
-                  type="button" // prevent default submit
-                  onClick={(e) => {
-                    e.stopPropagation(); // prevent parent click
-                    handleAddToCart(); // call handler passed from FoodMenu
-                  }}
-                  className={btnClass}
-                  onMouseEnter={() => setIsAddHover(true)}
-                  onMouseLeave={() => setIsAddHover(false)}
-                  style={{
-                    padding: "10px 14px",
-                    backgroundColor: isAddHover ? "#012169" : "#c8102e",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    transition: "background-color 160ms ease",
-                  }}
-                >
-                  Add to Cart
-                </button>
-              )}
-
-              {/* VIEW DETAILS — RIGHT */}
+          {/* BUTTONS */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent:
+                variant === "additional" ? "space-between" : "flex-end",
+              alignItems: "center",
+              marginBottom: "12px",
+            }}
+          >
+            {/* ADD TO CART — LEFT (ONLY ADDITIONAL ITEMS) */}
+            {variant === "additional" && (
               <button
-                onClick={() => setOpen(true)}
+                type="button" // prevent default submit
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent parent click
+                  handleAddToCart(); // call handler passed from FoodMenu
+                }}
                 className={btnClass}
-                onMouseEnter={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}
+                onMouseEnter={() => setIsAddHover(true)}
+                onMouseLeave={() => setIsAddHover(false)}
                 style={{
                   padding: "10px 14px",
-                  backgroundColor: isHover ? "#c8102e" : "#012169",
+                  backgroundColor: isAddHover ? "#012169" : "#c8102e",
                   color: "#fff",
                   border: "none",
                   borderRadius: "6px",
@@ -168,9 +147,28 @@ export default function MenuCard({
                   transition: "background-color 160ms ease",
                 }}
               >
-                View Details
+                Add to Cart
               </button>
-            </div>
+            )}
+
+            {/* VIEW DETAILS — RIGHT */}
+            <button
+              onClick={() => setOpen(true)}
+              className={btnClass}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+              style={{
+                padding: "10px 14px",
+                backgroundColor: isHover ? "#c8102e" : "#012169",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                transition: "background-color 160ms ease",
+              }}
+            >
+              View Details
+            </button>
           </div>
         </div>
       </div>
@@ -181,6 +179,6 @@ export default function MenuCard({
         open={open}
         onClose={() => setOpen(false)}
       />
-    </>
+    </div>
   );
 }
