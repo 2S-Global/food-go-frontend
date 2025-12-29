@@ -4,11 +4,85 @@ import { useContext, useState } from "react";
 import { CartContext } from "@/app/context/CartContext";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
+import Loader from "../components/Loader";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
-  const context = useContext(CartContext);
   const router = useRouter();
+  const context = useContext(CartContext);
+
+  // Safety check if context is missing
+  if (!context) {
+    return (
+      <section>
+        <PageBanner
+          title="Checkout"
+          subtitle="Complete your order"
+          background="/assets/images/topbg.jpg"
+          showSearchForm={false}
+        />
+        <div className="container text-center py-5">
+          <h3>Cart system unavailable. Please try again.</h3>
+          <button onClick={() => router.push("/cart")} className="btn btn-danger mt-3">
+            Back to Cart
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  const { cart, initialized, loading } = context;
+
+  // Loading state
+  if (!initialized || loading) {
+    return (
+      <section>
+        <PageBanner
+          title="Checkout"
+          subtitle="Complete your order"
+          background="/assets/images/topbg.jpg"
+          showSearchForm={false}
+        />
+        <div className="container text-center py-5" style={{ minHeight: "500px" }}>
+          <Loader />
+          <h4 className="mt-4 text-muted">Loading checkout...</h4>
+        </div>
+      </section>
+    );
+  }
+
+  const cartItems = cart?.items || [];
+  const subtotal = Number(cart?.total_cart_amount || 0);
+
+  // Empty cart
+  if (cartItems.length === 0) {
+    return (
+      <section>
+        <PageBanner
+          title="Checkout"
+          subtitle="Complete your order"
+          background="/assets/images/topbg.jpg"
+          showSearchForm={false}
+        />
+        <BreadCrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Cart", href: "/cart" },
+            { label: "Checkout" },
+          ]}
+        />
+        <div className="container text-center py-5">
+          <h3>Your cart is empty</h3>
+          <p className="text-muted">Add some meals to continue.</p>
+          <a href="/menu" className="btn btn-danger mt-3">
+            Browse Menu
+          </a>
+        </div>
+      </section>
+    );
+  }
+
+  // Form state - CORRECT use of useState
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,150 +97,57 @@ export default function CheckoutPage() {
     cardExpiry: "",
     cardCVV: "",
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  if (!context || !context.isHydrated) {
-    return (
-      <section>
-        <PageBanner
-          title="Checkout"
-          subtitle="Complete your order"
-          background="/assets/images/group-2.jpg"
-          showSearchForm={false}
-        />
-        <div
-          className="container"
-          style={{ paddingTop: "40px", paddingBottom: "80px" }}
-        >
-          <div className="text-center" style={{ padding: "80px 0" }}>
-            <h3>Loading checkout...</h3>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const { cartItems, getCartTotal } = context;
-
-  if (cartItems.length === 0) {
-    return (
-      <section>
-        <PageBanner
-          title="Checkout"
-          subtitle="Complete your order"
-          background="/assets/images/group-2.jpg"
-          showSearchForm={false}
-        />
-        <BreadCrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Cart", href: "/cart" },
-            { label: "Checkout" },
-          ]}
-        />
-        <div
-          className="container"
-          style={{ paddingTop: "40px", paddingBottom: "80px" }}
-        >
-          <div className="text-center" style={{ padding: "80px 0" }}>
-            <h3>Your cart is empty</h3>
-            <a href="/menu" className="btn btn-danger mt-3">
-              Continue Shopping
-            </a>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const deliveryCharge = 40;
+  const total = subtotal + deliveryCharge;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate form
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.address ||
-      !formData.city ||
-      !formData.state ||
-      !formData.zipCode ||
-      !formData.cardNumber ||
-      !formData.cardExpiry ||
-      !formData.cardCVV
-    ) {
-      alert("Please fill in all required fields");
+    // Simple required field validation
+    const required = [
+      "firstName", "lastName", "email", "phone",
+      "address", "city", "state", "zipCode",
+      "cardName", "cardNumber", "cardExpiry", "cardCVV"
+    ];
+
+    for (const field of required) {
+      if (!formData[field]?.trim()) {
+        alert("Please fill in all required fields.");
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
+    // Basic email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert("Please enter a valid email address.");
       setIsSubmitting(false);
       return;
     }
 
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validate phone
-    if (formData.phone.length < 10) {
-      alert("Please enter a valid phone number");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validate card number
-    if (formData.cardNumber.replace(/\s/g, "").length < 13) {
-      alert("Please enter a valid card number");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Simulate order processing
     try {
-      // Here you would typically send the order to your backend
-      const orderData = {
-        customerInfo: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          zipCode: formData.zipCode,
-        },
-        items: cartItems,
-        total: getCartTotal() + 40,
-        timestamp: new Date().toISOString(),
-      };
+      console.log("Order placed:", { formData, cart, total });
+      alert(`Order placed successfully! 🎉\nOrder ID: #${Date.now()}`);
 
-      console.log("Order placed:", orderData);
-      alert("Order placed successfully! Order ID: #" + Date.now());
-
-      // Redirect to order confirmation
+      // Clear cart from localStorage (adjust key if different in your CartContext)
       localStorage.removeItem("foodAppCart");
+
       router.push("/");
     } catch (error) {
-      alert("Error placing order. Please try again.");
+      alert("Order failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  const deliveryCharge = 40;
-  const subtotal = getCartTotal();
-  const total = subtotal + deliveryCharge;
 
   return (
     <section>
@@ -178,209 +159,92 @@ export default function CheckoutPage() {
       />
 
       <BreadCrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Checkout" }]}
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Cart", href: "/cart" },
+          { label: "Checkout" },
+        ]}
       />
 
-      <div
-        className="container"
-        style={{ paddingTop: "40px", paddingBottom: "80px" }}
-      >
+      <div className="container" style={{ paddingTop: "40px", paddingBottom: "80px" }}>
         <div className="row">
-          {/* Checkout Form */}
+          {/* Form */}
           <div className="col-md-8">
             <div className="checkout-form">
               <h3 style={{ marginBottom: "30px" }}>Delivery Information</h3>
 
               <form onSubmit={handleSubmit}>
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>First Name *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        placeholder="Enter first name"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">First Name *</label>
+                    <input type="text" className="form-control" name="firstName" value={formData.firstName} onChange={handleInputChange} required />
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>Last Name *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        placeholder="Enter last name"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Last Name *</label>
+                    <input type="text" className="form-control" name="lastName" value={formData.lastName} onChange={handleInputChange} required />
                   </div>
                 </div>
 
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>Email Address *</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Enter email address"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Email Address *</label>
+                    <input type="email" className="form-control" name="email" value={formData.email} onChange={handleInputChange} required />
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>Phone Number *</label>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="Enter phone number"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Phone Number *</label>
+                    <input type="tel" className="form-control" name="phone" value={formData.phone} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <div className="form-group mb-3">
-                  <label>Delivery Address *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="Enter delivery address"
-                    required
-                  />
+                <div className="mb-3">
+                  <label className="form-label">Delivery Address *</label>
+                  <input type="text" className="form-control" name="address" value={formData.address} onChange={handleInputChange} required />
                 </div>
 
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>City *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        placeholder="Enter city"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">City *</label>
+                    <input type="text" className="form-control" name="city" value={formData.city} onChange={handleInputChange} required />
                   </div>
-                  <div className="col-md-3">
-                    <div className="form-group mb-3">
-                      <label>State *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleInputChange}
-                        placeholder="Enter state"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label">State *</label>
+                    <input type="text" className="form-control" name="state" value={formData.state} onChange={handleInputChange} required />
                   </div>
-                  <div className="col-md-3">
-                    <div className="form-group mb-3">
-                      <label>ZIP Code *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="zipCode"
-                        value={formData.zipCode}
-                        onChange={handleInputChange}
-                        placeholder="ZIP Code"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label">ZIP Code *</label>
+                    <input type="text" className="form-control" name="zipCode" value={formData.zipCode} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <h3 style={{ marginTop: "40px", marginBottom: "30px" }}>
-                  Payment Information
-                </h3>
+                <h3 style={{ marginTop: "50px", marginBottom: "30px" }}>Payment Information</h3>
 
-                <div className="form-group mb-3">
-                  <label>Cardholder Name *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="cardName"
-                    value={formData.cardName}
-                    onChange={handleInputChange}
-                    placeholder="Name on card"
-                    required
-                  />
+                <div className="mb-3">
+                  <label className="form-label">Cardholder Name *</label>
+                  <input type="text" className="form-control" name="cardName" value={formData.cardName} onChange={handleInputChange} required />
                 </div>
 
-                <div className="form-group mb-3">
-                  <label>Card Number *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="cardNumber"
-                    value={formData.cardNumber}
-                    onChange={handleInputChange}
-                    placeholder="1234 5678 9012 3456"
-                    required
-                  />
+                <div className="mb-3">
+                  <label className="form-label">Card Number *</label>
+                  <input type="text" className="form-control" name="cardNumber" placeholder="1234 5678 9012 3456" value={formData.cardNumber} onChange={handleInputChange} required />
                 </div>
 
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>Expiry Date (MM/YY) *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="cardExpiry"
-                        value={formData.cardExpiry}
-                        onChange={handleInputChange}
-                        placeholder="MM/YY"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Expiry Date (MM/YY) *</label>
+                    <input type="text" className="form-control" name="cardExpiry" placeholder="MM/YY" value={formData.cardExpiry} onChange={handleInputChange} required />
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group mb-3">
-                      <label>CVV *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="cardCVV"
-                        value={formData.cardCVV}
-                        onChange={handleInputChange}
-                        placeholder="123"
-                        maxLength="4"
-                        required
-                      />
-                    </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">CVV *</label>
+                    <input type="text" className="form-control" name="cardCVV" maxLength="4" placeholder="123" value={formData.cardCVV} onChange={handleInputChange} required />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="btn btn-danger btn-lg mt-4"
+                  className="btn btn-danger btn-lg w-100 mt-4"
                   disabled={isSubmitting}
-                  style={{ width: "100%" }}
                 >
-                  {isSubmitting ? "Processing..." : "Place Order"}
+                  {isSubmitting ? "Processing Order..." : `Place Order - £${total}`}
                 </button>
               </form>
             </div>
@@ -391,87 +255,51 @@ export default function CheckoutPage() {
             <div className="order-summary">
               <h4>Order Summary</h4>
 
-              <div
-                className="order-items"
-                style={{
-                  marginBottom: "20px",
-                  maxHeight: "300px",
-                  overflowY: "auto",
-                }}
-              >
+              <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "20px" }}>
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
-                    className="order-item"
+                    key={item._id}
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      marginBottom: "15px",
-                      paddingBottom: "10px",
+                      padding: "12px 0",
                       borderBottom: "1px solid #eee",
                     }}
                   >
                     <div>
-                      <p style={{ margin: 0 }}>
-                        <strong>{item.name}</strong>
-                      </p>
-                      <p
-                        style={{
-                          margin: "5px 0 0 0",
-                          color: "#666",
-                          fontSize: "14px",
-                        }}
-                      >
-                        x{item.qty}
+                      <strong>
+                        {item.subscription_type
+                          ? `${item.subscription_type === "veg" ? "Veg" : "Non-Veg"} Subscription`
+                          : "Meal Plan"}
+                      </strong>
+                      <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#666" }}>
+                        {item.weeks} Weeks • {item.meal_count} Meals
                       </p>
                     </div>
-                    <div style={{ textAlign: "right" }}>
-                      <p style={{ margin: 0 }}>
-                        <strong>₹{item.price * item.qty}</strong>
-                      </p>
-                    </div>
+                    <strong>£{item.item_total_price}</strong>
                   </div>
                 ))}
               </div>
 
               <ul style={{ listStyle: "none", padding: 0, margin: "20px 0" }}>
-                <li
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
-                    fontSize: "16px",
-                  }}
-                >
-                  <span>Subtotal:</span>
-                  <span>₹{subtotal}</span>
+                <li style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+                  <span>Subtotal</span>
+                  <span>£{subtotal}</span>
                 </li>
-
-                <li
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
-                    fontSize: "16px",
-                  }}
-                >
-                  <span>Delivery Charge:</span>
-                  <span>₹{deliveryCharge}</span>
+                <li style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+                  <span>Delivery</span>
+                  <span>£{deliveryCharge}</span>
                 </li>
-
-                <li
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "15px",
-                    paddingTop: "15px",
-                    borderTop: "2px solid #eee",
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <span>Grand Total:</span>
-                  <span style={{ color: "#ff6b6b" }}>₹{total}</span>
+                <li style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "15px",
+                  borderTop: "2px solid #eee",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                }}>
+                  <span>Total</span>
+                  <span style={{ color: "#d32f2f" }}>£{total}</span>
                 </li>
               </ul>
             </div>
@@ -480,54 +308,38 @@ export default function CheckoutPage() {
       </div>
 
       <style jsx>{`
-        .checkout-form {
+        .checkout-form, .order-summary {
           background: #fff;
-          padding: 30px;
-          border-radius: 10px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+          padding: 35px;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
         .order-summary {
-          background: #fff;
-          padding: 25px;
-          border-radius: 10px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
           position: sticky;
-          top: 20px;
+          top: 100px;
         }
 
-        .form-group label {
+        .form-label {
           font-weight: 600;
-          margin-bottom: 8px;
           color: #333;
         }
 
         .form-control {
-          border-radius: 5px;
+          padding: 12px 15px;
+          border-radius: 8px;
           border: 1px solid #ddd;
-          padding: 10px 12px;
-          font-size: 14px;
         }
 
         .form-control:focus {
-          border-color: #ff6b6b;
-          box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
-        }
-
-        .btn {
-          border-radius: 5px;
-          font-weight: 600;
-        }
-
-        .btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
+          border-color: #d32f2f;
+          box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.2);
         }
 
         @media (max-width: 768px) {
           .order-summary {
             position: static;
-            margin-top: 30px;
+            margin-top: 40px;
           }
         }
       `}</style>
