@@ -125,6 +125,21 @@ export default function DashboardPage() {
                               
                               <button
                                 className="nav-link"
+                                id="v-pills-order-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#v-pills-order"
+                                type="button"
+                                role="tab"
+                                aria-controls="v-pills-order"
+                                aria-selected="false"
+                              >
+                                <a href="#my-orders">
+                                  <i className="fa fa-shopping-basket" /> ORDER DETAILS
+                                </a>
+                              </button>
+                              
+                              <button
+                                className="nav-link"
                                 id="v-pills-statement-tab"
                                 data-bs-toggle="pill"
                                 data-bs-target="#v-pills-statement"
@@ -361,8 +376,20 @@ export default function DashboardPage() {
                             aria-labelledby="v-pills-profile-tab"
                           >
                             <div className="tabs-wrp brd-rd5">
-                              {/* 👇 NEW COMPONENT GOES HERE */}
+                              {/* <h4 itemProp="headline">MY SUBSCRIPTIONS</h4> */}
                               <MyOrder />
+                            </div>
+                          </div>
+                         
+                          <div
+                            className="tab-pane fade"
+                            id="v-pills-order"
+                            role="tabpanel"
+                            aria-labelledby="v-pills-settings-tab"
+                          >
+                            <div className="tabs-wrp brd-rd5">
+                              <h4 itemProp="headline">MY ORDERS</h4>
+                              
                             </div>
                           </div>
                           
