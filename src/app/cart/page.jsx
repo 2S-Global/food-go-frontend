@@ -28,6 +28,15 @@ export default function CartPage() {
     setModalOpen(true);
   };
 
+  const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
   const handleConfirmDelete = async () => {
     if (!itemToDelete) return;
 
@@ -121,14 +130,24 @@ export default function CartPage() {
                         : "Additional Items"}
                     </h5>
 
-                    <div className="text-muted small d-flex gap-3">
+                    <div className="text-muted small d-flex flex-wrap gap-3 mt-1">
                       <span className="d-flex align-items-center gap-1">
-                        <CalendarDays size={16} /> {item.weeks} Weeks
+                        <CalendarDays size={16} />
+                        {item.weeks} Weeks
                       </span>
 
                       <span className="d-flex align-items-center gap-1">
-                        <Utensils size={16} /> {item.meal_count} Meals
+                        <Utensils size={16} />
+                        {item.meal_count} Meals
                       </span>
+
+                      {item.start_date && item.end_date && (
+                        <span className="d-flex align-items-center gap-1">
+                          <CalendarDays size={16} />
+                          {formatDate(item.start_date)} →{" "}
+                          {formatDate(item.end_date)}
+                        </span>
+                      )}
                     </div>
                   </div>
 
