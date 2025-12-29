@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import MyOrder from "../components/MyOrder";
 import { getUserDetails } from "../lib/api";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
@@ -57,7 +58,10 @@ export default function DashboardPage() {
                           data-wow-delay="0.2s"
                         >
                           <div className="profile-sidebar-inner brd-rd5">
-                            <div className="user-info red-bg" style={{ display: "flex" }}>
+                            <div
+                              className="user-info red-bg"
+                              style={{ display: "flex" }}
+                            >
                               <img
                                 className="brd-rd50"
                                 src={
@@ -122,22 +126,7 @@ export default function DashboardPage() {
                                   SUBSCRIPTIONS
                                 </a>
                               </button>
-                              
-                              <button
-                                className="nav-link"
-                                id="v-pills-order-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#v-pills-order"
-                                type="button"
-                                role="tab"
-                                aria-controls="v-pills-order"
-                                aria-selected="false"
-                              >
-                                <a href="#my-orders">
-                                  <i className="fa fa-shopping-basket" /> ORDER DETAILS
-                                </a>
-                              </button>
-                              
+
                               <button
                                 className="nav-link"
                                 id="v-pills-statement-tab"
@@ -380,19 +369,7 @@ export default function DashboardPage() {
                               <MyOrder />
                             </div>
                           </div>
-                         
-                          <div
-                            className="tab-pane fade"
-                            id="v-pills-order"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-settings-tab"
-                          >
-                            <div className="tabs-wrp brd-rd5">
-                              <h4 itemProp="headline">MY ORDERS</h4>
-                              
-                            </div>
-                          </div>
-                          
+
                           <div
                             className="tab-pane fade"
                             id="v-pills-statement"
@@ -420,6 +397,7 @@ export default function DashboardPage() {
                                       <th>DATE</th>
                                       <th>DETAIL</th>
                                       <th>AMOUNT</th>
+                                      <th>VIEW</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -431,14 +409,14 @@ export default function DashboardPage() {
                                       <td>
                                         <span className="red-clr">$35.97</span>
                                       </td>
-                                    </tr>
-                                    <tr>
-                                      <td>#30737723</td>
-                                      <td>8720</td>
-                                      <td>Aug 17,2017</td>
-                                      <td>Order - Jet's Kitchen</td>
                                       <td>
-                                        <span className="red-clr">$35.97</span>
+                                        <Link
+                                          href={`/order-details/8720`}
+                                          className="view-order-btn"
+                                          title="View Order Details"
+                                        >
+                                          <i className="fa fa-eye" />
+                                        </Link>
                                       </td>
                                     </tr>
                                     <tr>
@@ -449,14 +427,14 @@ export default function DashboardPage() {
                                       <td>
                                         <span className="red-clr">$35.97</span>
                                       </td>
-                                    </tr>
-                                    <tr>
-                                      <td>#30737723</td>
-                                      <td>8720</td>
-                                      <td>Aug 17,2017</td>
-                                      <td>Order - Misumisu Thai</td>
                                       <td>
-                                        <span className="red-clr">$35.97</span>
+                                        <Link
+                                          href={`/order-details/8720`}
+                                          className="view-order-btn"
+                                          title="View Order Details"
+                                        >
+                                          <i className="fa fa-eye" />
+                                        </Link>
                                       </td>
                                     </tr>
                                     <tr>
@@ -466,6 +444,15 @@ export default function DashboardPage() {
                                       <td>Order - Misumisu Thai</td>
                                       <td>
                                         <span className="red-clr">$35.97</span>
+                                      </td>
+                                      <td>
+                                        <Link
+                                          href={`/order-details/8720`}
+                                          className="view-order-btn"
+                                          title="View Order Details"
+                                        >
+                                          <i className="fa fa-eye" />
+                                        </Link>
                                       </td>
                                     </tr>
                                   </tbody>

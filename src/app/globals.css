@@ -336,3 +336,13 @@ html {
   color: #666;
 } */
 
+.view-order-btn {
+  color: #012169;
+  font-size: 16px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.view-order-btn:hover {
+  color: #c8102e;
+  transform: scale(1.1);
+}
