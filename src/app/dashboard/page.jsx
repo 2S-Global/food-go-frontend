@@ -57,7 +57,7 @@ export default function DashboardPage() {
                           data-wow-delay="0.2s"
                         >
                           <div className="profile-sidebar-inner brd-rd5">
-                            <div className="user-info red-bg">
+                            <div className="user-info red-bg" style={{ display: "flex" }}>
                               <img
                                 className="brd-rd50"
                                 src={
@@ -120,6 +120,21 @@ export default function DashboardPage() {
                                 <a href="#my-bookings">
                                   <i className="fa fa-file-text" /> MY
                                   SUBSCRIPTIONS
+                                </a>
+                              </button>
+                              
+                              <button
+                                className="nav-link"
+                                id="v-pills-order-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#v-pills-order"
+                                type="button"
+                                role="tab"
+                                aria-controls="v-pills-order"
+                                aria-selected="false"
+                              >
+                                <a href="#my-orders">
+                                  <i className="fa fa-shopping-basket" /> ORDER DETAILS
                                 </a>
                               </button>
                               
@@ -361,8 +376,20 @@ export default function DashboardPage() {
                             aria-labelledby="v-pills-profile-tab"
                           >
                             <div className="tabs-wrp brd-rd5">
-                              {/* 👇 NEW COMPONENT GOES HERE */}
+                              {/* <h4 itemProp="headline">MY SUBSCRIPTIONS</h4> */}
                               <MyOrder />
+                            </div>
+                          </div>
+                         
+                          <div
+                            className="tab-pane fade"
+                            id="v-pills-order"
+                            role="tabpanel"
+                            aria-labelledby="v-pills-settings-tab"
+                          >
+                            <div className="tabs-wrp brd-rd5">
+                              <h4 itemProp="headline">MY ORDERS</h4>
+                              
                             </div>
                           </div>
                           
