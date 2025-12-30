@@ -7,26 +7,33 @@ export default function SurveyModal({ onSkip, onComplete }) {
   const [step, setStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "");
   }, []);
 
+const submitSurvey = async () => {
+  try {
+    const res = await fetch("http://localhost:8080/api/survey/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-  const submitSurvey = async () => {
-    try {
-      await fetch("http://localhost:5000/api/survey/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error("Submit failed", error);
-      alert("Submission failed");
+    if (!res.ok) {
+      throw new Error("Survey submission failed");
     }
-  };
+
+    // ✅ show success screen only on success
+    setIsSubmitted(true);
+  } catch (error) {
+    console.error("Submit failed", error);
+    setErrorMsg("Submission failed. Please try again.");
+    setTimeout(() => setErrorMsg(""), 5000);
+  }
+};
+
 
   const updateField = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -64,13 +71,36 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <Step5 key="5" formData={formData} updateField={updateField} />,
   ];
 
-const next = () => {
-  if (step < steps.length - 1) {
-    setStep(step + 1);
-  } else {
-    submitSurvey();
-  }
-};
+  const next = () => {
+    // 🔴 STEP 1 validation (Name & Email)
+    if (step === 0) {
+      if (!formData.fullName?.trim() || !formData.email?.trim()) {
+        setErrorMsg("Please enter your Name and Email to continue.");
+
+        setTimeout(() => setErrorMsg(""), 5000);
+        return;
+      }
+    }
+
+    // 🔴 FINAL STEP validation (Consent checkbox)
+    if (step === steps.length - 1) {
+      if (!formData.consent) {
+        setErrorMsg("Please accept the acknowledgement to submit the survey.");
+
+        setTimeout(() => setErrorMsg(""), 5000);
+        return;
+      }
+    }
+
+    // ✅ clear message if valid
+    setErrorMsg("");
+
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    } else {
+      submitSurvey();
+    }
+  };
 
   const prev = () => step > 0 && setStep(step - 1);
 
@@ -81,6 +111,22 @@ const next = () => {
         className="survey-modal"
         onSubmit={(e) => e.preventDefault()}
       >
+        {errorMsg && (
+          <div
+            style={{
+              background: "#fdecea",
+              color: "#b71c1c",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              marginBottom: "15px",
+              fontWeight: "600",
+              textAlign: "center",
+            }}
+          >
+            {errorMsg}
+          </div>
+        )}
+
         {isSubmitted ? (
           <SuccessScreen onClose={onComplete} />
         ) : (
@@ -134,7 +180,7 @@ const next = () => {
                 type="button"
                 onClick={next}
                 style={nextBtn}
-                disabled={step === steps.length - 1 && !formData.consent}
+            
               >
                 {step === steps.length - 1 ? "Submit" : "Next"}
               </button>
@@ -170,7 +216,6 @@ function Step1({ formData, updateField }) {
       <label>Full Name *</label>
       <input
         type="text"
-
         placeholder="Enter your full name"
         value={formData.fullName || ""}
         onChange={(e) => updateField("fullName", e.target.value)}
@@ -180,7 +225,6 @@ function Step1({ formData, updateField }) {
       <label>Imperial College Email *</label>
       <input
         type="email"
- 
         placeholder="name@imperial.ac.uk"
         value={formData.email || ""}
         onChange={(e) => updateField("email", e.target.value)}
@@ -551,7 +595,6 @@ function Step5({ formData, updateField }) {
         >
           <input
             type="checkbox"
-        
             checked={formData.consent || false}
             onChange={(e) => updateField("consent", e.target.checked)}
             style={{ marginRight: "10px" }}
