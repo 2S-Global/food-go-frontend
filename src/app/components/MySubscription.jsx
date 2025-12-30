@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "@/app/components/MyOrder.module.css";
+import styles from "@/app/components/MySubscription.module.css";
 
 const MONTHS = [
   "January",
@@ -18,7 +18,7 @@ const MONTHS = [
   "December",
 ];
 
-export default function MyOrder() {
+export default function MySubscription() {
   const today = new Date();
 
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());

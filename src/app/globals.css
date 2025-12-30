@@ -346,3 +346,48 @@ html {
   color: #c8102e;
   transform: scale(1.1);
 }
+
+/* Sidebar links */
+.dashboard-tabs .nav-link {
+  color: #333;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+/* Icons default */
+.dashboard-tabs .nav-link i {
+  color: #999;
+}
+
+/* Active state (RED like screenshot) */
+.dashboard-tabs .nav-link.active {
+  color: #e60023 !important;
+  background: transparent !important;
+}
+
+/* Active icon */
+.dashboard-tabs .nav-link.active i {
+  color: #e60023;
+}
+
+/* Arrow */
+.dashboard-tabs .nav-link .arrow {
+  margin-left: auto;
+  color: #e60023;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Hover */
+.dashboard-tabs .nav-link:hover {
+  color: #e60023;
+  background: transparent;
+}
+
+.dashboard-tabs .nav-link:hover i {
+  color: #e60023;
+}
+
