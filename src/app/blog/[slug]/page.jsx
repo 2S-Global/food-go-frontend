@@ -5,7 +5,6 @@ import BreadCrumbs from "@/app/components/Breadcrumbs";
 import { getBlogDetails } from "@/app/lib/api";
 
 export default async function BlogDetailPage({ params }) {
-  // ✅ FIX: await params (Next.js 16 requirement)
   const { slug } = await params;
 
   let response;
