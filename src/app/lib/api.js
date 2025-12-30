@@ -1,4 +1,5 @@
-const BASE_URL = "https://food-delivery-backend-mocha.vercel.app";
+// const BASE_URL = "https://food-delivery-backend-mocha.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function getAuthHeaders() {
   if (typeof window === "undefined") return {};
@@ -140,8 +141,6 @@ export async function addToCart(payload) {
   return data;
 }
 
-
-
 /* ====================
    LIST USER CART
 ===================== */
@@ -204,4 +203,71 @@ export async function getMealTypes() {
 
   return res.json();
 }
+
+/* ======================
+   BLOG APIs (PUBLIC)
+====================== */
+
+/*Get all user blogs*/
+export async function getUserBlogs() {
+  const res = await fetch(
+    `${BASE_URL}/api/userblog/list-user-blogs`,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch blogs");
+  }
+
+  return data;
+}
+
+/**
+ * Get single blog by slug (frontend helper)
+ * NOTE: This fetches all blogs and filters by slug
+ */
+export async function getBlogBySlug(slug) {
+  const response = await getUserBlogs();
+
+  const blog = response?.data?.find(
+    (item) => item.slug === slug
+  );
+
+  if (!blog) {
+    throw new Error("Blog not found");
+  }
+
+  return blog;
+}
+
+
+/* ======================
+   BLOG DETAILS (PUBLIC)
+====================== */
+export async function getBlogDetails(blogId) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/userblog/blog-details?_id=${blogId}`,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Blog details error:", text);
+    throw new Error("Failed to fetch blog details");
+  }
+
+  return res.json();
+}
+
 

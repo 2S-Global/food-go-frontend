@@ -7,20 +7,36 @@ export default function BlogCard({ item }) {
       <div className="news-box wow fadeIn">
         <div className="news-thumb">
           <Link className="brd-rd2" href={`/blog/${item.slug}`}>
-            <img src={`${item.image}`} alt={item.image} />
+            <img
+              src={item.image?.[0]}
+              alt={item.title}
+            />
           </Link>
+
           <div className="news-btns">
-            <span className="post-date red-bg">{item.date}</span>
-            <Link className="read-more" href={`/blog/${item.slug}`}>
+            <span className="post-date red-bg">
+              {new Date(item.date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "2-digit",
+              })}
+            </span>
+
+            <Link className="read-more" href={`/blog/${item._id}`}>
               READ MORE
             </Link>
           </div>
         </div>
+
         <div className="news-info">
           <h4>
-            <Link href={`/blog/${item.slug}`}>{item.title}</Link>
+            <Link href={`/blog/${item.slug}`}>
+              {item.title}
+            </Link>
           </h4>
-          <p>{item.excerpt}</p>
+
+          <p>
+            {item.description?.substring(0, 100)}...
+          </p>
         </div>
       </div>
     </div>
