@@ -12,7 +12,7 @@ export default function BlogCard({ item }) {
       <div className="news-box wow fadeIn">
         <div className="news-thumb">
           <Link className="brd-rd2" href={`/blog/${item.slug}`}>
-            <img src={item.image?.[0]} alt={item.title} />
+            <img src={item.image?.[0]} alt={item.title} style={{maxHeight:"230px"}}/>
           </Link>
 
           <div className="news-btns">
