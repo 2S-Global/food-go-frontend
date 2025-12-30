@@ -27,7 +27,7 @@ export default async function BlogSection({
           {showTitle && isHome && (
             <div className="title1-wrapper text-center">
               <div className="title1-inner">
-                {/* <span>Website for Restaurant and Cafe</span> */}
+                <span>Where Taste Wins</span>
                 <h2>Latest Blogs</h2>
               </div>
             </div>

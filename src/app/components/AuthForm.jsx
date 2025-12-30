@@ -89,14 +89,28 @@ export default function AuthForm({ type }) {
 
           {/* ✅ SUCCESS MESSAGE */}
           {success && (
-            <p style={{ color: "green", marginTop: "12px", marginBottom:"0", fontWeight: 500 }}>
+            <p
+              style={{
+                color: "green",
+                marginTop: "12px",
+                marginBottom: "0",
+                fontWeight: 500,
+              }}
+            >
               {success}
             </p>
           )}
 
           {/* ❌ ERROR MESSAGE */}
           {error && (
-            <p style={{ color: "red", marginTop: "12px", marginBottom:"0", fontWeight: 500 }}>
+            <p
+              style={{
+                color: "red",
+                marginTop: "12px",
+                marginBottom: "0",
+                fontWeight: 500,
+              }}
+            >
               {error}
             </p>
           )}
@@ -191,11 +205,31 @@ export default function AuthForm({ type }) {
             </div>
 
             {/* FOOTER */}
-            <div className="col-md-12">
+            <div className="col-md-12 text-center">
               {isLogin ? (
-                <Link className="sign-btn" href="/register">
-                  Not a member? Sign up
-                </Link>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Link className="sign-btn" href="/register">
+                    Not a member? Sign up
+                  </Link>
+
+                  <Link
+                    href="/forgot-password"
+                    style={{
+                      fontSize: "12px",
+                      color: "#e74c3c",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
               ) : (
                 <Link className="sign-btn" href="/login">
                   Already Registered? Sign in
