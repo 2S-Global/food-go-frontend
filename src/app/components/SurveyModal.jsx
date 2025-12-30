@@ -12,28 +12,26 @@ export default function SurveyModal({ onSkip, onComplete }) {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "");
   }, []);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const submitSurvey = async () => {
-  try {
-    const res = await fetch("http://localhost:8080/api/survey/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+  const submitSurvey = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/survey/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    if (!res.ok) {
-      throw new Error("Survey submission failed");
+      if (!res.ok) {
+        throw new Error("Survey submission failed");
+      }
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Submit failed", error);
+      setErrorMsg("Submission failed. Please try again.");
     }
-
-    // ✅ show success screen only on success
-    setIsSubmitted(true);
-  } catch (error) {
-    console.error("Submit failed", error);
-    setErrorMsg("Submission failed. Please try again.");
-    setTimeout(() => setErrorMsg(""), 5000);
-  }
-};
-
+  };
 
   const updateField = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -176,12 +174,7 @@ const submitSurvey = async () => {
                   Prev
                 </button>
               )}
-              <button
-                type="button"
-                onClick={next}
-                style={nextBtn}
-            
-              >
+              <button type="button" onClick={next} style={nextBtn}>
                 {step === steps.length - 1 ? "Submit" : "Next"}
               </button>
             </div>
