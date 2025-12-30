@@ -40,19 +40,19 @@ export default function SurveyModal({ onSkip, onComplete }) {
         ) : (
           <>
             {/* HEADER */}
-           <h2
-  style={{
-    color: "#666",
-    textDecoration: "none",
-    fontSize: "20px",
-    fontWeight: "bold",
-  }}
->
-  Survey Form
-</h2>
+            <h2
+              style={{
+                color: "#666",
+                textDecoration: "none",
+                fontSize: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              Survey Form
+            </h2>
 
             <div style={headerContainer}>
-{/*               <div style={progress}>
+              {/*               <div style={progress}>
                 Step {step + 1} of {steps.length}
               </div> */}
               <button type="button" onClick={onSkip} style={skipBtn}>
@@ -140,6 +140,24 @@ function Step1() {
           </div>
         ))}
       </div>
+
+      <label>
+        How often do you currently eat homemade or fresh cooked meals?
+      </label>
+      <div className="option-grid">
+        {[
+          "Daily",
+          "4–6 times a week",
+          "2–3 times a week",
+          "Rarely",
+          "Never",
+        ].map((opt) => (
+          <div className="option-row" key={opt}>
+            <input type="radio" name="homemadeFrequency" />
+            <label>{opt}</label>
+          </div>
+        ))}
+      </div>
     </>
   );
 }
@@ -152,19 +170,16 @@ function Step2() {
     <>
       <h2>Eating & Food Preferences</h2>
 
-      <label>How often do you currently eat homemade or fresh cooked meals?</label>
-      <div className="option-grid">
-        {["Daily","4–6 times a week","2–3 times a week","Rarely","Never"].map(opt=>(
-          <div className="option-row" key={opt}>
-            <input type="radio" name="homemadeFrequency" />
-            <label>{opt}</label>
-          </div>
-        ))}
-      </div>
-
       <label>What is your preferred meal type? (Select all that apply)</label>
       <div className="option-grid">
-        {["Vegetarian","Vegan","Non-vegetarian","Halal","Dairy-free","Gluten-free"].map(opt=>(
+        {[
+          "Vegetarian",
+          "Vegan",
+          "Non-vegetarian",
+          "Halal",
+          "Dairy-free",
+          "Gluten-free",
+        ].map((opt) => (
           <div className="option-row" key={opt}>
             <input type="checkbox" />
             <label>{opt}</label>
@@ -172,15 +187,6 @@ function Step2() {
         ))}
       </div>
       <input type="text" placeholder="Other dietary restrictions" />
-    </>
-  );
-}
-
-/* Remaining steps unchanged */
-function Step3() {
-  return (
-    <>
-      <h2>Meal Requirements</h2>
 
       <label>How many meal boxes would you require per week?</label>
       <div className="option-grid">
@@ -201,6 +207,15 @@ function Step3() {
           </div>
         ))}
       </div>
+    </>
+  );
+}
+
+/* Remaining steps unchanged */
+function Step3() {
+  return (
+    <>
+      <h2>Meal Requirements</h2>
 
       <label>What portion size do you prefer?</label>
       <div className="option-grid">
@@ -227,14 +242,6 @@ function Step3() {
           </div>
         ))}
       </div>
-    </>
-  );
-}
-
-function Step4() {
-  return (
-    <>
-      <h2>Delivery & Drop-off Points</h2>
 
       <label>What is your preferred delivery drop-off point?</label>
       <div className="option-grid">
@@ -252,7 +259,9 @@ function Step4() {
       </div>
       <input type="text" placeholder="Other (please specify)" />
 
-      <label>What time window is ideal for delivery? (Select all that apply)</label>
+      <label>
+        What time window is ideal for delivery? (Select all that apply)
+      </label>
       <div className="option-grid">
         {[
           "11:30 AM – 1:00 PM (Lunch)",
@@ -270,12 +279,13 @@ function Step4() {
   );
 }
 
-function Step5() {
+function Step4() {
   return (
     <>
-      <h2>Price Sensitivity</h2>
-
-      <label>What is a reasonable price for one healthy homemade meal box?</label>
+      <h2>Delivery & Drop-off Points</h2>
+      <label>
+        What is a reasonable price for one healthy homemade meal box?
+      </label>
       <div className="option-grid">
         {["£3–£4", "£4–£5", "£5–£6", "£6–£7", "£7+"].map((price) => (
           <div className="option-row" key={price}>
@@ -285,7 +295,10 @@ function Step5() {
         ))}
       </div>
 
-      <label>Would you pay slightly more for any of the following? (tick all that apply)</label>
+      <label>
+        Would you pay slightly more for any of the following? (tick all that
+        apply)
+      </label>
       <div className="option-grid">
         {[
           "Organic ingredients",
@@ -300,14 +313,6 @@ function Step5() {
           </div>
         ))}
       </div>
-    </>
-  );
-}
-
-function Step6() {
-  return (
-    <>
-      <h2>Experience & Feedback</h2>
 
       <label>What do you currently struggle with regarding food at uni?</label>
       <div className="option-grid">
@@ -326,8 +331,18 @@ function Step6() {
         ))}
       </div>
       <input type="text" placeholder="Other (please specify)" />
+    </>
+  );
+}
 
-      <label>Would you be willing to recommend UniEat to friends if you like it?</label>
+function Step5() {
+  return (
+    <>
+      <h2>Price Sensitivity</h2>
+
+      <label>
+        Would you be willing to recommend UniEat to friends if you like it?
+      </label>
       <div className="option-grid">
         {["Definitely", "Maybe", "Probably not"].map((rec) => (
           <div className="option-row" key={rec}>
@@ -363,6 +378,17 @@ function Step6() {
   );
 }
 
+function Step6() {
+  return (
+    <>
+      <h2>Experience & Feedback</h2>
+
+
+
+  
+    </>
+  );
+}
 
 /* =======================
    SUCCESS
@@ -444,8 +470,6 @@ const overlay = {
   zIndex: 999999,
 };
 
-
-
 const box = {
   background: "#fff",
   width: "100%",
@@ -454,7 +478,7 @@ const box = {
   padding: 30,
   borderRadius: 12,
   display: "flex",
-  maxHeight: "90vh",      // max height relative to viewport
+  maxHeight: "90vh", // max height relative to viewport
   overflowY: "auto",
   boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
   flexDirection: "column",
