@@ -542,7 +542,7 @@ function Step5({ formData, updateField }) {
 
       {/* RECOMMENDATION */}
       <label>
-        Would you be willing to recommend UniEat to friends if you like it?
+        Would you be willing to recommend Food Go to friends if you like it?
       </label>
       <div className="option-grid">
         {["Definitely", "Maybe", "Probably not"].map((rec) => (
@@ -592,8 +592,8 @@ function Step5({ formData, updateField }) {
             onChange={(e) => updateField("consent", e.target.checked)}
             style={{ marginRight: "10px" }}
           />
-          I acknowledge that I will receive a free UniEat homemade meal box
-          after successfully completing this survey.
+          {/* I acknowledge that I will receive a free UniEat homemade meal box
+          after successfully completing this survey. */}
         </label>
       </div>
     </>
