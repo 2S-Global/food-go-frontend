@@ -12,6 +12,7 @@ import FoodCategoryFilter from "./components/FoodCategoryFilter";
 import FeaturedPosts from "./components/FeaturedPosts";
 import { articleData } from "./data/articleData";
 import { getMealTypes } from "./lib/api";
+import BlogSection from "./components/BlogSection";
 
 export default async function Home() {
   const response = await getMealTypes();
@@ -40,11 +41,7 @@ export default async function Home() {
       <EasyOrderSteps />
       {/* <FeaturedList /> */}
       <FoodCategoryFilter />
-      <FeaturedPosts
-        articles={articleData}
-        limit={3}
-        showTitle={true}
-      />
+      <BlogSection limit={3} showTitle={true} variant="home" />
       <AppDownloadSection />
       {/* <Footer /> */}
     </>
