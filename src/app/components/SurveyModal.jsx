@@ -6,25 +6,71 @@ import Select from "react-select";
 export default function SurveyModal({ onSkip, onComplete }) {
   const [step, setStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [formData, setFormData] = useState({});
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "");
   }, []);
 
+
+  const submitSurvey = async () => {
+    try {
+      await fetch("http://localhost:5000/api/survey/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Submit failed", error);
+      alert("Submission failed");
+    }
+  };
+
+  const updateField = (name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const toggleArray = (name, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: prev[name]?.includes(value)
+        ? prev[name].filter((v) => v !== value)
+        : [...(prev[name] || []), value],
+    }));
+  };
+
   const steps = [
-    <Step1 key="1" />,
-    <Step2 key="2" />,
-    <Step3 key="3" />,
-    <Step4 key="4" />,
-    <Step5 key="5" />,
-   
+    <Step1 key="1" formData={formData} updateField={updateField} />,
+    <Step2
+      key="2"
+      formData={formData}
+      updateField={updateField}
+      toggleArray={toggleArray}
+    />,
+    <Step3
+      key="3"
+      formData={formData}
+      updateField={updateField}
+      toggleArray={toggleArray}
+    />,
+    <Step4
+      key="4"
+      formData={formData}
+      updateField={updateField}
+      toggleArray={toggleArray}
+    />,
+    <Step5 key="5" formData={formData} updateField={updateField} />,
   ];
 
-  const next = () => {
-    if (step < steps.length - 1) setStep(step + 1);
-    else setIsSubmitted(true);
-  };
+const next = () => {
+  if (step < steps.length - 1) {
+    setStep(step + 1);
+  } else {
+    submitSurvey();
+  }
+};
 
   const prev = () => step > 0 && setStep(step - 1);
 
@@ -84,7 +130,12 @@ export default function SurveyModal({ onSkip, onComplete }) {
                   Prev
                 </button>
               )}
-              <button type="button" onClick={next} style={nextBtn}>
+              <button
+                type="button"
+                onClick={next}
+                style={nextBtn}
+                disabled={step === steps.length - 1 && !formData.consent}
+              >
                 {step === steps.length - 1 ? "Submit" : "Next"}
               </button>
             </div>
@@ -100,7 +151,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
 ======================= */
 /* 🔴 UNCHANGED – your exact steps stay as-is */
 
-function Step1() {
+function Step1({ formData, updateField }) {
   const options = [
     { value: "Beit Hall", label: "Beit Hall" },
     { value: "Wilson House", label: "Wilson House" },
@@ -110,20 +161,43 @@ function Step1() {
     { value: "Woodward Buildings", label: "Woodward Buildings" },
     { value: "Other", label: "Other" },
   ];
+
   return (
     <>
       <h2>Basic Information</h2>
 
+      {/* FULL NAME – REQUIRED */}
       <label>Full Name *</label>
-      <input type="text" required placeholder="Enter your full name" />
+      <input
+        type="text"
 
+        placeholder="Enter your full name"
+        value={formData.fullName || ""}
+        onChange={(e) => updateField("fullName", e.target.value)}
+      />
+
+      {/* EMAIL – REQUIRED */}
       <label>Imperial College Email *</label>
-      <input type="email" required placeholder="name@imperial.ac.uk" />
+      <input
+        type="email"
+ 
+        placeholder="name@imperial.ac.uk"
+        value={formData.email || ""}
+        onChange={(e) => updateField("email", e.target.value)}
+      />
 
+      {/* ACCOMMODATION */}
       <label>
         Which Imperial College accommodation/hostel do you currently live in?
       </label>
-      <Select options={options} />
+      <Select
+        options={options}
+        value={options.find((o) => o.value === formData.accommodation) || null}
+        onChange={(opt) => updateField("accommodation", opt ? opt.value : "")}
+        isClearable
+      />
+
+      {/* YEAR OF STUDY */}
       <label>What year of study are you in?</label>
       <div className="option-grid">
         {[
@@ -135,12 +209,18 @@ function Step1() {
           "PhD / Research",
         ].map((year) => (
           <div className="option-row" key={year}>
-            <input type="radio" name="year" />
+            <input
+              type="radio"
+              name="yearOfStudy"
+              checked={formData.yearOfStudy === year}
+              onChange={() => updateField("yearOfStudy", year)}
+            />
             <label>{year}</label>
           </div>
         ))}
       </div>
 
+      {/* HOMEMADE MEAL FREQUENCY */}
       <label>
         How often do you currently eat homemade or fresh cooked meals?
       </label>
@@ -153,7 +233,12 @@ function Step1() {
           "Never",
         ].map((opt) => (
           <div className="option-row" key={opt}>
-            <input type="radio" name="homemadeFrequency" />
+            <input
+              type="radio"
+              name="homemadeFrequency"
+              checked={formData.homemadeFrequency === opt}
+              onChange={() => updateField("homemadeFrequency", opt)}
+            />
             <label>{opt}</label>
           </div>
         ))}
@@ -165,11 +250,12 @@ function Step1() {
 /* ⚠️ ALL OTHER STEPS REMAIN IDENTICAL – ONLY GRID CLASS APPLIES */
 /* (I did not alter wording/options anywhere) */
 
-function Step2() {
+function Step2({ formData, updateField, toggleArray }) {
   return (
     <>
       <h2>Eating & Food Preferences</h2>
 
+      {/* MEAL TYPE – CHECKBOX (MULTI) */}
       <label>What is your preferred meal type? (Select all that apply)</label>
       <div className="option-grid">
         {[
@@ -181,29 +267,52 @@ function Step2() {
           "Gluten-free",
         ].map((opt) => (
           <div className="option-row" key={opt}>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={formData.mealTypes?.includes(opt) || false}
+              onChange={() => toggleArray("mealTypes", opt)}
+            />
             <label>{opt}</label>
           </div>
         ))}
       </div>
-      <input type="text" placeholder="Other dietary restrictions" />
 
+      {/* OTHER DIET */}
+      <input
+        type="text"
+        placeholder="Other dietary restrictions"
+        value={formData.otherDiet || ""}
+        onChange={(e) => updateField("otherDiet", e.target.value)}
+      />
+
+      {/* MEALS PER WEEK */}
       <label>How many meal boxes would you require per week?</label>
       <div className="option-grid">
         {["1–2", "3–4", "5–6", "7–10", "11+ meals"].map((num) => (
           <div className="option-row" key={num}>
-            <input type="radio" name="mealsPerWeek" id={num} />
-            <label htmlFor={num}>{num}</label>
+            <input
+              type="radio"
+              name="mealsPerWeek"
+              checked={formData.mealsPerWeek === num}
+              onChange={() => updateField("mealsPerWeek", num)}
+            />
+            <label>{num}</label>
           </div>
         ))}
       </div>
 
+      {/* MEAL PREFERENCE */}
       <label>Which meals are you interested in?</label>
       <div className="option-grid">
         {["Lunch", "Dinner", "Both lunch and dinner"].map((meal) => (
           <div className="option-row" key={meal}>
-            <input type="radio" name="mealPreference" id={meal} />
-            <label htmlFor={meal}>{meal}</label>
+            <input
+              type="radio"
+              name="mealPreference"
+              checked={formData.mealPreference === meal}
+              onChange={() => updateField("mealPreference", meal)}
+            />
+            <label>{meal}</label>
           </div>
         ))}
       </div>
@@ -212,23 +321,30 @@ function Step2() {
 }
 
 /* Remaining steps unchanged */
-function Step3() {
+function Step3({ formData, updateField, toggleArray }) {
   return (
     <>
       <h2>Meal Requirements</h2>
 
+      {/* PORTION SIZE */}
       <label>What portion size do you prefer?</label>
       <div className="option-grid">
         {["Regular", "Large / High-protein", "Small / Budget option"].map(
           (size) => (
             <div className="option-row" key={size}>
-              <input type="radio" name="portion" id={size} />
-              <label htmlFor={size}>{size}</label>
+              <input
+                type="radio"
+                name="portion"
+                checked={formData.portion === size}
+                onChange={() => updateField("portion", size)}
+              />
+              <label>{size}</label>
             </div>
           )
         )}
       </div>
 
+      {/* PLAN TYPE */}
       <label>Do you prefer weekly meal plans or order-per-meal?</label>
       <div className="option-grid">
         {[
@@ -237,12 +353,18 @@ function Step3() {
           "Not sure yet",
         ].map((pref) => (
           <div className="option-row" key={pref}>
-            <input type="radio" name="planType" id={pref} />
-            <label htmlFor={pref}>{pref}</label>
+            <input
+              type="radio"
+              name="planType"
+              checked={formData.planType === pref}
+              onChange={() => updateField("planType", pref)}
+            />
+            <label>{pref}</label>
           </div>
         ))}
       </div>
 
+      {/* DROPOFF POINT */}
       <label>What is your preferred delivery drop-off point?</label>
       <div className="option-grid">
         {[
@@ -252,13 +374,26 @@ function Step3() {
           "On-campus pickup point",
         ].map((point) => (
           <div className="option-row" key={point}>
-            <input type="radio" name="dropoff" id={point} />
-            <label htmlFor={point}>{point}</label>
+            <input
+              type="radio"
+              name="dropoff"
+              checked={formData.dropoff === point}
+              onChange={() => updateField("dropoff", point)}
+            />
+            <label>{point}</label>
           </div>
         ))}
       </div>
-      <input type="text" placeholder="Other (please specify)" />
 
+      {/* OTHER DROPOFF */}
+      <input
+        type="text"
+        placeholder="Other (please specify)"
+        value={formData.otherDropoff || ""}
+        onChange={(e) => updateField("otherDropoff", e.target.value)}
+      />
+
+      {/* DELIVERY TIMES */}
       <label>
         What time window is ideal for delivery? (Select all that apply)
       </label>
@@ -270,8 +405,12 @@ function Step3() {
           "7:30 PM – 9:00 PM (Late dinner)",
         ].map((time) => (
           <div className="option-row" key={time}>
-            <input type="checkbox" id={time} />
-            <label htmlFor={time}>{time}</label>
+            <input
+              type="checkbox"
+              checked={formData.deliveryTimes?.includes(time) || false}
+              onChange={() => toggleArray("deliveryTimes", time)}
+            />
+            <label>{time}</label>
           </div>
         ))}
       </div>
@@ -279,22 +418,30 @@ function Step3() {
   );
 }
 
-function Step4() {
+function Step4({ formData, updateField, toggleArray }) {
   return (
     <>
       <h2>Delivery & Drop-off Points</h2>
+
+      {/* PRICE RANGE */}
       <label>
         What is a reasonable price for one healthy homemade meal box?
       </label>
       <div className="option-grid">
         {["£3–£4", "£4–£5", "£5–£6", "£6–£7", "£7+"].map((price) => (
           <div className="option-row" key={price}>
-            <input type="radio" name="priceRange" id={price} />
-            <label htmlFor={price}>{price}</label>
+            <input
+              type="radio"
+              name="priceRange"
+              checked={formData.priceRange === price}
+              onChange={() => updateField("priceRange", price)}
+            />
+            <label>{price}</label>
           </div>
         ))}
       </div>
 
+      {/* PAID EXTRAS */}
       <label>
         Would you pay slightly more for any of the following? (tick all that
         apply)
@@ -308,12 +455,17 @@ function Step4() {
           "Dessert add-on",
         ].map((extra) => (
           <div className="option-row" key={extra}>
-            <input type="checkbox" id={extra} />
-            <label htmlFor={extra}>{extra}</label>
+            <input
+              type="checkbox"
+              checked={formData.paidExtras?.includes(extra) || false}
+              onChange={() => toggleArray("paidExtras", extra)}
+            />
+            <label>{extra}</label>
           </div>
         ))}
       </div>
 
+      {/* STRUGGLES */}
       <label>What do you currently struggle with regarding food at uni?</label>
       <div className="option-grid">
         {[
@@ -325,39 +477,67 @@ function Step4() {
           "Missing homemade taste",
         ].map((struggle) => (
           <div className="option-row" key={struggle}>
-            <input type="checkbox" id={struggle} />
-            <label htmlFor={struggle}>{struggle}</label>
+            <input
+              type="checkbox"
+              checked={formData.struggles?.includes(struggle) || false}
+              onChange={() => toggleArray("struggles", struggle)}
+            />
+            <label>{struggle}</label>
           </div>
         ))}
       </div>
-      <input type="text" placeholder="Other (please specify)" />
+
+      {/* OTHER STRUGGLE */}
+      <input
+        type="text"
+        placeholder="Other (please specify)"
+        value={formData.otherStruggle || ""}
+        onChange={(e) => updateField("otherStruggle", e.target.value)}
+      />
     </>
   );
 }
 
-function Step5() {
+function Step5({ formData, updateField }) {
   return (
     <>
       <h2>Experience & Feedback</h2>
 
+      {/* RECOMMENDATION */}
       <label>
         Would you be willing to recommend UniEat to friends if you like it?
       </label>
       <div className="option-grid">
         {["Definitely", "Maybe", "Probably not"].map((rec) => (
           <div className="option-row" key={rec}>
-            <input type="radio" name="recommend" id={rec} />
-            <label htmlFor={rec}>{rec}</label>
+            <input
+              type="radio"
+              name="recommend"
+              checked={formData.recommend === rec}
+              onChange={() => updateField("recommend", rec)}
+            />
+            <label>{rec}</label>
           </div>
         ))}
       </div>
 
+      {/* MENU IDEAS */}
       <label>Any meals you would love to see in our menu? (Open-ended)</label>
-      <textarea placeholder="Share your ideas..." />
+      <textarea
+        placeholder="Share your ideas..."
+        value={formData.menuSuggestions || ""}
+        onChange={(e) => updateField("menuSuggestions", e.target.value)}
+      />
 
+      {/* ADDITIONAL FEEDBACK */}
       <label>Any additional feedback or suggestions? (Open-ended)</label>
-      <textarea placeholder="Let us know your thoughts..." />
+      <textarea
+        placeholder="Let us know your thoughts..."
+        value={formData.feedback || ""}
+        onChange={(e) => updateField("feedback", e.target.value)}
+      />
 
+      {/* CONSENT – REQUIRED */}
       <div
         style={{
           marginTop: "20px",
@@ -369,15 +549,20 @@ function Step5() {
         <label
           style={{ display: "flex", alignItems: "center", fontWeight: "600" }}
         >
-          <input type="checkbox" required style={{ marginRight: "10px" }} />I
-          acknowledge that I will receive a free UniEat homemade meal box after
-          successfully completing this survey.
+          <input
+            type="checkbox"
+        
+            checked={formData.consent || false}
+            onChange={(e) => updateField("consent", e.target.checked)}
+            style={{ marginRight: "10px" }}
+          />
+          I acknowledge that I will receive a free UniEat homemade meal box
+          after successfully completing this survey.
         </label>
       </div>
     </>
   );
 }
-
 
 /* =======================
    SUCCESS
