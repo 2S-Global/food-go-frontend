@@ -1,16 +1,18 @@
 "use client";
 import Link from "next/link";
 
+function stripHtml(html) {
+  if (!html) return "";
+  return html.replace(/<[^>]*>?/gm, "");
+}
+
 export default function BlogCard({ item }) {
   return (
     <div className="col-md-4 col-sm-6 col-lg-4">
       <div className="news-box wow fadeIn">
         <div className="news-thumb">
           <Link className="brd-rd2" href={`/blog/${item.slug}`}>
-            <img
-              src={item.image?.[0]}
-              alt={item.title}
-            />
+            <img src={item.image?.[0]} alt={item.title} />
           </Link>
 
           <div className="news-btns">
@@ -29,14 +31,10 @@ export default function BlogCard({ item }) {
 
         <div className="news-info">
           <h4>
-            <Link href={`/blog/${item.slug}`}>
-              {item.title}
-            </Link>
+            <Link href={`/blog/${item.slug}`}>{item.title}</Link>
           </h4>
 
-          <p>
-            {item.description?.substring(0, 100)}...
-          </p>
+          <p>{stripHtml(item.description).substring(0, 100)}</p>
         </div>
       </div>
     </div>
