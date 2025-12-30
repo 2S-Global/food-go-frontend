@@ -18,7 +18,7 @@ export default function SurveyModal({ onSkip, onComplete }) {
     <Step3 key="3" />,
     <Step4 key="4" />,
     <Step5 key="5" />,
-    <Step6 key="6" />,
+   
   ];
 
   const next = () => {
@@ -338,7 +338,7 @@ function Step4() {
 function Step5() {
   return (
     <>
-      <h2>Price Sensitivity</h2>
+      <h2>Experience & Feedback</h2>
 
       <label>
         Would you be willing to recommend UniEat to friends if you like it?
@@ -378,17 +378,6 @@ function Step5() {
   );
 }
 
-function Step6() {
-  return (
-    <>
-      <h2>Experience & Feedback</h2>
-
-
-
-  
-    </>
-  );
-}
 
 /* =======================
    SUCCESS
