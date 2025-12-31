@@ -6,7 +6,7 @@ import BreadCrumbs from "../components/Breadcrumbs";
 
 export default function AboutUsPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const slug = "about-us";
+  const slug = "terms-condition";
 
   const [cms, setCms] = useState(null);
   const [loading, setLoading] = useState(true);

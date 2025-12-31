@@ -348,6 +348,7 @@ form.dark-red-bg {
   z-index: -2;
   background-position: center center;
   background-repeat: repeat;
+   background-size: cover ;
 }
 .fixed-bg {
   background-attachment: fixed !important;

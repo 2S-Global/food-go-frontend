@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 
 const Footer = () => {
@@ -12,150 +12,121 @@ const Footer = () => {
               <div className="col-md-12 col-sm-12 col-lg-12">
                 <div className="footer-data">
                   <div className="row">
+                    {/* ===== ABOUT ===== */}
                     <div className="col-md-3 col-sm-6 col-lg-3">
-                      <div
-                        className="widget about_widget wow fadeIn"
-                        data-wow-delay="0.1s"
-                      >
+                      <div className="widget about_widget">
                         <div className="logo">
-                          <h1 itemProp="headline">
-                            <a href="#" title="Home" itemProp="url">
-                              <img
-                                src="/assets/images/logo.png"
-                                alt="logo.png"
-                                itemProp="image"
-                              />
-                            </a>
+                          <h1>
+                            <Link href="/" title="Home">
+                              <img src="/assets/images/logo.png" alt="Logo" />
+                            </Link>
                           </h1>
                         </div>
-                        <p itemProp="description">
+
+                        <p>
                           Food Ordering is a Premium HTML Template. Best choice
                           for your online store. Let purchase it to enjoy now
                         </p>
+
                         <div className="social2">
                           <a
                             className="brd-rd50"
                             href="#"
-                            title="Facebook"
-                            itemProp="url"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <i className="fa fa-facebook" />
                           </a>
                           <a
                             className="brd-rd50"
                             href="#"
-                            title="Google Plus"
-                            itemProp="url"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <i className="fa fa-google-plus" />
                           </a>
                           <a
                             className="brd-rd50"
                             href="#"
-                            title="Twitter"
-                            itemProp="url"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <i className="fa fa-twitter" />
                           </a>
                           <a
                             className="brd-rd50"
                             href="#"
-                            title="Pinterest"
-                            itemProp="url"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <i className="fa fa-pinterest" />
                           </a>
                         </div>
                       </div>
                     </div>
+
+                    {/* ===== INFORMATION ===== */}
                     <div className="col-md-3 col-sm-6 col-lg-3">
-                      <div
-                        className="widget information_links wow fadeIn"
-                        data-wow-delay="0.2s"
-                      >
-                        <h4 className="widget-title" itemProp="headline">
-                          INFORMATION
-                        </h4>
+                      <div className="widget information_links">
+                        <h4 className="widget-title">INFORMATION</h4>
                         <ul>
                           <li>
-                           <Link href="/">
-                              Home
-                            </Link>
+                            <Link href="/">Home</Link>
                           </li>
                           <li>
-                            <Link href="/about-us">
-                              About Us
-                            </Link>
+                            <Link href="/about-us">About Us</Link>
                           </li>
                           <li>
-                            <Link href="/menu">
-                             Menu
-                            </Link>
+                            <Link href="/menu">Menu</Link>
                           </li>
                           <li>
-                            <Link href="/blog">
-                              Blog
-                            </Link>
+                            <Link href="/blog">Blog</Link>
                           </li>
                           <li>
-                            <Link href="/contact-us">
-                              Contact Us
-                            </Link>
+                            <Link href="/contact-us">Contact Us</Link>
                           </li>
                         </ul>
                       </div>
                     </div>
+
+                    {/* ===== CUSTOMER CARE ===== */}
                     <div className="col-md-3 col-sm-6 col-lg-3">
-                      <div
-                        className="widget customer_care wow fadeIn"
-                        data-wow-delay="0.3s"
-                      >
-                        <h4 className="widget-title" itemProp="headline">
-                          CUSTOMER CARE
-                        </h4>
+                      <div className="widget customer_care">
+                        <h4 className="widget-title">CUSTOMER CARE</h4>
                         <ul>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Privacy Policy
-                            </a>
+                            <Link href="/privacy-policy">Privacy Policy</Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Refund Policy
-                            </a>
+                            <Link href="/refund-policy">Refund Policy</Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
+                            <Link href="/terms-condition">
                               Terms & Condition
-                            </a>
+                            </Link>
                           </li>
-                         
                         </ul>
                       </div>
                     </div>
+
+                    {/* ===== CONTACT ===== */}
                     <div className="col-md-3 col-sm-6 col-lg-3">
-                      <div
-                        className="widget get_in_touch wow fadeIn"
-                        data-wow-delay="0.4s"
-                      >
-                        <h4 className="widget-title" itemProp="headline">
-                          GET IN TOUCH
-                        </h4>
+                      <div className="widget get_in_touch">
+                        <h4 className="widget-title">GET IN TOUCH</h4>
                         <ul>
                           <li>
                             <i className="fa fa-map-marker" /> 123 New Design
-                            Str, ABC Building, melbourne, Australia.
+                            Str, ABC Building, Melbourne, Australia.
                           </li>
                           <li>
-                            <i className="fa fa-phone" /> (0044) 8647 1234 587
+                            <i className="fa fa-phone" />{" "}
+                            <a href="tel:+004486471234587">
+                              (0044) 8647 1234 587
+                            </a>
                           </li>
                           <li>
-                            <i className="fa fa-envelope" />
-                            <a href="#" title="" itemProp="url">
+                            <i className="fa fa-envelope" />{" "}
+                            <a href="mailto:hello@yourdomain.com">
                               hello@yourdomain.com
                             </a>
                           </li>
@@ -170,9 +141,11 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+
+      {/* ===== COPYRIGHT ===== */}
       <div className="bottom-bar dark-bg text-center">
         <div className="container">
-          <p itemProp="description">
+          <p>
             © 2025{" "}
             <a
               href="https://www.2sglobal.co/"
