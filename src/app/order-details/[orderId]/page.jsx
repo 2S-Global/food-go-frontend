@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function OrderDetailsPage() {
   const { orderId } = useParams();
 
-  // 🔹 TEMP: Mock order data (replace with API later)
+  // 🔹 TEMP: Mock order data
   const order = {
     orderId,
     transactionId: "#30737723",
@@ -51,99 +51,110 @@ export default function OrderDetailsPage() {
       />
 
       <div className="container py-5">
-        {/* ===== Order Summary ===== */}
-        <div className="card mb-4">
-          <div className="card-body">
-            <h4 className="mb-3">Order Summary</h4>
+        <div className="row g-4">
+          {/* ================= LEFT SIDE ================= */}
+          <div className="col-lg-8">
+            {/* Order Info */}
+            <div className="card mb-4 shadow-sm">
+              <div className="card-body">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h4 className="mb-0">Order Information</h4>
+                  <span className="badge bg-success px-3 py-2">
+                    {order.status}
+                  </span>
+                </div>
 
-            <div className="row">
-              <div className="col-md-6">
-                <p>
-                  <strong>Order ID:</strong> {order.orderId}
-                </p>
-                <p>
-                  <strong>Transaction ID:</strong> {order.transactionId}
-                </p>
-                <p>
-                  <strong>Date:</strong> {order.date}
-                </p>
-                <p>
-                  <strong>Status:</strong>{" "}
-                  <span className="text-success">{order.status}</span>
-                </p>
+                <div className="row">
+                  <div className="col-md-6 mb-2">
+                    <p className="mb-1 text-muted">Order ID</p>
+                    <strong>{order.orderId}</strong>
+                  </div>
+                  <div className="col-md-6 mb-2">
+                    <p className="mb-1 text-muted">Transaction ID</p>
+                    <strong>{order.transactionId}</strong>
+                  </div>
+                  <div className="col-md-6 mb-2">
+                    <p className="mb-1 text-muted">Order Date</p>
+                    <strong>{order.date}</strong>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              <div className="col-md-6">
-                <p>
-                  <strong>Name:</strong> {order.customerName}
-                </p>
-                <p>
-                  <strong>Email:</strong> {order.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {order.phone}
-                </p>
-                <p>
-                  <strong>Address:</strong> {order.address}
-                </p>
+            {/* Items */}
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h4 className="mb-3">Ordered Items</h4>
+
+                <div className="table-responsive">
+                  <table className="table align-middle">
+                    <thead className="table-light">
+                      <tr>
+                        <th>Item</th>
+                        <th>Weeks</th>
+                        <th>Meals</th>
+                        <th className="text-end">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {order.items.map((item, index) => (
+                        <tr key={index}>
+                          <td>
+                            <strong>{item.name}</strong>
+                          </td>
+                          <td>{item.weeks}</td>
+                          <td>{item.meals}</td>
+                          <td className="text-end">£{item.price}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ===== Items Table ===== */}
-        <div className="card mb-4">
-          <div className="card-body">
-            <h4 className="mb-3">Ordered Items</h4>
+          {/* ================= RIGHT SIDE ================= */}
+          <div className="col-lg-4">
+            {/* Customer Info */}
+            <div className="card mb-4 shadow-sm">
+              <div className="card-body">
+                <h4 className="mb-3">Customer Details</h4>
 
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Weeks</th>
-                    <th>Meals</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {order.items.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.weeks}</td>
-                      <td>{item.meals}</td>
-                      <td>£{item.price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                <p className="mb-1">
+                  <strong>{order.customerName}</strong>
+                </p>
+                <p className="mb-1 text-muted">{order.email}</p>
+                <p className="mb-1 text-muted">{order.phone}</p>
+                <p className="mb-0 text-muted">{order.address}</p>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* ===== Price Summary ===== */}
-        <div className="card">
-          <div className="card-body">
-            <h4 className="mb-3">Payment Summary</h4>
+            {/* Payment Summary */}
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h4 className="mb-3">Payment Summary</h4>
 
-            <ul className="list-unstyled">
-              <li className="d-flex justify-content-between mb-2">
-                <span>Subtotal</span>
-                <span>£{order.subtotal}</span>
-              </li>
-              <li className="d-flex justify-content-between mb-2">
-                <span>Delivery</span>
-                <span>£{order.delivery}</span>
-              </li>
-              <li className="d-flex justify-content-between fw-bold">
-                <span>Total</span>
-                <span>£{order.total}</span>
-              </li>
-            </ul>
+                <ul className="list-unstyled mb-3">
+                  <li className="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span>£{order.subtotal}</span>
+                  </li>
+                  <li className="d-flex justify-content-between mb-2">
+                    <span>Delivery</span>
+                    <span>£{order.delivery}</span>
+                  </li>
+                  <li className="d-flex justify-content-between border-top pt-2 fw-bold">
+                    <span>Total</span>
+                    <span>£{order.total}</span>
+                  </li>
+                </ul>
 
-            <Link href="/dashboard" className="btn btn-danger mt-3">
-              Back to Dashboard
-            </Link>
+                <Link href="/dashboard" className="btn btn-danger w-100">
+                  Back to Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
