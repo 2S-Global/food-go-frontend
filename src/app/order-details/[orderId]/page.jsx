@@ -41,7 +41,7 @@ export default function OrderDetailsPage() {
           color: #012169;
         }
       `}</style>
-      
+
       {/* ===== Banner ===== */}
       <PageBanner
         title="Order Details"
@@ -126,7 +126,10 @@ export default function OrderDetailsPage() {
                         <tr key={item._id}>
                           <td>
                             <strong>
-                              {item.subscription_type.replace("_", " ")}
+                              {item.subscription_type
+                                .replace("_", " ")
+                                .replace(/^./, (c) => c.toUpperCase())
+                                .replace(/\bNon veg\b/i, "Non-veg")}
                             </strong>
                           </td>
                           <td>{item.weeks}</td>

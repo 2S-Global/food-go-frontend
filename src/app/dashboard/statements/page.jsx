@@ -59,7 +59,9 @@ export default function StatementsPage() {
     <div className="tabs-wrp brd-rd5">
       {/* ===== Heading + Dropdown ===== */}
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 itemProp="headline" className="mb-0">STATEMENTS</h4>
+        <h4 itemProp="headline" className="mb-0">
+          STATEMENTS
+        </h4>
         <div style={{ width: "200px" }}>
           <Select
             options={sortOptions}
@@ -105,9 +107,23 @@ export default function StatementsPage() {
                     year: "numeric",
                   })}
                 </td>
-                <td>
+                {/* <td>
                   {order.items.map((item) => item.subscription_type).join(", ")}
+                </td> */}
+                <td>
+                  {order.items
+                    .map((item) => {
+                      let text = item.subscription_type.replace("_", " ");
+
+                      if (text.toLowerCase() === "non veg") {
+                        return "Non-veg";
+                      }
+
+                      return text.replace(/^./, (c) => c.toUpperCase());
+                    })
+                    .join(", ")}
                 </td>
+
                 <td>
                   <span className="red-clr">${order.total_price}</span>
                 </td>
