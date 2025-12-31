@@ -271,3 +271,56 @@ export async function getBlogDetails(blogId) {
 }
 
 
+/* ======================
+   USER ORDERS APIs
+====================== */
+
+/**
+ * Get all orders of logged-in user
+ * GET /api/user-order/list-user-orders
+ */
+export async function getUserOrders() {
+  const res = await fetch(
+    `${BASE_URL}/api/user-order/list-user-orders`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch orders");
+  }
+
+  return data;
+}
+
+/**
+ * Get single order details by order ID
+ * GET /api/user-order/list-order-details?orderId=XXX
+ */
+export async function getOrderDetails(orderId) {
+  if (!orderId) {
+    throw new Error("orderId is required");
+  }
+
+  const res = await fetch(
+    `${BASE_URL}/api/user-order/list-order-details?orderId=${orderId}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch order details");
+  }
+
+  return data;
+}

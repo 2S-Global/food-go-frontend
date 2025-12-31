@@ -1,42 +1,51 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+
 import PageBanner from "../../components/PageBanner";
 import BreadCrumbs from "../../components/Breadcrumbs";
-import Link from "next/link";
+import Loader from "@/app/components/Loader";
+
+import { getOrderDetails } from "@/app/lib/api";
 
 export default function OrderDetailsPage() {
   const { orderId } = useParams();
 
-  // 🔹 TEMP: Mock order data
-  const order = {
-    orderId,
-    transactionId: "#30737723",
-    date: "Aug 17, 2017",
-    customerName: "John Doe",
-    email: "john@example.com",
-    phone: "+44 123 456 789",
-    address: "221B Baker Street, London",
-    items: [
-      {
-        name: "Veg Subscription",
-        weeks: 4,
-        meals: 20,
-        price: 70,
-      },
-    ],
-    subtotal: 70,
-    delivery: 0,
-    total: 70,
-    status: "Completed",
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (orderId) fetchOrderDetails();
+  }, [orderId]);
+
+  const fetchOrderDetails = async () => {
+    try {
+      const res = await getOrderDetails(orderId);
+      setOrder(res?.data);
+    } catch (error) {
+      console.error("Order details fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) return <Loader />;
+  if (!order) return <p className="text-center">Order not found</p>;
 
   return (
     <section>
+      <style jsx>{`
+        strong {
+          color: #012169;
+        }
+      `}</style>
+      
       {/* ===== Banner ===== */}
       <PageBanner
         title="Order Details"
-        subtitle={`Order ID: ${order.orderId}`}
+        subtitle={`Order ID: ${order.order_number}`}
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
@@ -60,22 +69,38 @@ export default function OrderDetailsPage() {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h4 className="mb-0">Order Information</h4>
                   <span className="badge bg-success px-3 py-2">
-                    {order.status}
+                    {order.payment_status}
                   </span>
                 </div>
 
                 <div className="row">
-                  <div className="col-md-6 mb-2">
-                    <p className="mb-1 text-muted">Order ID</p>
-                    <strong>{order.orderId}</strong>
+                  <div className="col-md-6 mb-3">
+                    <div className="d-flex gap-2">
+                      <span className="text-muted">Order ID:</span>
+                      <strong>{order.order_number}</strong>
+                    </div>
                   </div>
-                  <div className="col-md-6 mb-2">
-                    <p className="mb-1 text-muted">Transaction ID</p>
-                    <strong>{order.transactionId}</strong>
+
+                  <div className="col-md-6 mb-3">
+                    <div className="d-flex gap-2">
+                      <span className="text-muted">Payment Method:</span>
+                      <strong className="text-capitalize">
+                        {order.payment_method}
+                      </strong>
+                    </div>
                   </div>
-                  <div className="col-md-6 mb-2">
-                    <p className="mb-1 text-muted">Order Date</p>
-                    <strong>{order.date}</strong>
+
+                  <div className="col-md-6 mb-3">
+                    <div className="d-flex gap-2">
+                      <span className="text-muted">Order Date:</span>
+                      <strong>
+                        {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </strong>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,14 +122,16 @@ export default function OrderDetailsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {order.items.map((item, index) => (
-                        <tr key={index}>
+                      {order.items.map((item) => (
+                        <tr key={item._id}>
                           <td>
-                            <strong>{item.name}</strong>
+                            <strong>
+                              {item.subscription_type.replace("_", " ")}
+                            </strong>
                           </td>
                           <td>{item.weeks}</td>
-                          <td>{item.meals}</td>
-                          <td className="text-end">£{item.price}</td>
+                          <td>{item.meal_count}</td>
+                          <td className="text-end">£{item.total_price}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -117,16 +144,41 @@ export default function OrderDetailsPage() {
           {/* ================= RIGHT SIDE ================= */}
           <div className="col-lg-4">
             {/* Customer Info */}
-            <div className="card mb-4 shadow-sm">
+            <div className="card mb-4 shadow-sm border-0">
               <div className="card-body">
-                <h4 className="mb-3">Customer Details</h4>
+                <h4 className="mb-4">Customer Details</h4>
 
-                <p className="mb-1">
-                  <strong>{order.customerName}</strong>
-                </p>
-                <p className="mb-1 text-muted">{order.email}</p>
-                <p className="mb-1 text-muted">{order.phone}</p>
-                <p className="mb-0 text-muted">{order.address}</p>
+                {/* Full Name */}
+                <div className="d-flex mb-2">
+                  <span className="text-muted me-2">Full Name:</span>
+                  <strong>
+                    {order.shipping_address.firstName}{" "}
+                    {order.shipping_address.lastName}
+                  </strong>
+                </div>
+
+                {/* Email */}
+                <div className="d-flex mb-2">
+                  <span className="text-muted me-2">Email:</span>
+                  <span>{order.shipping_address.email}</span>
+                </div>
+
+                {/* Phone */}
+                <div className="d-flex mb-3">
+                  <span className="text-muted me-2">Phone:</span>
+                  <span>{order.shipping_address.phone}</span>
+                </div>
+
+                {/* Address (multi-line is better UX) */}
+                <div className="d-flex">
+                  <span className="text-muted me-2">Address:</span>
+                  <span className="lh-base">
+                    {order.shipping_address.address},{" "}
+                    {order.shipping_address.city},{" "}
+                    {order.shipping_address.state} –{" "}
+                    {order.shipping_address.zipCode}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -137,21 +189,16 @@ export default function OrderDetailsPage() {
 
                 <ul className="list-unstyled mb-3">
                   <li className="d-flex justify-content-between mb-2">
-                    <span>Subtotal</span>
-                    <span>£{order.subtotal}</span>
-                  </li>
-                  <li className="d-flex justify-content-between mb-2">
-                    <span>Delivery</span>
-                    <span>£{order.delivery}</span>
-                  </li>
-                  <li className="d-flex justify-content-between border-top pt-2 fw-bold">
                     <span>Total</span>
-                    <span>£{order.total}</span>
+                    <span>£{order.total_price}</span>
                   </li>
                 </ul>
 
-                <Link href="/dashboard" className="btn btn-danger w-100">
-                  Back to Dashboard
+                <Link
+                  href="/dashboard/statements"
+                  className="btn btn-danger w-100"
+                >
+                  Back to Statements
                 </Link>
               </div>
             </div>
