@@ -186,8 +186,8 @@ export default function ChangePasswordForm() {
 
             {/* FOOTER */}
             <div className="col-md-12 text-center">
-              <Link className="sign-btn" href="/dashboard">
-                Back to Dashboard
+              <Link className="sign-btn" href="/login">
+                Back to Login
               </Link>
             </div>
           </div>
