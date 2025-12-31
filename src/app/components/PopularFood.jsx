@@ -9,7 +9,8 @@ const PopularFood = () => {
 
    const [menu, setMenu] = useState([]);
    const [loading, setLoading] = useState(true);
-
+const [vegMenu, setVegMenu] = useState([]);
+const [vegLoading, setVegLoading] = useState(true);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
   });
@@ -38,6 +39,24 @@ const PopularFood = () => {
     };
 
     fetchMenu();
+  }, [API_URL]);
+
+  useEffect(() => {
+    const fetchVegMenu = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/usermenu/list-menu?type=veg`);
+        const json = await res.json();
+
+        // 🔥 TAKE FIRST 8 ITEMS
+        setVegMenu((json?.data || []).slice(0, 8));
+      } catch (err) {
+        console.error("Veg menu fetch error:", err);
+      } finally {
+        setVegLoading(false);
+      }
+    };
+
+    fetchVegMenu();
   }, [API_URL]);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
@@ -129,89 +148,42 @@ const PopularFood = () => {
             {/* ===== RIGHT CONTENT (UNCHANGED) ===== */}
             <div className="col-md-8 col-xs-12">
               <div className="popular-of-month">
-                <div className="pop-dish wow fadeIn" data-wow-delay="0.1s">
-                  <div className="poplr-dish">
-                    <img src="/assets/images/round-pic1.jpg" alt="" />
-                    <div className="dish-meta">
-                      <span>$10.00–$30.00</span>
-                      <h4>
-                        <a href="#" title="">
-                          Tequila &amp; Lime hake
-                        </a>
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="item-meta">
-                    <img alt="" src="/assets/images/restaurant-logo2.png" />
-                    <div>
-                      <span>Jagnetina Na Raznju</span>
-                      <p>68 5th Avenue New York</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="pop-dish wow fadeIn" data-wow-delay="0.2s">
-                  <div className="poplr-dish">
-                    <img src="/assets/images/round-pic2.jpg" alt="" />
-                    <div className="dish-meta">
-                      <span>$10.00–$30.00</span>
-                      <h4>
-                        <a href="#" title="">
-                          Maximus nibh facilisis
-                        </a>
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="item-meta">
-                    <img alt="" src="/assets/images/restaurant-logo3.png" />
-                    <div>
-                      <span>Central Caffe Pizzeria</span>
-                      <p>68 5th Avenue New York</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="pop-dish wow fadeIn" data-wow-delay="0.3s">
-                  <div className="poplr-dish">
-                    <img src="/assets/images/round-pic3.jpg" alt="" />
-                    <div className="dish-meta">
-                      <span>$10.00–$30.00</span>
-                      <h4>
-                        <a href="#" title="">
-                          Hendrerit nisi venenatis
-                        </a>
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="item-meta">
-                    <img alt="" src="/assets/images/restaurant-logo4.png" />
-                    <div>
-                      <span>Dream Food By Opaq</span>
-                      <p>68 5th Avenue New York</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="pop-dish">
-                  <div className="poplr-dish wow fadeIn" data-wow-delay="0.4s">
-                    <img src="/assets/images/round-pic4.jpg" alt="" />
-                    <div className="dish-meta">
-                      <span>$10.00–$30.00</span>
-                      <h4>
-                        <a href="#" title="">
-                          Grilled Shrimp Scampi
-                        </a>
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="item-meta">
-                    <img alt="" src="/assets/images/restaurant-logo5.png" />
-                    <div>
-                      <span>Fabio Al Porto Ristorante</span>
-                      <p>68 5th Avenue New York</p>
-                    </div>
-                  </div>
+                <div className="row">
+                  {vegLoading ? (
+                    <p>Loading...</p>
+                  ) : (
+                    vegMenu.map((item, index) => (
+                      <div
+                        key={item._id}
+                        className="col-md-6 col-sm-6 col-xs-12"
+                      >
+                        <div
+                          className="pop-dish wow fadeIn"
+                          data-wow-delay={`${(index + 1) * 0.1}s`}
+                        >
+                          {/* IMAGE + BADGE */}
+                          <div className="poplr-dish poplr-inline">
+                            <img
+                              src={
+                                item.images?.[0] ||
+                                "/assets/images/round-pic1.jpg"
+                              }
+                              alt={item.menuName}
+                            />
+                            <div className="poplr-text">
+                              <span>{item.menuName}</span>
+                              <p>{item.menuType}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
+
               <div className="rite-meta">
-                <a href="#" title="" className="view-more">
+                <a href="#" className="view-more">
                   view more food
                 </a>
               </div>

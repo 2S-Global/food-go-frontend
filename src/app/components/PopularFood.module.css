@@ -25,7 +25,7 @@
 
 /* ===== IMAGE HEIGHT FIX ===== */
 .emblaSlide figure img {
-  height: 297px;        /* 🔥 reduce height */
+  height: 350px;        /* 🔥 reduce height */
   object-fit: cover;
   width: 100%;
 }
@@ -73,3 +73,41 @@
 .emblaNext {
   right: -8px;
 }
+
+/* FORCE INLINE LAYOUT */
+.poplr-inline {
+  display: flex !important;
+  align-items: center;
+  gap: 14px;
+}
+
+/* KILL THEME WIDTH RULE */
+.poplr-inline img {
+  width: 70px !important;
+  max-width: none !important;
+  height: 70px !important;
+  display: inline-block !important;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* TEXT */
+.poplr-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.poplr-text span {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.poplr-text p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+
