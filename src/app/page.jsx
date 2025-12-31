@@ -40,8 +40,8 @@ export default async function Home() {
       <PopularFood />
       <EasyOrderSteps />
       {/* <FeaturedList /> */}
-      <FoodCategoryFilter />
-      <BlogSection limit={3} showTitle={true} variant="home" />
+      {/* <FoodCategoryFilter /> */}
+      <BlogSection limit={6} showTitle={true} variant="home" />
       <AppDownloadSection />
       {/* <Footer /> */}
     </>

@@ -17,7 +17,7 @@ export default async function BlogSection({
       <div
         className={
           isHome
-            ? "block mb-60 pt-5" // white background + space before footer
+            ? "block mb-60 pt-6" // white background + space before footer
             : "block less-spacing gray-bg top-padd30" // grey background (blog page)
         }
       >
