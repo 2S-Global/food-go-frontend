@@ -5,12 +5,12 @@ import styles from "./PopularFood.module.css";
 
 const PopularFood = () => {
   // Embla
-   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-   const [menu, setMenu] = useState([]);
-   const [loading, setLoading] = useState(true);
-const [vegMenu, setVegMenu] = useState([]);
-const [vegLoading, setVegLoading] = useState(true);
+  const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [vegMenu, setVegMenu] = useState([]);
+  const [vegLoading, setVegLoading] = useState(true);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
   });
