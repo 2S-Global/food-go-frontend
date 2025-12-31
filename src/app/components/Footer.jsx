@@ -1,4 +1,6 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -80,29 +82,29 @@ const Footer = () => {
                         </h4>
                         <ul>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Careers
-                            </a>
+                           <Link href="/">
+                              Home
+                            </Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Investor Relations
-                            </a>
+                            <Link href="/about-us">
+                              About Us
+                            </Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Press Releases
-                            </a>
+                            <Link href="/menu">
+                             Menu
+                            </Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              Shop with Points
-                            </a>
+                            <Link href="/blog">
+                              Blog
+                            </Link>
                           </li>
                           <li>
-                            <a href="#" title="" itemProp="url">
-                              More Branches
-                            </a>
+                            <Link href="/contact-us">
+                              Contact Us
+                            </Link>
                           </li>
                         </ul>
                       </div>
@@ -118,29 +120,20 @@ const Footer = () => {
                         <ul>
                           <li>
                             <a href="#" title="" itemProp="url">
-                              Returns
+                              Privacy Policy
                             </a>
                           </li>
                           <li>
                             <a href="#" title="" itemProp="url">
-                              Shipping Info
+                              Refund Policy
                             </a>
                           </li>
                           <li>
                             <a href="#" title="" itemProp="url">
-                              Gift Cards
+                              Terms & Condition
                             </a>
                           </li>
-                          <li>
-                            <a href="#" title="" itemProp="url">
-                              Size Guide
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" title="" itemProp="url">
-                              Money Back
-                            </a>
-                          </li>
+                         
                         </ul>
                       </div>
                     </div>
