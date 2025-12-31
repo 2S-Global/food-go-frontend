@@ -100,7 +100,7 @@ const PopularFood = () => {
                                 />
                                 <div>
                                   <span>{item.menuType}</span>
-                                  <p>{item.mealType}</p>
+                               
                                 </div>
                               </div>
 
