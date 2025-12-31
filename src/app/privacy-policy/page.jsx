@@ -54,7 +54,7 @@ export default function AboutUsPage() {
             <div className="col-md-12">
               <div className="sec-box text-center">
                 <div
-                  className="cms-content"
+                  className="cms-content" style={{textAlign:"left"}}
                   dangerouslySetInnerHTML={{
                     __html: cms.full_content,
                   }}
