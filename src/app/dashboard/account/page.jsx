@@ -18,7 +18,7 @@ export default function AccountSettingsPage() {
               </div>
               <a
                 className="red-clr change-password"
-                href="#"
+                href="/change-password"
                 title=""
                 itemProp="url"
               >

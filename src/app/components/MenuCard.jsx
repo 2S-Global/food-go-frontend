@@ -153,7 +153,7 @@ export default function MenuCard({
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 style={{
-                  padding: "10px 14px",
+                  padding: "12px 26px",
                   backgroundColor: isHover ? "#c8102e" : "#012169",
                   color: "#fff",
                   border: "none",
