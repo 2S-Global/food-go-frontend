@@ -29,8 +29,17 @@ export default function AboutUsPage() {
     fetchCMS();
   }, []);
 
-  if (loading) return <p className="text-center">Loading...</p>;
-  if (!cms) return <p className="text-center">CMS content not found</p>;
+  if (loading)
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "60vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -54,7 +63,8 @@ export default function AboutUsPage() {
             <div className="col-md-12">
               <div className="sec-box text-center">
                 <div
-                  className="cms-content" style={{textAlign:"left"}}
+                  className="cms-content"
+                  style={{ textAlign: "left" }}
                   dangerouslySetInnerHTML={{
                     __html: cms.full_content,
                   }}

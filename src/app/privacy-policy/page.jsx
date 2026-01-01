@@ -28,8 +28,17 @@ export default function AboutUsPage() {
 
     fetchCMS();
   }, []);
-
-  if (loading) return <p className="text-center">Loading...</p>;
+ if (loading)
+   return (
+     <div
+       className="d-flex justify-content-center align-items-center"
+       style={{ minHeight: "60vh" }}
+     >
+       <div className="spinner-border text-primary" role="status">
+         <span className="visually-hidden">Loading...</span>
+       </div>
+     </div>
+   );
   if (!cms) return <p className="text-center">CMS content not found</p>;
 
   return (
