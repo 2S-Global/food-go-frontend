@@ -1,25 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
+import Loader from "../components/Loader";
 
 export default function ContactUsPage() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const [contact, setContact] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactDetails = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/userdata/list-contact-details`);
+        const result = await res.json();
+
+        if (result?.success && result?.data?.length > 0) {
+          setContact(result.data[0]); // API returns array
+        }
+      } catch (error) {
+        console.error("Contact API error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactDetails();
+  }, [API_URL]);
+
+  if (loading) return <Loader />;
+  if (!contact) return <p className="text-center">Contact details not found</p>;
+
   return (
     <>
       <PageBanner
         title="Contact Us"
-        subtitle="A Greate Restaurant Website"
+        subtitle="A Great Restaurant Website"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
 
       <BreadCrumbs
-        items={[
-          { label: "Home", href: "/" },
-          //   { label: "Cart", href: "/cart" },
-          { label: "Contact Us" },
-        ]}
+        items={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
       />
 
       <section>
@@ -28,95 +52,77 @@ export default function ContactUsPage() {
             <div className="row">
               <div className="col-md-12 col-sm-12 col-lg-12">
                 <div className="sec-box">
-                  <div className="loc-map" id="loc-map" />
+                  {/* ===== CONTACT INFO ===== */}
                   <div className="contact-info-sec text-center">
                     <div className="row">
+                      {/* PHONE */}
                       <div className="col-md-4 col-sm-4 col-lg-4">
                         <div className="contact-info-box">
                           <i className="fa fa-phone-square" />
-                          <h5 itemProp="headline">PHONE</h5>
-                          <p itemProp="description">
-                            Phone 01: (0091) 8547 632521
+                          <h5>PHONE</h5>
+                          <p>
+                            <a href={`tel:${contact.phone_number}`}>
+                              {contact.phone_number}
+                            </a>
                           </p>
-                          <p itemProp="description">Phone 02: (084) 965 4788</p>
                         </div>
                       </div>
+
+                      {/* ADDRESS */}
                       <div className="col-md-4 col-sm-4 col-lg-4">
                         <div className="contact-info-box">
                           <i className="fa fa-map-marker" />
-                          <h5 itemProp="headline">ADDRESS</h5>
-                          <p itemProp="description">
-                            5Tth Floor, AH Building, 756 New St Melbourne,
-                            Australia.
-                          </p>
+                          <h5>ADDRESS</h5>
+                          <p>{contact.address}</p>
                         </div>
                       </div>
+
+                      {/* EMAIL */}
                       <div className="col-md-4 col-sm-4 col-lg-4">
                         <div className="contact-info-box">
                           <i className="fa fa-envelope" />
-                          <h5 itemProp="headline">EMAIL</h5>
-                          <p itemProp="description">support@yourdomain.com</p>
-                          <p itemProp="description">hello@yourdomain.com</p>
+                          <h5>EMAIL</h5>
+                          <p>
+                            <a href={`mailto:${contact.email}`}>
+                              {contact.email}
+                            </a>
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* ===== CONTACT FORM ===== */}
                   <div className="contact-form-wrapper text-center">
                     <div className="contact-form-inner">
-                      <h3 itemProp="headline">
-                        If You Got Any Questions <br /> Please Do Not Hesitate
-                        to Send us a Message.
+                      <h3>
+                        If You Got Any Questions <br />
+                        Please Do Not Hesitate to Send us a Message.
                       </h3>
-                      <div id="message" />
-                      <form method="post" action="contact.php" id="contactform">
+
+                      <form>
                         <div className="row">
-                          <div className="col-md-12 col-sm-6 col-lg-12">
-                            <input
-                              id="name"
-                              type="text"
-                              placeholder="Your Name"
-                            />
+                          <div className="col-md-12">
+                            <input type="text" placeholder="Your Name" />
                           </div>
-                          <div className="col-md-12 col-sm-6 col-lg-12">
-                            <input
-                              id="email"
-                              type="email"
-                              placeholder="Your Email"
-                            />
+                          <div className="col-md-12">
+                            <input type="email" placeholder="Your Email" />
                           </div>
-                          <div className="col-md-12 col-sm-12 col-lg-12">
+                          <div className="col-md-12">
                             <input type="text" placeholder="Subject" />
                           </div>
-                          <div className="col-md-12 col-sm-12 col-lg-12">
-                            <textarea
-                              id="comments"
-                              placeholder="Message"
-                              defaultValue={""}
-                            />
+                          <div className="col-md-12">
+                            <textarea placeholder="Message" />
                           </div>
-                          {/*<div class="col-md-12 col-sm-12 col-lg-12">
-                                              <div class="g-recaptcha" data-sitekey="6LelmzAUAAAAAHBE2SJeRMfnzYVxH9RMGQstUij2"></div> 
-                                          </div>*/}
-                          <div className="col-md-12 col-sm-12 col-lg-12">
-                            <button
-                              className="brd-rd2"
-                              id="submit"
-                              type="submit"
-                            >
+                          <div className="col-md-12">
+                            <button className="brd-rd2" type="submit">
                               SEND MESSAGE
                             </button>
-                            <img
-                              src="/assets/images/ajax-loader.gif"
-                              className="loader"
-                              alt="ajax-loader.gif"
-                              itemProp="image"
-                            />
                           </div>
                         </div>
                       </form>
                     </div>
                   </div>
-                  {/* Contact Form Wrapper */}
                 </div>
               </div>
             </div>
