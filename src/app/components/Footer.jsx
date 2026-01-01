@@ -1,8 +1,35 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 const Footer = () => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const [contact, setContact] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactDetails = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/userdata/list-contact-details`);
+        const result = await res.json();
+
+        if (result?.success && result?.data?.length > 0) {
+          setContact(result.data[0]); // API returns array
+        }
+      } catch (error) {
+        console.error("Footer API error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactDetails();
+  }, [API_URL]);
+
+  if (loading || !contact) return null; // footer silently waits
+
   return (
     <>
       <footer>
@@ -17,50 +44,40 @@ const Footer = () => {
                       <div className="widget about_widget">
                         <div className="logo">
                           <h1>
-                            <Link href="/" title="Home">
-                              <img src="/assets/images/logo.png" alt="Logo" />
+                            <Link href="/">
+                              <img
+                                src={contact.logo}
+                                alt="Logo"
+                                style={{ maxHeight: 60 }}
+                              />
                             </Link>
                           </h1>
                         </div>
 
-                        <p>
-                          Food Ordering is a Premium HTML Template. Best choice
-                          for your online store. Let purchase it to enjoy now
-                        </p>
+                        <p>{contact.short_description}</p>
 
                         <div className="social2">
-                          <a
-                            className="brd-rd50"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa fa-facebook" />
-                          </a>
-                          <a
-                            className="brd-rd50"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa fa-google-plus" />
-                          </a>
-                          <a
-                            className="brd-rd50"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa fa-twitter" />
-                          </a>
-                          <a
-                            className="brd-rd50"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa fa-pinterest" />
-                          </a>
+                          {contact.social_links?.facebook && (
+                            <a
+                              className="brd-rd50"
+                              href={contact.social_links.facebook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <i className="fa fa-facebook" />
+                            </a>
+                          )}
+
+                          {contact.social_links?.twitter && (
+                            <a
+                              className="brd-rd50"
+                              href={contact.social_links.twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <i className="fa fa-twitter" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -115,19 +132,18 @@ const Footer = () => {
                         <h4 className="widget-title">GET IN TOUCH</h4>
                         <ul>
                           <li>
-                            <i className="fa fa-map-marker" /> 123 New Design
-                            Str, ABC Building, Melbourne, Australia.
+                            <i className="fa fa-map-marker" /> {contact.address}
                           </li>
                           <li>
                             <i className="fa fa-phone" />{" "}
-                            <a href="tel:+004486471234587">
-                              (0044) 8647 1234 587
+                            <a href={`tel:${contact.phone_number}`}>
+                              {contact.phone_number}
                             </a>
                           </li>
                           <li>
                             <i className="fa fa-envelope" />{" "}
-                            <a href="mailto:hello@yourdomain.com">
-                              hello@yourdomain.com
+                            <a href={`mailto:${contact.email}`}>
+                              {contact.email}
                             </a>
                           </li>
                         </ul>
@@ -135,7 +151,6 @@ const Footer = () => {
                     </div>
                   </div>
                 </div>
-                {/* Footer Data */}
               </div>
             </div>
           </div>
@@ -146,7 +161,7 @@ const Footer = () => {
       <div className="bottom-bar dark-bg text-center">
         <div className="container">
           <p>
-            © 2025{" "}
+            © {new Date().getFullYear()}{" "}
             <a
               href="https://www.2sglobal.co/"
               target="_blank"
