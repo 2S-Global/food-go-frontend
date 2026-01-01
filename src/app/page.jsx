@@ -4,6 +4,8 @@ import Footer from "./components/Footer";
 import HeroBanner from "./components/HeroBanner";
 import TopBanner from "./components/TopBanner";
 import FoodMenu from "./components/FoodMenu";
+import FoodMenuStatic from "./components/FoodMenuStatic";
+
 import AppDownloadSection from "./components/AppDownloadSection";
 import PopularFood from "./components/PopularFood";
 import EasyOrderSteps from "./components/EasyOrderSteps";
@@ -31,11 +33,14 @@ export default async function Home() {
       <HeroBanner />
       {/* <TopBanner /> */}
 
-      <FoodMenu
+{/*       <FoodMenu
         items={menuData}
         limit={3}
         showTitle={true}
-      />
+      /> */}
+
+
+    <FoodMenuStatic />
 
       <PopularFood />
       <EasyOrderSteps />

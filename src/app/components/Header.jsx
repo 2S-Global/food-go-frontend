@@ -83,7 +83,7 @@ const Header = () => {
         <div className="container">
           <div className="logo">
             <Link href="/">
-              <img src="/assets/images/logo2.png" alt="logo" itemProp="image" />
+              <img src="/assets/images/logo2.png" alt="logo" itemProp="image" style={{ height: "58px", width: "auto" }} />
             </Link>
           </div>
 

@@ -28,9 +28,9 @@ return(
               </i>
               <div className="fact-inner">
                 <strong>
-                  <span className="counter">137</span>
+                  <span className="counter">28</span>
                 </strong>
-                <h5>Restaurant</h5>
+                <h5>Menu Sets</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -46,9 +46,9 @@ return(
               </i>
               <div className="fact-inner">
                 <strong>
-                  <span className="counter">158</span>
+                  <span className="counter">14</span>
                 </strong>
-                <h5>People Served</h5>
+                <h5>Veg Menu</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -64,9 +64,9 @@ return(
               </i>
               <div className="fact-inner">
                 <strong>
-                  <span className="counter">659</span>K
+                  <span className="counter">14</span>
                 </strong>
-                <h5>Happy Service</h5>
+                <h5>Non-Veg Menus</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -82,9 +82,9 @@ return(
               </i>
               <div className="fact-inner">
                 <strong>
-                  <span className="counter">235</span>
+                  <span className="counter">2</span>K
                 </strong>
-                <h5>Regular users</h5>
+                <h5>Customers</h5>
               </div>
             </div>
             {/* Fact Box */}
