@@ -172,7 +172,7 @@ const PopularFood = () => {
                             />
                             <div className="poplr-text">
                               <span>{item.menuName}</span>
-                              <p>{item.menuType}</p>
+                          
                             </div>
                           </div>
                         </div>
