@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
+import Loader from "../components/Loader";
 
 export default function AboutUsPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -29,17 +30,7 @@ export default function AboutUsPage() {
     fetchCMS();
   }, []);
 
-  if (loading)
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "60vh" }}
-      >
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+  if (loading) return <Loader />;
   if (!cms) return <p className="text-center">CMS content not found</p>;
 
   return (
@@ -65,6 +56,7 @@ export default function AboutUsPage() {
               <div className="sec-box text-center">
                 <div
                   className="cms-content"
+                  style={{ textAlign: "left" }}
                   dangerouslySetInnerHTML={{
                     __html: cms.full_content,
                   }}

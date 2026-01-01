@@ -1,12 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./MenuCategories.module.css";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import Link from "next/link";
+import Loader from "../components/Loader";
 
 export default function MenuPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      setLoading(false);
+    };
+
+    init();
+  }, []);
+
+  if (loading) return <Loader />;
+
   return (
     <>
       <PageBanner
@@ -37,7 +54,10 @@ export default function MenuPage() {
             <Link href="/menu/veg" className={styles.menuBox}>
               <img src="/assets/images/veg-menu.jpg" alt="Veg Menu" />
               <h3>Veg Menu</h3>
-              <p>£70 <span style={{ fontSize: "28px", color: "#666" }}>/week</span></p>
+              <p>
+                £70{" "}
+                <span style={{ fontSize: "28px", color: "#666" }}>/week</span>
+              </p>
               {/* <p>
                 £70{" "}
                 <span style={{ fontSize: "14px", color: "#666" }}>/week</span>
@@ -48,7 +68,10 @@ export default function MenuPage() {
             <Link href="/menu/non-veg" className={styles.menuBox}>
               <img src="/assets/images/nonveg-menu.jpg" alt="Non Veg Menu" />
               <h3>Non-Veg Menu</h3>
-              <p>£80 <span style={{ fontSize: "28px", color: "#666" }}>/week</span></p>
+              <p>
+                £80{" "}
+                <span style={{ fontSize: "28px", color: "#666" }}>/week</span>
+              </p>
               {/* <p>
                 £80{" "}
                 <span style={{ fontSize: "14px", color: "#666" }}>/week</span>

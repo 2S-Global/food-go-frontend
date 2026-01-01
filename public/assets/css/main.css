@@ -89,7 +89,8 @@ p {
   font-size: 15px;
   font-family: "lato";
   line-height: 28px;
-  color: #9fa4af;
+  /* color: #9fa4af; */
+  color: #232323;
   display: inline-block;
   letter-spacing: 0.5px;
 }

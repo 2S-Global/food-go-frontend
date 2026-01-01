@@ -1,5 +1,4 @@
 import React from "react";
-import BlogCard from "../components/BlogCard";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
 import { getUserBlogs } from "../lib/api";
@@ -8,6 +7,7 @@ import BlogSection from "../components/BlogSection";
 export default async function BlogPage() {
   const response = await getUserBlogs();
   const blogs = response?.data || [];
+
 
   return (
     <>
