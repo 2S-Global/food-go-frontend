@@ -139,7 +139,7 @@ const Header = () => {
                       className="fa fa-shopping-cart"
                       style={{ fontSize: "26px" }}
                     />
-                    <span className="cart-count">3</span>
+                    {/* <span className="cart-count">3</span> */}
                   </Link>
                 </div>
 
