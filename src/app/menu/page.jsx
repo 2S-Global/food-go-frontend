@@ -29,7 +29,7 @@ export default function MenuPage() {
       <PageBanner
         title="Our Menu"
         subtitle="Discover Delicious Options"
-        background="/assets/images/group-2.jpg"
+        background="/assets/images/menu.jpg"
         showSearchForm={false}
       />
 

@@ -8,7 +8,7 @@ const EasyOrderSteps = () => {
       <div className="block blue-overlay low-opacity">
         <div
           className="fixed-bg"
-          style={{ backgroundImage: "url(/assets/images/group-1.jpeg)" }}
+          style={{ backgroundImage: "url(/assets/images/easy_order.png)" }}
         />
         <div className="container">
           <div className="row">
@@ -35,7 +35,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Explore Restaurants</h4>
-                        <p itemProp="description">
+                        <p itemProp="description" style={{color:"antiquewhite"}} >
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>
@@ -55,7 +55,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Choose a Tasty Dish</h4>
-                        <p itemProp="description">
+                        <p itemProp="description" style={{color:"antiquewhite"}}>
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>
@@ -75,7 +75,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Follow The Status</h4>
-                        <p itemProp="description">
+                        <p itemProp="description" style={{color:"antiquewhite"}}>
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>

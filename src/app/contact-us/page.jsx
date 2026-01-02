@@ -38,7 +38,7 @@ export default function ContactUsPage() {
       <PageBanner
         title="Contact Us"
         subtitle="A Great Restaurant Website"
-        background="/assets/images/group-2.jpg"
+        background="/assets/images/contact_us.jpg"
         showSearchForm={false}
       />
 

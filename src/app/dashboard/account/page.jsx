@@ -125,9 +125,10 @@ export default function AccountSettingsPage() {
                     </label>
                     <div className="select-wrp">
                       <select>
-                        <option>Pakistan</option>
                         <option>India</option>
+                        <option>UK</option>
                         <option>USA</option>
+                        <option>Bangladesh</option>
                       </select>
                     </div>
                   </div>
@@ -143,9 +144,10 @@ export default function AccountSettingsPage() {
                     </label>
                     <div className="select-wrp">
                       <select>
-                        <option>Karachi</option>
-                        <option>Multan</option>
-                        <option>Lahore</option>
+                        <option>Kolkata</option>
+                        <option>Birmingham</option>
+                        <option>Mumbai</option>
+                        <option>London</option>
                       </select>
                     </div>
                   </div>

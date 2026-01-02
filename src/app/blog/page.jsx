@@ -14,7 +14,7 @@ export default async function BlogPage() {
       <PageBanner
         title="Blog Grid"
         subtitle="A Greate Restaurant Website"
-        background="/assets/images/group-2.jpg"
+        background="/assets/images/blog.png"
         showSearchForm={false}
       />
 

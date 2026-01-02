@@ -21,8 +21,8 @@ return(
             <div className="fact-box">
               <i className="brd-rd50">
                 <img
-                  src="assets/images/fact-icon1.png"
-                  alt="fact-icon1"
+                  src="/assets/images/menu_icon.png"
+                  alt="menu_icon"
                   itemProp="image"
                 />
               </i>
@@ -39,8 +39,8 @@ return(
             <div className="fact-box">
               <i className="brd-rd50">
                 <img
-                  src="assets/images/fact-icon2.png"
-                  alt="fact-icon2"
+                  src="/assets/images/veg_icon.png"
+                  alt="veg_icon"
                   itemProp="image"
                 />
               </i>
@@ -57,8 +57,8 @@ return(
             <div className="fact-box">
               <i className="brd-rd50">
                 <img
-                  src="assets/images/fact-icon3.png"
-                  alt="fact-icon3"
+                  src="/assets/images/nonveg_icon.png"
+                  alt="nonveg_icon"
                   itemProp="image"
                 />
               </i>
@@ -75,8 +75,8 @@ return(
             <div className="fact-box">
               <i className="brd-rd50">
                 <img
-                  src="assets/images/fact-icon4.png"
-                  alt="fact-icon4"
+                  src="/assets/images/customer_icon.png"
+                  alt="customer_icon"
                   itemProp="image"
                 />
               </i>

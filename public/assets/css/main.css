@@ -1285,7 +1285,7 @@ header.sticky nav > div > ul > li span {
 }
 .funfacts {
   display: flex;
-  margin: 20px auto 0 0;
+  margin: 30px auto 0 0;
   width: 100%;
 }
 .fact-box {

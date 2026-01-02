@@ -68,7 +68,7 @@ export default function NonVegMenuPage() {
       <PageBanner
         title="Non-Veg Menu"
         subtitle="Delicious Non-Veg Options"
-        background="/assets/images/group-2.jpg"
+        background="/assets/images/nonveg_menu1.png"
         showSearchForm={false}
       />
 

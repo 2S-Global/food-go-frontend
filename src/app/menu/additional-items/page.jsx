@@ -50,7 +50,7 @@ export default function AdditionalItemsPage() {
       <PageBanner
         title="Additional Items"
         subtitle="Add Extra Items to Your Order"
-        background="/assets/images/group-2.jpg"
+        background="/assets/images/additional_items1.png"
         showSearchForm={false}
       />
 
