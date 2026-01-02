@@ -83,7 +83,7 @@ const PopularFood = () => {
                   <div className="title1-inner">
                     <span>Your Favourite Food</span>
                     <h2 itemProp="headline">Popular This Month</h2>
-                    <b>In Your City</b>
+                    <b>In Your Area</b>
                   </div>
                 </div>
               </div>

@@ -221,7 +221,7 @@ export default function AuthForm({ type }) {
                   }}
                 >
                   <Link className="sign-btn" href="/register">
-                    Not a member? Sign up
+                    <span>Not a member? <strong>Sign up</strong></span>
                   </Link>
 
                   <Link
@@ -237,7 +237,7 @@ export default function AuthForm({ type }) {
                 </div>
               ) : (
                 <Link className="sign-btn" href="/login">
-                  Already Registered? Sign in
+                  <span>Already a member? <strong>Sign in</strong></span>
                 </Link>
               )}
             </div>

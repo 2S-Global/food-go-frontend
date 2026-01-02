@@ -31,11 +31,36 @@ export default function FoodMenuStatic({
       <section>
         <div className="block">
           <div className="container">
+            {/* {showTitle && (
+              <div className="title1-wrapper text-center">
+                <div className="title1-inner">
+                  <span>Your Favourite Food</span>
+                  <h2>Choose &amp; Enjoy</h2>
+                </div>
+              </div>
+            )} */}
             {showTitle && (
               <div className="title1-wrapper text-center">
                 <div className="title1-inner">
                   <span>Your Favourite Food</span>
                   <h2>Choose &amp; Enjoy</h2>
+
+                  {/* NEW DESCRIPTION TEXT */}
+                  <p
+                    style={{
+                      maxWidth: "820px",
+                      margin: "14px auto 0",
+                      color: "#4a4a4a",
+                      fontSize: "15.5px",
+                      lineHeight: "1.7",
+                      textAlign: "justify",
+                      textAlignLast: "center",
+                    }}
+                  >
+                    Endless Choice, Authentic Taste. From hearty non-veg
+                    classics to vibrant vegetarian delights, explore a massive
+                    menu of home-cooked meals and authentic side treats. With <strong style={{color:"#c8102e"}}>FoodGo</strong>, you’re in control—browse our wide range of weekly optionsand customize your perfect meal plan today.
+                  </p>
                 </div>
               </div>
             )}

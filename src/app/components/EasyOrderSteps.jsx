@@ -22,7 +22,7 @@ const EasyOrderSteps = () => {
             <div className="col-md-12 col-sm-12 col-lg-12">
               <div className="title1-wrapper text-center">
                 <div className="title1-inner">
-                  <span>Website for Restaurant and Cafe</span>
+                  <span>Choose Meal fast & simple</span>
                   <h2 className="text-white" itemProp="headline">
                     easy order in 3 steps
                   </h2>
@@ -41,10 +41,9 @@ const EasyOrderSteps = () => {
                         <span className="brd-rd50 red-bg">1</span>
                       </i>
                       <div className="setp-box-inner">
-                        <h4 itemProp="headline">Explore Restaurants</h4>
+                        <h4 itemProp="headline">Choose meal type</h4>
                         <p itemProp="description"  >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry
+                          Choose your weekly meal from a wide range of veg and non-veg options.
                         </p>
                       </div>
                     </div>
@@ -61,10 +60,9 @@ const EasyOrderSteps = () => {
                         <span className="brd-rd50 red-bg">2</span>
                       </i>
                       <div className="setp-box-inner">
-                        <h4 itemProp="headline">Choose a Tasty Dish</h4>
+                        <h4 itemProp="headline">Choose a Starting Date</h4>
                         <p itemProp="description" >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry
+                          Choose a starting date and end date to enjoy your meals.
                         </p>
                       </div>
                     </div>
@@ -81,10 +79,9 @@ const EasyOrderSteps = () => {
                         <span className="brd-rd50 red-bg">3</span>
                       </i>
                       <div className="setp-box-inner">
-                        <h4 itemProp="headline">Follow The Status</h4>
+                        <h4 itemProp="headline">Confirm and Pay</h4>
                         <p itemProp="description" >
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry
+                          Confirm your order and make the payment. Enjoy your meals!
                         </p>
                       </div>
                     </div>

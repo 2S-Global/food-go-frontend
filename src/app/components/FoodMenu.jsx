@@ -9,13 +9,12 @@ export default function FoodMenu({
   variant = "home",
   subscriptionType,
   onAddToCart,
+  topContent,
 }) {
   // ✅ SAFETY: ensure array
   const safeItems = Array.isArray(items) ? items : [];
 
-  const visibleItems = limit
-    ? safeItems.slice(0, limit)
-    : safeItems;
+  const visibleItems = limit ? safeItems.slice(0, limit) : safeItems;
 
   const isMenu = variant === "menu";
   const isAdditional = variant === "additional";
@@ -41,6 +40,20 @@ export default function FoodMenu({
 
           {isMenu || isAdditional ? (
             <div className="sec-box">
+              {/* ✅ TOP CONTENT INSIDE SAME WHITE AREA */}
+              {topContent && (
+                <div
+                  style={{
+                    maxWidth: "900px",
+                    margin: "0 auto 30px",
+                    textAlign: "justify",
+                    paddingBottom: "20px",
+                  }}
+                >
+                  {topContent}
+                </div>
+              )}
+
               <div className="remove-ext">
                 <div className="row gy-4">
                   {visibleItems.map((item, index) => (

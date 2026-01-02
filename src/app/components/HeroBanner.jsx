@@ -13,7 +13,7 @@ return(
     <div className="restaurant-searching text-center">
       <div className="restaurant-searching-inner">
         <h2 itemProp="headline">
-          A <span>Taste of Home,</span> Delivered to Your Doorstep.
+          A <span style={{color: "#c8102e"}}>Taste of Home,</span> Delivered to Your Doorstep.
         </h2>
         
         <div className="funfacts">

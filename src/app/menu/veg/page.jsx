@@ -90,6 +90,7 @@ export default function VegMenuPage() {
           subscriptionType="veg"
           showTitle={false}
           onAddToCart={handleAddToCart}
+          topContent={`Experience the true taste of home with our vibrant Vegetarian Menu. From slow-simmered dals and spicy curries to fresh, seasonal vegetable stir-fries, we bring you a massive variety of meat-free masterpieces.Choose from a wide range of regional veg specialties and add on traditional sides to complete your feast. Healthy, hearty, and home-cooked; it’s the plant-based comfort you’ve been missing, delivered straight to your door.`}
         />
       )}
 

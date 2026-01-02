@@ -92,7 +92,8 @@ export default function NonVegMenuPage() {
           variant="menu"
           subscriptionType="non_veg"
           showTitle={false}
-          onAddToCart={handleAddToCart} // ✅ IMPORTANT
+          onAddToCart={handleAddToCart}
+          topContent={` Satisfy your cravings with our extensive Non-Veg Menu, featuring the rich, authentic meat dishes you miss most. From tender slow-cooked curries and succulent stews to traditional poultry and seafood specialties, our home chefs bring the soul of your heritage to every bite. Enjoy your favourite meat-based mains with our wide range of traditional sides. Choose your perfect weekly lineup and enjoy high-quality, protein-packed meals that taste exactly like a Sunday dinner back home.`}
         />
       )}
 
