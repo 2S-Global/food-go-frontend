@@ -33,6 +33,13 @@ export default function OrderDetailsPage() {
 
   if (loading) return <Loader />;
   if (!order) return <p className="text-center">Order not found</p>;
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
 
   return (
     <>
@@ -123,34 +130,39 @@ export default function OrderDetailsPage() {
                       <thead className="table-light">
                         <tr>
                           <th>Item</th>
-                          <th>Weeks</th>
+
                           <th>Meals</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
                           <th className="text-end">Price</th>
                         </tr>
                       </thead>
                       <tbody>
                         {order.items
                           .map((item) => {
-                            // 🔹 Skip malformed / summary rows
                             if (!item.item_type) return null;
 
-                            // 🔹 Additional items
+                            /* ================= ADDITIONAL ITEMS ================= */
                             if (item.item_type === "additional_item") {
-                              return (
-                                <tr key={item._id}>
+                              return item.additional_items.map((addon) => (
+                                <tr key={addon._id}>
                                   <td>
-                                    <strong>Additional Item</strong>
+                                    <strong>{addon.item_id?.itemName}</strong>
                                   </td>
+                              
                                   <td>—</td>
-                                  <td>—</td>
+                                  <td>{formatDate(addon.addon_start_date)}</td>
+
+                                  <td>{formatDate(addon.addon_end_date)}</td>
+
                                   <td className="text-end">
                                     £{item.total_price}
                                   </td>
                                 </tr>
-                              );
+                              ));
                             }
 
-                            // 🔹 Subscription items
+                            /* ================= SUBSCRIPTIONS ================= */
                             if (
                               item.item_type === "subscription" &&
                               item.subscription_type
@@ -165,8 +177,11 @@ export default function OrderDetailsPage() {
                                   <td>
                                     <strong>{label}</strong>
                                   </td>
-                                  <td>{item.weeks ?? "—"}</td>
+                        
                                   <td>{item.meal_count ?? "—"}</td>
+                                  <td>{formatDate(item.start_date)}</td>
+                                  <td>{formatDate(item.end_date)}</td>
+
                                   <td className="text-end">
                                     £{item.total_price}
                                   </td>
@@ -176,6 +191,7 @@ export default function OrderDetailsPage() {
 
                             return null;
                           })
+                          .flat()
                           .filter(Boolean)}
                       </tbody>
                     </table>
