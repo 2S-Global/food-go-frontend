@@ -59,7 +59,10 @@ export default function OrderDetailsPage() {
         ]}
       />
 
-      <section className="block less-spacing gray-bg" style={{paddingTop:"0px"}}>
+      <section
+        className="block less-spacing gray-bg"
+        style={{ paddingTop: "0px" }}
+      >
         <div className="container py-5">
           <div className="row g-4">
             {/* ================= LEFT SIDE ================= */}
@@ -126,21 +129,54 @@ export default function OrderDetailsPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {order.items.map((item) => (
-                          <tr key={item._id}>
-                            <td>
-                              <strong>
-                                {item.subscription_type
-                                  .replace("_", " ")
-                                  .replace(/^./, (c) => c.toUpperCase())
-                                  .replace(/\bNon veg\b/i, "Non-veg")}
-                              </strong>
-                            </td>
-                            <td>{item.weeks}</td>
-                            <td>{item.meal_count}</td>
-                            <td className="text-end">£{item.total_price}</td>
-                          </tr>
-                        ))}
+                        {order.items
+                          .map((item) => {
+                            // 🔹 Skip malformed / summary rows
+                            if (!item.item_type) return null;
+
+                            // 🔹 Additional items
+                            if (item.item_type === "additional_item") {
+                              return (
+                                <tr key={item._id}>
+                                  <td>
+                                    <strong>Additional Item</strong>
+                                  </td>
+                                  <td>—</td>
+                                  <td>—</td>
+                                  <td className="text-end">
+                                    £{item.total_price}
+                                  </td>
+                                </tr>
+                              );
+                            }
+
+                            // 🔹 Subscription items
+                            if (
+                              item.item_type === "subscription" &&
+                              item.subscription_type
+                            ) {
+                              const label = item.subscription_type
+                                .replace(/_/g, " ")
+                                .replace(/\bnon veg\b/i, "Non-veg")
+                                .replace(/^./, (c) => c.toUpperCase());
+
+                              return (
+                                <tr key={item._id}>
+                                  <td>
+                                    <strong>{label}</strong>
+                                  </td>
+                                  <td>{item.weeks ?? "—"}</td>
+                                  <td>{item.meal_count ?? "—"}</td>
+                                  <td className="text-end">
+                                    £{item.total_price}
+                                  </td>
+                                </tr>
+                              );
+                            }
+
+                            return null;
+                          })
+                          .filter(Boolean)}
                       </tbody>
                     </table>
                   </div>
