@@ -4,6 +4,13 @@ import React from "react";
 
 const EasyOrderSteps = () => {
   return (
+    <>
+    <style jsx>{`
+        .setp-box-inner p {
+          color: antiquewhite;
+        }
+      `}</style>
+    
     <section>
       <div className="block blue-overlay low-opacity">
         <div
@@ -35,7 +42,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Explore Restaurants</h4>
-                        <p itemProp="description" style={{color:"antiquewhite"}} >
+                        <p itemProp="description"  >
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>
@@ -55,7 +62,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Choose a Tasty Dish</h4>
-                        <p itemProp="description" style={{color:"antiquewhite"}}>
+                        <p itemProp="description" >
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>
@@ -75,7 +82,7 @@ const EasyOrderSteps = () => {
                       </i>
                       <div className="setp-box-inner">
                         <h4 itemProp="headline">Follow The Status</h4>
-                        <p itemProp="description" style={{color:"antiquewhite"}}>
+                        <p itemProp="description" >
                           Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry
                         </p>
@@ -90,6 +97,7 @@ const EasyOrderSteps = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
