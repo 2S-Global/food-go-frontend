@@ -84,7 +84,7 @@ return(
                 <strong>
                   <span className="counter">2</span>K+
                 </strong>
-                <h5>Customers</h5>
+                <h5>Happy Customers</h5>
               </div>
             </div>
             {/* Fact Box */}
