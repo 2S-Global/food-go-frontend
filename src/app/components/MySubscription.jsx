@@ -122,7 +122,7 @@ export default function MySubscription() {
               data={{
                 menuName: add.item.itemName,
                 images: add.item.images,
-                item1: `Price: ₹${add.item.itemPrice}`,
+                item1: `Price: £${add.item.itemPrice}`,
                 item2: `Quantity: ${add.quantity}`,
                 description: "",
               }}
