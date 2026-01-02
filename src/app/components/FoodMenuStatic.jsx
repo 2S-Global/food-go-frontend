@@ -208,7 +208,7 @@ export default function FoodMenuStatic({
                   data-wow-delay="0.6s"
                 >
                   <div className="popular-dish-thumb">
-                    <a href="/menu/non-veg">
+                    <a href="menu/additional-items">
                       <img
                         src="/assets/images/additional_items.png"
                         alt="Coke"
@@ -246,7 +246,7 @@ export default function FoodMenuStatic({
                         marginBottom: "12px",
                       }}
                     >
-                      <Link href="/menu/non-veg">
+                      <Link href="/menu/additional-items">
                         <button
                           className="brd-rd2"
                           style={{
