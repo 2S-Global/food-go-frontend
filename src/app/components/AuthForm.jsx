@@ -53,7 +53,12 @@ export default function AuthForm({ type }) {
 
         // ⏳ Redirect after delay
         setTimeout(() => {
-          router.push("/");
+          const redirectPath =
+            localStorage.getItem("redirect_after_login") || "/";
+
+          localStorage.removeItem("redirect_after_login");
+
+          router.push(redirectPath);
         }, 1500);
       } else {
         await customerRegister(formData);

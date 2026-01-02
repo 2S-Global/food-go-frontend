@@ -83,20 +83,25 @@ export default function LoginRequiredModal({ open, onClose }) {
             Cancel
           </button>
 
-          <Link href="/login">
-            <button
-              style={{
-                padding: "10px 16px",
-                background: "#c8102e",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              Login
-            </button>
-          </Link>
+          <button
+            onClick={() => {
+              localStorage.setItem(
+                "redirect_after_login",
+                window.location.pathname
+              );
+              window.location.href = "/login";
+            }}
+            style={{
+              padding: "10px 16px",
+              background: "#c8102e",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              cursor: "pointer",
+            }}
+          >
+            Login
+          </button>
         </div>
       </div>
 
