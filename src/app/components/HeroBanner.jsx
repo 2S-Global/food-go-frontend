@@ -48,7 +48,7 @@ return(
                 <strong>
                   <span className="counter">14</span>
                 </strong>
-                <h5>Veg Menu</h5>
+                <h5>Veg Menu Set</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -66,7 +66,7 @@ return(
                 <strong>
                   <span className="counter">14</span>
                 </strong>
-                <h5>Non-Veg Menus</h5>
+                <h5>Non-veg Menu Set</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -82,7 +82,7 @@ return(
               </i>
               <div className="fact-inner">
                 <strong>
-                  <span className="counter">2</span>K
+                  <span className="counter">2</span>K+
                 </strong>
                 <h5>Customers</h5>
               </div>
