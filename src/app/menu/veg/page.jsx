@@ -68,7 +68,7 @@ export default function VegMenuPage() {
       <PageBanner
         title="Veg Menu"
         subtitle="Fresh & Healthy Veg Meals"
-        background="/assets/images/veg_menu.png"
+        background="/assets/images/veg_menu1.png"
         showSearchForm={false}
       />
 
@@ -89,7 +89,7 @@ export default function VegMenuPage() {
           variant="menu"
           subscriptionType="veg"
           showTitle={false}
-          onAddToCart={handleAddToCart} // ✅ IMPORTANT
+          onAddToCart={handleAddToCart}
         />
       )}
 
