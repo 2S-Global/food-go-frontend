@@ -6,12 +6,12 @@ const AppDownloadSection = () => {
   return (
     <section>
       <div className="block no-padding red-bg">
-        <img
+        {/* <img
           className="bottom-clouds-mockup"
           src="/assets/images/clouds2.png"
           alt="clouds2.png"
           itemProp="image"
-        />
+        /> */}
         <div className="container">
           <div className="row">
             <div className="col-md-12 col-sm-12 col-lg-12">
