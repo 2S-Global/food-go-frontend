@@ -70,7 +70,7 @@ export default function AdditionalItemsPage() {
           items={items}
           variant="additional"
           showTitle={false}
-          onAddToCart={(item) => setSelectedItem(item)} // ✅ open modal on click
+          onAddToCart={(item) => setSelectedItem(item)}
         />
       )}
 

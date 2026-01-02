@@ -48,7 +48,7 @@ return(
                 <strong>
                   <span className="counter">14</span>
                 </strong>
-                <h5 style={{fontSize: "13px"}}>Veg Menu Set</h5>
+                <h5 style={{fontSize: "13px"}}>Veg Menu Sets</h5>
               </div>
             </div>
             {/* Fact Box */}
@@ -66,7 +66,7 @@ return(
                 <strong>
                   <span className="counter">14</span>
                 </strong>
-                <h5 style={{fontSize: "13px"}}>Non-veg Menu Set</h5>
+                <h5 style={{fontSize: "13px"}}>Non-veg Menu Sets</h5>
               </div>
             </div>
             {/* Fact Box */}
