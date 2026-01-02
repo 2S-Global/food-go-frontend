@@ -42,28 +42,32 @@ const AppDownloadSection = () => {
                       <div className="app-download-btns">
                         <a
                           className=""
-                          href="#"
+                          href="https://www.figma.com/proto/e1WN5veaqgQKipLlY1GJgc/Food-Go?node-id=1-8&t=k3j6UJPww3sKIrik-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A8"
                           title="Google Play Store"
                           itemProp="url"
                           target="_blank"
+                          style={{ display: "inline-block" }}
                         >
                           <img
                             src="/assets/images/app-download-btn1.png"
                             alt="app-download-btn1.png"
                             itemProp="image"
+                            style={{ pointerEvents: "none" }}
                           />
                         </a>
                         <a
                           className=""
-                          href="#"
+                          href="https://www.figma.com/proto/e1WN5veaqgQKipLlY1GJgc/Food-Go?node-id=1-8&t=k3j6UJPww3sKIrik-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A8"
                           title="Apple App Store"
                           itemProp="url"
                           target="_blank"
+                          style={{ display: "inline-block" }}
                         >
                           <img
                             src="/assets/images/app-download-btn2.png"
                             alt="app-download-btn2.png"
                             itemProp="image"
+                            style={{ pointerEvents: "none" }}
                           />
                         </a>
                       </div>

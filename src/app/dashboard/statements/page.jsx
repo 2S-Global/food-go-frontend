@@ -145,7 +145,7 @@ export default function StatementsPage() {
                 </td>
 
                 <td>
-                  <span className="red-clr">${order.total_price}</span>
+                  <span className="red-clr">£{order.total_price}</span>
                 </td>
                 <td>
                   <Link

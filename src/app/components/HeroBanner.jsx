@@ -94,13 +94,13 @@ return(
       </div>
       <img
         className="left-scooty-mockup"
-        src="assets/images/restaurant-mockup1.png"
+        src="/assets/images/restaurant-mockup1.png"
         alt="restaurant-mockup1.png"
         itemProp="image"
       />
       <img
         className="bottom-clouds-mockup"
-        src="assets/images/clouds.png"
+        src="/assets/images/clouds.png"
         alt="clouds.png"
         itemProp="image"
       />

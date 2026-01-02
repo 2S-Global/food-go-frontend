@@ -187,7 +187,7 @@ export default function FoodMenuStatic({
 
                 <div className="popular-dish-info card-content" style={{ padding: "10px" }}>
                   <h4>
-                    <Link href="/menu/non-veg">Additional Items</Link>
+                    <Link href="/menu/additional-items">Additional Items</Link>
                   </h4>
 
                   <p
