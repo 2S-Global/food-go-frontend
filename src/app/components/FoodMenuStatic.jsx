@@ -17,12 +17,14 @@ export default function FoodMenuStatic({
   return (
     <>
       <style jsx>{`
-        /* 🔒 Disable rotate + zoom on hover */
-         .popular-dish-box:hover .popular-dish-thumb > a img {
-          -webkit-transform: none !important;
-          -ms-transform: none !important;
-          -o-transform: none !important;
+        /* Disable rotate + zoom */
+        .popular-dish-box:hover .popular-dish-thumb > a img {
           transform: none !important;
+        }
+
+        /* Restore button hover */
+        .popular-dish-box button:hover {
+          background-color: #c8102e !important;
         }
       `}</style>
 
