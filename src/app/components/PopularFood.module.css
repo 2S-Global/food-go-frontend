@@ -75,14 +75,13 @@
 }
 
 /* FORCE INLINE LAYOUT */
-.poplr-inline {
+:global(.poplr-inline) {
   display: flex !important;
   align-items: center;
   gap: 14px;
 }
 
-/* KILL THEME WIDTH RULE */
-.poplr-inline img {
+:global(.poplr-inline img) {
   width: 70px !important;
   max-width: none !important;
   height: 70px !important;
@@ -92,22 +91,33 @@
   flex-shrink: 0;
 }
 
-/* TEXT */
-.poplr-text {
+:global(.poplr-text) {
   display: flex;
   flex-direction: column;
 }
 
-.poplr-text span {
+:global(.poplr-text span) {
   font-size: 16px;
   font-weight: 600;
   line-height: 1.2;
 }
 
-.poplr-text p {
+:global(.poplr-text p) {
   margin: 2px 0 0;
   font-size: 13px;
   color: #666;
 }
 
+:global(.poplr-dish){
+  width: 100% !important;
+}
+
+:global(.PopularFood-module__JD4qYW__embla){
+  height: 576px
+}
+
+:global(.popular-of-month) {
+
+    height: 576px
+}
 

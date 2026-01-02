@@ -111,17 +111,37 @@ export default function StatementsPage() {
                   {order.items.map((item) => item.subscription_type).join(", ")}
                 </td> */}
                 <td>
-                  {order.items
-                    .map((item) => {
-                      let text = item.subscription_type.replace("_", " ");
+                  {Array.isArray(order.items)
+                    ? order.items
+                        .map((item) => {
+                          // 1️⃣ Additional item (no subscription_type)
+                          if (item.item_type === "additional_item") {
+                            return "Additional Item";
+                          }
 
-                      if (text.toLowerCase() === "non veg") {
-                        return "Non-veg";
-                      }
+                          // 2️⃣ Subscription item
+                          if (
+                            item.item_type === "subscription" &&
+                            item.subscription_type
+                          ) {
+                            let text = item.subscription_type.replace(
+                              /_/g,
+                              " "
+                            );
 
-                      return text.replace(/^./, (c) => c.toUpperCase());
-                    })
-                    .join(", ")}
+                            if (text.toLowerCase() === "non veg") {
+                              return "Non-veg";
+                            }
+
+                            return text.charAt(0).toUpperCase() + text.slice(1);
+                          }
+
+                          // 3️⃣ Fallback (summary or malformed item)
+                          return null;
+                        })
+                        .filter(Boolean)
+                        .join(", ")
+                    : "—"}
                 </td>
 
                 <td>

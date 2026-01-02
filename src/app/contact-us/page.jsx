@@ -11,6 +11,28 @@ export default function ContactUsPage() {
   const [contact, setContact] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (successMsg) {
+      const timer = setTimeout(() => {
+        setSuccessMsg("");
+      }, 4000); // ⏱️ 4 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMsg]);
+
+  /* ================= FETCH CONTACT DETAILS ================= */
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
@@ -18,7 +40,7 @@ export default function ContactUsPage() {
         const result = await res.json();
 
         if (result?.success && result?.data?.length > 0) {
-          setContact(result.data[0]); // API returns array
+          setContact(result.data[0]);
         }
       } catch (error) {
         console.error("Contact API error:", error);
@@ -30,11 +52,59 @@ export default function ContactUsPage() {
     fetchContactDetails();
   }, [API_URL]);
 
+  /* ================= FORM CHANGE ================= */
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* ================= FORM SUBMIT ================= */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setSubmitting(true);
+    setSuccessMsg("");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch(`${API_URL}/api/contact-us`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result?.success !== false) {
+        setSuccessMsg("Your message has been sent successfully.");
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        setErrorMsg(result?.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Contact submit error:", error);
+      setErrorMsg("Server error. Please try again later.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  /* ================= UI STATES ================= */
   if (loading) return <Loader />;
   if (!contact) return <p className="text-center">Contact details not found</p>;
 
   return (
     <>
+      {/* ===== BANNER ===== */}
       <PageBanner
         title="Contact Us"
         subtitle="A Great Restaurant Website"
@@ -42,6 +112,7 @@ export default function ContactUsPage() {
         showSearchForm={false}
       />
 
+      {/* ===== BREADCRUMB ===== */}
       <BreadCrumbs
         items={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
       />
@@ -50,13 +121,12 @@ export default function ContactUsPage() {
         <div className="block less-spacing gray-bg top-padd30">
           <div className="container">
             <div className="row">
-              <div className="col-md-12 col-sm-12 col-lg-12">
+              <div className="col-md-12">
                 <div className="sec-box">
                   {/* ===== CONTACT INFO ===== */}
                   <div className="contact-info-sec text-center">
                     <div className="row">
-                      {/* PHONE */}
-                      <div className="col-md-4 col-sm-4 col-lg-4">
+                      <div className="col-md-4">
                         <div className="contact-info-box">
                           <i className="fa fa-phone-square" />
                           <h5>PHONE</h5>
@@ -68,8 +138,7 @@ export default function ContactUsPage() {
                         </div>
                       </div>
 
-                      {/* ADDRESS */}
-                      <div className="col-md-4 col-sm-4 col-lg-4">
+                      <div className="col-md-4">
                         <div className="contact-info-box">
                           <i className="fa fa-map-marker" />
                           <h5>ADDRESS</h5>
@@ -77,8 +146,7 @@ export default function ContactUsPage() {
                         </div>
                       </div>
 
-                      {/* EMAIL */}
-                      <div className="col-md-4 col-sm-4 col-lg-4">
+                      <div className="col-md-4">
                         <div className="contact-info-box">
                           <i className="fa fa-envelope" />
                           <h5>EMAIL</h5>
@@ -100,23 +168,70 @@ export default function ContactUsPage() {
                         Please Do Not Hesitate to Send us a Message.
                       </h3>
 
-                      <form>
+                      <form onSubmit={handleSubmit}>
                         <div className="row">
                           <div className="col-md-12">
-                            <input type="text" placeholder="Your Name" />
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="Your Name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
+
                           <div className="col-md-12">
-                            <input type="email" placeholder="Your Email" />
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Your Email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
+
                           <div className="col-md-12">
-                            <input type="text" placeholder="Subject" />
+                            <input
+                              type="text"
+                              name="subject"
+                              placeholder="Subject"
+                              value={formData.subject}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
+
                           <div className="col-md-12">
-                            <textarea placeholder="Message" />
+                            <textarea
+                              name="message"
+                              placeholder="Message"
+                              value={formData.message}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
+
+                          {(successMsg || errorMsg) && (
+                            <div className="col-md-12">
+                              <p
+                                className={
+                                  successMsg ? "text-success" : "text-danger"
+                                }
+                              >
+                                {successMsg || errorMsg}
+                              </p>
+                            </div>
+                          )}
+
                           <div className="col-md-12">
-                            <button className="brd-rd2" type="submit">
-                              SEND MESSAGE
+                            <button
+                              className="brd-rd2"
+                              type="submit"
+                              disabled={submitting}
+                            >
+                              {submitting ? "Sending..." : "SEND MESSAGE"}
                             </button>
                           </div>
                         </div>
