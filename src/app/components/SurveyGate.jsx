@@ -9,7 +9,7 @@ export default function SurveyGate() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // 👉 change this path to wherever you want the survey
+
     if (pathname === "/" && !localStorage.getItem("unieat-survey")) {
       setShow(true);
     }
