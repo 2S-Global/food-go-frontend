@@ -17,11 +17,11 @@ export default function SurveyGate() {
   return (
     <SurveyModal
       onSkip={() => {
-        localStorage.setItem("unieat-survey", "skipped");
+        // localStorage.setItem("unieat-survey", "skipped");
         setShow(false);
       }}
       onComplete={() => {
-        localStorage.setItem("unieat-survey", "completed");
+        // localStorage.setItem("unieat-survey", "completed");
         setShow(false);
       }}
     />

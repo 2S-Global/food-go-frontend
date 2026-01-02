@@ -592,8 +592,8 @@ function Step5({ formData, updateField }) {
             onChange={(e) => updateField("consent", e.target.checked)}
             style={{ marginRight: "10px" }}
           />
-          {/* I acknowledge that I will receive a free UniEat homemade meal box
-          after successfully completing this survey. */}
+          I acknowledge that I will receive a free UniEat homemade meal box
+          after successfully completing this survey.
         </label>
       </div>
     </>
