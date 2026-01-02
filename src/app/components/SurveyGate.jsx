@@ -5,12 +5,21 @@ import { usePathname } from "next/navigation";
 import SurveyModal from "./SurveyModal";
 
 export default function SurveyGate() {
-  const [show, setShow] = useState(false);
   const pathname = usePathname();
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
+    // If NOT home page → reset survey state
+    if (pathname !== "/") {
+      sessionStorage.removeItem("unieat-survey-closed");
+      setShow(false);
+      return;
+    }
 
-    if (pathname === "/" && !localStorage.getItem("unieat-survey")) {
+    // Home page → always open unless closed in this visit
+    const closed = sessionStorage.getItem("unieat-survey-closed");
+
+    if (!closed) {
       setShow(true);
     }
   }, [pathname]);
@@ -20,11 +29,11 @@ export default function SurveyGate() {
   return (
     <SurveyModal
       onSkip={() => {
-        localStorage.setItem("unieat-survey", "skipped");
+        sessionStorage.setItem("unieat-survey-closed", "true");
         setShow(false);
       }}
       onComplete={() => {
-        localStorage.setItem("unieat-survey", "completed");
+        sessionStorage.setItem("unieat-survey-closed", "true");
         setShow(false);
       }}
     />
