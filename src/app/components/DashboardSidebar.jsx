@@ -45,7 +45,7 @@ export default function DashboardSidebar({ user, loading }) {
             href="/dashboard/subscriptions"
             className={`nav-link ${
               isActive("/dashboard/subscriptions") ? "active" : ""
-            }`}
+            }`} style={{ display: "none" }}
           >
             <i className="fa fa-file-text" /> MY SUBSCRIPTIONS
             {isActive("/dashboard/subscriptions") && (
