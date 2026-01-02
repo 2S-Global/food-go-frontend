@@ -2,6 +2,7 @@
 
 import { useState, useContext, useEffect } from "react";
 import Modal from "./Modal";
+import LoginRequiredModal from "./LoginRequiredModal";
 import { CartContext } from "@/app/context/CartContext";
 
 const SCHEDULES = [
@@ -12,6 +13,12 @@ const SCHEDULES = [
   { label: "Monthly", value: "monthly" },
 ];
 
+// 🔐 Login helper
+const isLoggedIn = () => {
+  if (typeof window === "undefined") return false;
+  return !!localStorage.getItem("auth_token");
+};
+
 export default function AddToCartScheduleModal({ open, item, onClose }) {
   const { addToCart, loading } = useContext(CartContext);
 
@@ -21,6 +28,9 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
   const [hover, setHover] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  // 🔐 login modal state
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
   const today = new Date().toISOString().split("T")[0];
 
   // Reset state when modal closes
@@ -29,6 +39,7 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
       setSchedule(SCHEDULES[0]);
       setStartDate("");
       setSuccessMessage("");
+      setShowLoginModal(false);
     }
   }, [open]);
 
@@ -41,6 +52,12 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
 
     if (!startDate) {
       alert("Please select start date");
+      return;
+    }
+
+    // 🔒 LOGIN CHECK (FINAL STEP ONLY)
+    if (!isLoggedIn()) {
+      setShowLoginModal(true);
       return;
     }
 
@@ -62,98 +79,106 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
         `Your ${item.name || "item"} menu added to the cart successfully!`
       );
 
-      // Auto-close after 2 second
+      // Auto-close after 2 seconds
       setTimeout(() => onClose(), 2000);
     } catch (err) {
       console.error(err);
-      // error is already handled in addToCart
     }
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <h3 style={{ marginBottom: "16px" }}>Pick Schedule</h3>
+    <>
+      <Modal open={open} onClose={onClose}>
+        <h3 style={{ marginBottom: "16px" }}>Pick Schedule</h3>
 
-      {/* Schedule options */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          marginBottom: "20px",
-        }}
-      >
-        {SCHEDULES.map((s) => {
-          const active = schedule.value === s.value;
-
-          return (
-            <button
-              key={s.value}
-              type="button"
-              onClick={() => setSchedule(s)}
-              disabled={loading}
-              style={{
-                padding: "8px 14px",
-                borderRadius: "20px",
-                border: "1px solid #c8102e",
-                backgroundColor: active ? "#c8102e" : "#fff",
-                color: active ? "#fff" : "#c8102e",
-                cursor: loading ? "not-allowed" : "pointer",
-                opacity: loading ? 0.6 : 1,
-              }}
-            >
-              {s.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Start date input */}
-      <div>
-        <label>Subscription Start Date</label>
-        <input
-          type="date"
-          min={today}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          style={inputStyle}
-        />
-      </div>
-
-      {/* Success message */}
-      {successMessage && (
-        <p style={{ marginTop: "16px", color: "green", fontWeight: "bold" }}>
-          {successMessage}
-        </p>
-      )}
-
-      {/* Action button */}
-      <div style={{ textAlign: "right", marginTop: "24px" }}>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!startDate || loading}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
+        {/* Schedule options */}
+        <div
           style={{
-            padding: "10px 20px",
-            backgroundColor: !startDate
-              ? "#ccc"
-              : hover
-              ? "#c8102e"
-              : "#012169",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: !startDate || loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.7 : 1,
-            transition: "background-color 0.3s ease",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginBottom: "20px",
           }}
         >
-          {loading ? "Adding..." : "Add to Cart"}
-        </button>
-      </div>
-    </Modal>
+          {SCHEDULES.map((s) => {
+            const active = schedule.value === s.value;
+
+            return (
+              <button
+                key={s.value}
+                type="button"
+                onClick={() => setSchedule(s)}
+                disabled={loading}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: "20px",
+                  border: "1px solid #c8102e",
+                  backgroundColor: active ? "#c8102e" : "#fff",
+                  color: active ? "#fff" : "#c8102e",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  opacity: loading ? 0.6 : 1,
+                }}
+              >
+                {s.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Start date input */}
+        <div>
+          <label>Subscription Start Date</label>
+          <input
+            type="date"
+            min={today}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            style={inputStyle}
+          />
+        </div>
+
+        {/* Success message */}
+        {successMessage && (
+          <p style={{ marginTop: "16px", color: "green", fontWeight: "bold" }}>
+            {successMessage}
+          </p>
+        )}
+
+        {/* Action button */}
+        <div style={{ textAlign: "right", marginTop: "24px" }}>
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!startDate || loading}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: !startDate
+                ? "#ccc"
+                : hover
+                ? "#c8102e"
+                : "#012169",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              cursor: !startDate || loading ? "not-allowed" : "pointer",
+              opacity: loading ? 0.7 : 1,
+              transition: "background-color 0.3s ease",
+            }}
+          >
+            {loading ? "Adding..." : "Add to Cart"}
+          </button>
+        </div>
+      </Modal>
+
+      {/* 🔐 Login Required Modal */}
+      <LoginRequiredModal
+        open={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        redirectTo="/login?redirect=/menu/additional-items"
+      />
+    </>
   );
 }
 
