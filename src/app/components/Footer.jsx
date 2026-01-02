@@ -168,7 +168,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="footer-company"
             >
-              2S Global Technologies Ltd.
+              2S Global Technologies.
             </a>{" "}
             All Rights Reserved
           </p>
