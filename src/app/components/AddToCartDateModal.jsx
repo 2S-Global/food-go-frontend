@@ -3,8 +3,9 @@
 import { useEffect, useState, useContext } from "react";
 import Modal from "./Modal";
 import { CartContext } from "@/app/context/CartContext";
-
+import { useRouter } from "next/navigation";
 export default function AddToCartDateModal({
+
   open,
   onClose,
   subscriptionType, // "veg" | "non_veg"
@@ -18,7 +19,7 @@ export default function AddToCartDateModal({
   const [successMessage, setSuccessMessage] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
-
+const router = useRouter();
   // RESET STATE ON CLOSE
   useEffect(() => {
     if (!open) {
@@ -81,7 +82,10 @@ export default function AddToCartDateModal({
       );
 
       // auto-close after 2 seconds
-      setTimeout(() => onClose(), 2000);
+setTimeout(() => {
+  onClose();
+  router.push("/cart");
+}, 1500);
     } catch (err) {
       // addToCart already alerts
     }
