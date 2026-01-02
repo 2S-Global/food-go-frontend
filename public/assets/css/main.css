@@ -6313,7 +6313,7 @@ html.thanks-message-popup-active .thanks-message {
 .welcome-note {
   float: left;
   width: 100%;
-  padding: 35px 45px 30px;
+  padding: 4px 45px 30px;
   position: relative;
   z-index: 1;
   margin-bottom: 45px;

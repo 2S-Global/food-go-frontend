@@ -1,149 +1,206 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/app/components/MySubscription.module.css";
+import Loader from "@/app/components/Loader";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+/* ======================
+   AUTH HEADERS
+====================== */
+function getAuthHeaders() {
+  if (typeof window === "undefined") return {};
 
+  const token = localStorage.getItem("auth_token");
+
+  return {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+}
+
+/* ======================
+   MAIN COMPONENT
+====================== */
 export default function MySubscription() {
   const today = new Date();
 
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [weekStart, setWeekStart] = useState(getWeekStart(today));
-  const [selectedDate, setSelectedDate] = useState(today.toDateString());
+  const [selectedDate, setSelectedDate] = useState(formatDate(today));
+  const [menus, setMenus] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  /* Generate 7 days */
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  /* Generate week */
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
     d.setDate(d.getDate() + i);
     return d;
   });
 
-  function prevWeek() {
-    const d = new Date(weekStart);
-    d.setDate(d.getDate() - 7);
-    setWeekStart(d);
-  }
+  /* Fetch menu */
+  useEffect(() => {
+    if (!selectedDate) return;
 
-  function nextWeek() {
-    const d = new Date(weekStart);
-    d.setDate(d.getDate() + 7);
-    setWeekStart(d);
-  }
+    const fetchMenu = async () => {
+      try {
+        setLoading(true);
 
-  function onMonthChange(e) {
-    const monthIndex = Number(e.target.value);
-    setCurrentMonth(monthIndex);
+        const res = await fetch(
+          `${API_URL}/api/weeklymenu/get-menu-by-date?date=${selectedDate}`,
+          {
+            method: "GET",
+            headers: getAuthHeaders(),
+          }
+        );
 
-    const newDate = new Date(today.getFullYear(), monthIndex, 1);
-    setWeekStart(getWeekStart(newDate));
-  }
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem("auth_token");
+            window.location.href = "/login";
+          }
+          throw new Error("Failed to fetch menu");
+        }
+
+        const json = await res.json();
+        setMenus(json?.menus || []);
+      } catch (error) {
+        console.error("Menu fetch failed:", error);
+        setMenus([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenu();
+  }, [selectedDate, API_URL]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
+      {/* ✅ Month + Year (ONLY ADDITION, NO STRUCTURE CHANGE) */}
+      <div className={styles.monthYear}>{formatMonthYear(weekStart)}</div>
+
       {/* Date Slider */}
       <div className={styles.dateSlider}>
-        <button onClick={prevWeek} className={styles.arrow}>
+        <button
+          onClick={() => !loading && shiftWeek(-7)}
+          className={styles.arrow}
+          disabled={loading}
+        >
           ‹
         </button>
 
         <div className={styles.dateRow}>
-          {weekDates.map((date) => (
-            <div
-              key={date.toDateString()}
-              className={`${styles.dateBox} ${
-                selectedDate === date.toDateString() ? styles.active : ""
-              }`}
-              onClick={() => setSelectedDate(date.toDateString())}
-            >
-              <span className={styles.day}>
-                {date
-                  .toLocaleDateString("en-US", { weekday: "short" })
-                  .toUpperCase()}
-              </span>
-              <span className={styles.date}>{date.getDate()}</span>
-            </div>
-          ))}
+          {weekDates.map((date) => {
+            const formatted = formatDate(date);
+            return (
+              <div
+                key={formatted}
+                className={`${styles.dateBox} ${
+                  selectedDate === formatted ? styles.active : ""
+                } ${loading ? styles.disabled : ""}`}
+                onClick={() => !loading && setSelectedDate(formatted)}
+              >
+                <span className={styles.day}>
+                  {date.toLocaleDateString("en-US", { weekday: "short" })}
+                </span>
+                <span className={styles.date}>{date.getDate()}</span>
+              </div>
+            );
+          })}
         </div>
 
-        <button onClick={nextWeek} className={styles.arrow}>
+        <button
+          onClick={() => !loading && shiftWeek(7)}
+          className={styles.arrow}
+          disabled={loading}
+        >
           ›
         </button>
       </div>
 
-      {/* Title */}
-      <h4 className={styles.heading}>Today’s Order</h4>
+      <h4 className={styles.heading}>Your Meals</h4>
 
-      {/* Orders (static for now) */}
-      <OrderCard
-        title="Lunch Menu"
-        desc="Steamed Rice, Masoor Dal, Palak Paneer (Spinach & Cottage Cheese) and Mughlai Chicken"
-        badge="SUBSCRIPTION"
-      />
+      {/* Loader */}
+      {loading && <Loader />}
 
-      <OrderCard
-        title="Dinner Menu"
-        desc="Jeera Rice, Dal Fry (Toor/Arhar Dal), Aloo Gobi (Potato & Cauliflower) and Chicken Curry"
-        badge="SUBSCRIPTION"
-      />
+      {/* Empty */}
+      {!loading && menus.length === 0 && (
+        <div className={styles.emptyState}>
+          🍽️ No meals planned for this day
+        </div>
+      )}
 
-      <OrderCard
-        title="Additional Menu"
-        desc="Chicken Soup"
-        qty="Qty : 1"
-        badge="ADDITIONAL ITEM"
-        type="additional"
-      />
-    </>
+      {/* Orders */}
+      {!loading &&
+        menus.map((order) => (
+          <div key={order.orderNumber} className={styles.orderBlock}>
+            {order.lunch && <OrderCard meal="Lunch" data={order.lunch} />}
+            {order.dinner && <OrderCard meal="Dinner" data={order.dinner} />}
+          </div>
+        ))}
+    </div>
   );
+
+  function shiftWeek(days) {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + days);
+    setWeekStart(d);
+  }
 }
 
-/* Utils */
-function getWeekStart(date) {
-  const d = new Date(date);
-  const day = d.getDay() || 7; // Monday first
-  d.setDate(d.getDate() - day + 1);
-  return d;
-}
-
-/* Card */
-function OrderCard({ title, desc, badge, type, qty }) {
+/* ======================
+   ORDER CARD
+====================== */
+function OrderCard({ meal, data }) {
   return (
     <div className={styles.orderCard}>
       <img
-        src="/assets/images/popular-dish-img1.jpg"
-        alt={title}
+        src={data.images?.[0] || "/assets/images/popular-dish-img1.jpg"}
+        alt={data.menuName}
         className={styles.orderImg}
       />
 
       <div className={styles.orderContent}>
-        <div className={styles.orderTitle}>{title}</div>
-        <div className={styles.orderDesc}>{desc}</div>
-        {qty && <div className={styles.qty}>{qty}</div>}
+        <h5>
+          {meal} – {data.menuName}
+        </h5>
 
-        <span
-          className={`${styles.badge} ${
-            type === "additional"
-              ? styles.badgeAdditional
-              : styles.badgeSubscription
-          }`}
-        >
-          {badge}
-        </span>
+        <div
+          className={styles.orderDesc}
+          dangerouslySetInnerHTML={{ __html: data.description }}
+        />
+
+        <ul className={styles.items}>
+          {data.item1 && <li>{data.item1}</li>}
+          {data.item2 && <li>{data.item2}</li>}
+          {data.item3 && <li>{data.item3}</li>}
+          {data.item4 && <li>{data.item4}</li>}
+        </ul>
+
+        <span className={styles.badge}>SUBSCRIPTION</span>
       </div>
     </div>
   );
+}
+
+/* ======================
+   UTILS
+====================== */
+function getWeekStart(date) {
+  const d = new Date(date);
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() - day + 1);
+  return d;
+}
+
+function formatDate(date) {
+  return date.toISOString().split("T")[0];
+}
+
+function formatMonthYear(date) {
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
 }

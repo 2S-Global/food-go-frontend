@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Loader from "@/app/components/Loader";
-
+import MySubscription from "../components/MySubscription";
 
 export default function DashboardHome() {
   const [loading, setLoading] = useState(false);
@@ -21,11 +21,9 @@ export default function DashboardHome() {
 
   return (
     <div className="dashboard-wrapper brd-rd5">
-      <div className="welcome-note yellow-bg brd-rd5">
-        <h4>WELCOME TO YOUR ACCOUNT</h4>
-        <p>
-          Manage your subscriptions, view statements and update your profile.
-        </p>
+      <div className="welcome-note  brd-rd5">
+        <h4 style={{ color:"black" }}>WELCOME TO YOUR ACCOUNT</h4>
+        <MySubscription />
         <img src="/assets/images/welcome-note-img.png" alt="" />
       </div>
     </div>
