@@ -9,7 +9,7 @@ export default function LoginPage() {
     <>
       <PageBanner
         title="Login"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Access Your Account"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />

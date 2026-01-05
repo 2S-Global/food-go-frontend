@@ -9,7 +9,7 @@ export default function ForgotPasswordPage() {
     <>
       <PageBanner
         title="Forgot Password"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Recover Account Access"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />

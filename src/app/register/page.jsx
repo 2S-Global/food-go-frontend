@@ -9,7 +9,7 @@ export default function RegisterPage() {
     <>
       <PageBanner
         title="Register"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Create Your Account"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />

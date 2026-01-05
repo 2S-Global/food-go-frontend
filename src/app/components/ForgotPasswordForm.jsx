@@ -75,7 +75,7 @@ export default function ForgotPasswordForm() {
 
             <div className="col-md-12 text-center">
               <Link className="sign-btn" href="/login">
-                Back to Sign In
+                Back to <strong>Sign In</strong>
               </Link>
             </div>
           </div>

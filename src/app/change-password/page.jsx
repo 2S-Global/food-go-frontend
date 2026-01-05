@@ -9,7 +9,7 @@ export default function ChangePasswordPage() {
     <>
       <PageBanner
         title="Change Password"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Update Your Password"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
