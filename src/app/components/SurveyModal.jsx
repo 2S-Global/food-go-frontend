@@ -684,7 +684,7 @@ const box = {
   background: "#fff",
   width: "100%",
   maxWidth: 760,
-  height: "90vh",
+  // height: "90vh",
   padding: 30,
   borderRadius: 12,
   display: "flex",
