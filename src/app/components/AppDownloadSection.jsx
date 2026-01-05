@@ -31,13 +31,15 @@ const AppDownloadSection = () => {
                   </div>
                   <div className="col-md-6 col-md-offset-1 col-sm-12 col-sm-offset-0 col-lg-6 col-lg-offset-1">
                     <div className="app-info">
-                      <h4 itemProp="headline">The Best Food Delivery App</h4>
+                      <h4 itemProp="headline">
+                        Fast and Simple Food Delivery App.
+                      </h4>
                       <p itemProp="description">
-                        We have a launch team that focuses on one city at a
-                        time. At the end of the day, we're a marketplace. In
-                        order to make an effective marketplace, you need
-                        critical mass. We need enough restaurants that quality
-                        and variety
+                        FoodGo makes daily meals effortless for hostel residents
+                        across the UK. Choose from healthy vegetarian and
+                        delicious non-vegetarian meals, add extra items whenever
+                        you want, and enjoy reliable subscription-based food
+                        delivery designed for your busy lifestyle.
                       </p>
                       <div className="app-download-btns">
                         <a

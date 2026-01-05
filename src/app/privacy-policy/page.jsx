@@ -38,7 +38,7 @@ export default function AboutUsPage() {
       {/* 🔹 Banner */}
       <PageBanner
         title={cms.title}
-        subtitle={cms.summary}
+        // subtitle={cms.summary}
         background={cms.image}
         showSearchForm={false}
       />
