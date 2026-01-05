@@ -5,54 +5,73 @@ export default function PageBanner({
   subtitle,
   background,
   showSearchForm = true,
+  // fixed = false,
 }) {
   return (
-    <section>
-      <div className="block">
-        <div
-          className="fixed-bg"
-          style={{
-            backgroundImage: `url(${background || "/assets/images/group-2.jpg"})`,
-          }}
-        />
+    <>
+      <style jsx>{`
+        .page-banner-bg { 
+          background-attachment: scroll !important;
+          
+        }
+      `}</style>
 
-        <div className="page-title-wrapper text-center">
-          <div className="col-md-12 col-sm-12 col-lg-12">
-            <div className="page-title-inner">
+      <section>
+        <div className="block">
+          <div
+            className="fixed-bg page-banner-bg"
+            style={{
+              backgroundImage: `url(${
+                background || "/assets/images/group-2.jpg"
+              })`,
+            }}
+          />
 
-              <h1>{title}</h1>
-              {subtitle && <span>{subtitle}</span>}
+          {/* <div
+            className={fixed ? "fixed-bg" : "page-banner-bg"}
+            style={{
+              backgroundImage: `url(${
+                background || "/assets/images/group-2.jpg"
+              })`,
+            }}
+          /> */}
 
-              {showSearchForm && (
-                <form className="restaurant-search-form brd-rd2">
-                  <div className="row mrg10">
-                    <div className="col-md-6 col-sm-5 col-lg-5 col-xs-12">
-                      <div className="input-field brd-rd2">
-                        <input type="text" placeholder="Restaurant Name" />
+          <div className="page-title-wrapper text-center">
+            <div className="col-md-12 col-sm-12 col-lg-12">
+              <div className="page-title-inner">
+                <h1>{title}</h1>
+                {subtitle && <span>{subtitle}</span>}
+
+                {showSearchForm && (
+                  <form className="restaurant-search-form brd-rd2">
+                    <div className="row mrg10">
+                      <div className="col-md-6 col-sm-5 col-lg-5 col-xs-12">
+                        <div className="input-field brd-rd2">
+                          <input type="text" placeholder="Restaurant Name" />
+                        </div>
+                      </div>
+
+                      <div className="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+                        <div className="input-field brd-rd2">
+                          <i className="fa fa-map-marker" />
+                          <input type="text" placeholder="Search Location" />
+                          <i className="fa fa-location-arrow" />
+                        </div>
+                      </div>
+
+                      <div className="col-md-2 col-sm-3 col-lg-3 col-xs-12">
+                        <button className="brd-rd2 red-bg" type="submit">
+                          SEARCH
+                        </button>
                       </div>
                     </div>
-
-                    <div className="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                      <div className="input-field brd-rd2">
-                        <i className="fa fa-map-marker" />
-                        <input type="text" placeholder="Search Location" />
-                        <i className="fa fa-location-arrow" />
-                      </div>
-                    </div>
-
-                    <div className="col-md-2 col-sm-3 col-lg-3 col-xs-12">
-                      <button className="brd-rd2 red-bg" type="submit">
-                        SEARCH
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              )}
-
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
