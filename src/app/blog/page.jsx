@@ -13,7 +13,7 @@ export default async function BlogPage() {
     <>
       <PageBanner
         title="Blog Grid"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Latest FoodGo Blogs"
         background="/assets/images/blog.png"
         showSearchForm={false}
       />

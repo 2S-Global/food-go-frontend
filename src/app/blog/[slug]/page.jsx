@@ -24,7 +24,7 @@ export default async function BlogDetailPage({ params }) {
     <>
       <PageBanner
         title={blog.title}
-        subtitle="A Greate Restaurant Website"
+        subtitle="In-Depth Article"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
