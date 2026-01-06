@@ -4,7 +4,8 @@ import { useState, useContext, useEffect } from "react";
 import Modal from "./Modal";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { CartContext } from "@/app/context/CartContext";
-
+import { useCartCountStore } from "@/app/store/cartCountStore";
+import { useRouter } from "next/navigation";
 const SCHEDULES = [
   { label: "Daily", value: "daily" },
   { label: "Alternative Days", value: "alternate" },
@@ -20,6 +21,9 @@ const isLoggedIn = () => {
 };
 
 export default function AddToCartScheduleModal({ open, item, onClose }) {
+
+  const router = useRouter();
+
   const { addToCart, loading } = useContext(CartContext);
 
   // local state
@@ -27,6 +31,7 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
   const [startDate, setStartDate] = useState("");
   const [hover, setHover] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
 
   // 🔐 login modal state
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -47,44 +52,50 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
   if (!open || !item) return null;
 
   // Add additional item to cart
-  const handleSave = async () => {
-    if (loading) return;
+const handleSave = async () => {
+  if (loading) return;
 
-    if (!startDate) {
-      alert("Please select start date");
-      return;
-    }
+  if (!startDate) {
+    alert("Please select start date");
+    return;
+  }
 
-    // 🔒 LOGIN CHECK (FINAL STEP ONLY)
-    if (!isLoggedIn()) {
-      setShowLoginModal(true);
-      return;
-    }
+  // 🔒 LOGIN CHECK
+  if (!isLoggedIn()) {
+    setShowLoginModal(true);
+    return;
+  }
 
-    try {
-      await addToCart({
-        item_type: "additional_item",
-        additional_items: [
-          {
-            item_id: item._id,
-            quantity: 1,
-            addon_start_date: startDate,
-            addon_schedule_type: schedule.value,
-          },
-        ],
-      });
+  try {
+    await addToCart({
+      item_type: "additional_item",
+      additional_items: [
+        {
+          item_id: item._id,
+          quantity: 1,
+          addon_start_date: startDate,
+          addon_schedule_type: schedule.value,
+        },
+      ],
+    });
 
-      // Show success message
-      setSuccessMessage(
-        `Your ${item.name || "item"} menu added to the cart successfully!`
-      );
+    // ✅ UPDATE CART COUNT (ZUSTAND)
+    fetchCartCount();
 
-      // Auto-close after 2 seconds
-      setTimeout(() => onClose(), 2000);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    // Success message
+    setSuccessMessage(
+      `Your ${item.name || "item"} menu added to the cart successfully!`
+    );
+
+    setTimeout(() => {
+      onClose(); 
+      router.push("/cart"); 
+    }, 1500);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   return (
     <>
