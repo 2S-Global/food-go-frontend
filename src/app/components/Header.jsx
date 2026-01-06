@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useScrollUpBar from "./useScrollUpBar";
+import { useCartCountStore } from "@/app/store/cartCountStore";
 
 const Header = () => {
   useScrollUpBar();
@@ -11,7 +12,16 @@ const Header = () => {
 
   const [user, setUser] = useState(null);
   const [authLoaded, setAuthLoaded] = useState(false);
+const { count, fetchCartCount, resetCount } = useCartCountStore();
 
+
+useEffect(() => {
+  if (user) {
+    fetchCartCount();
+  } else {
+    resetCount();
+  }
+}, [user]);
   // Load user + listen for auth changes
   useEffect(() => {
     const loadUser = () => {
@@ -83,7 +93,12 @@ const Header = () => {
         <div className="container">
           <div className="logo">
             <Link href="/">
-              <img src="/assets/images/logo2.png" alt="logo" itemProp="image" style={{ height: "58px", width: "auto" }} />
+              <img
+                src="/assets/images/logo2.png"
+                alt="logo"
+                itemProp="image"
+                style={{ height: "58px", width: "auto" }}
+              />
             </Link>
           </div>
 
@@ -139,7 +154,7 @@ const Header = () => {
                       className="fa fa-shopping-cart"
                       style={{ fontSize: "26px" }}
                     />
-                    {/* <span className="cart-count">3</span> */}
+                    {count > 0 && <span className="cart-count">{count}</span>}
                   </Link>
                 </div>
 

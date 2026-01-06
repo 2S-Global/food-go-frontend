@@ -67,38 +67,52 @@ export function CartContextProvider({ children }) {
   /* =====================
      REMOVE CART ITEM
   ====================== */
-  const handleRemoveCartItem = async (cartItemId) => {
-    if (!cartItemId) return;
+const handleRemoveCartItem = async (cartItemId) => {
+  if (!cartItemId) return;
 
-    try {
-      setLoading(true);
+  // 🔁 Snapshot for rollback
+  const prevCart = cart;
 
-      // Optimistic UI
-      setCart((prev) => {
-        const updatedItems = prev.items.filter(
-          (item) => item._id !== cartItemId
-        );
+  try {
+    setLoading(true);
 
-        const updatedTotal = updatedItems.reduce(
-          (sum, item) => sum + item.item_total_price,
-          0
-        );
+    // ✅ OPTIMISTIC UI UPDATE
+    setCart((prev) => {
+      const updatedItems = prev.items.filter((item) => item._id !== cartItemId);
 
-        return {
-          ...prev,
-          items: updatedItems,
-          total_cart_amount: updatedTotal,
-        };
-      });
+      // ✅ force numeric + precision
+      const updatedTotal = Number(
+        updatedItems
+          .reduce(
+            (sum, item) => sum + parseFloat(item.item_total_price || 0),
+            0
+          )
+          .toFixed(2)
+      );
 
-      await deleteCartItem(cartItemId);
-    } catch (err) {
-      console.error("Remove cart item failed:", err);
-      await fetchCart(); // rollback
-    } finally {
-      setLoading(false);
-    }
-  };
+      return {
+        ...prev,
+        items: updatedItems,
+        total_cart_amount: updatedTotal,
+      };
+    });
+
+    // 🛰 API call
+    await deleteCartItem(cartItemId);
+
+    // ✅ FINAL SOURCE OF TRUTH (sync with backend)
+    await fetchCart();
+  } catch (err) {
+    console.error("Remove cart item failed:", err);
+
+    // 🔁 rollback if API fails
+    setCart(prevCart);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   useEffect(() => {
     fetchCart();

@@ -1,7 +1,7 @@
 // const BASE_URL = "https://food-delivery-backend-mocha.vercel.app";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-function getAuthHeaders() {
+export function getAuthHeaders() {
   if (typeof window === "undefined") return {};
 
   const token = localStorage.getItem("auth_token");

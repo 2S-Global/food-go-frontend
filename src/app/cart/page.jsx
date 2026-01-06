@@ -7,6 +7,8 @@ import BreadCrumbs from "../components/Breadcrumbs";
 import Loader from "../components/Loader";
 import ConfirmModal from "../components/ConfirmModal";
 import Link from "next/link";
+import { useCartCountStore } from "@/app/store/cartCountStore";
+
 import {
   Trash2,
   CalendarDays,
@@ -19,7 +21,9 @@ export default function CartPage() {
   const { cart, loading, initialized, removeCartItem } =
     useContext(CartContext);
 
-  // ================== Confirm Modal State ==================
+    const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
+
+  /* ================= CONFIRM MODAL ================= */
   const [modalOpen, setModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
@@ -28,29 +32,45 @@ export default function CartPage() {
     setModalOpen(true);
   };
 
-  const formatDate = (dateStr) => {
-  if (!dateStr) return "";
-  return new Date(dateStr).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+const handleConfirmDelete = async () => {
+  if (!itemToDelete) return;
+
+  setModalOpen(false);
+
+  await removeCartItem(itemToDelete);
+
+  // ✅ update cart badge count
+  fetchCartCount();
+
+  setItemToDelete(null);
 };
 
-  const handleConfirmDelete = async () => {
-    if (!itemToDelete) return;
-
-    setModalOpen(false);
-    await removeCartItem(itemToDelete); // context handles optimistic removal
-    setItemToDelete(null);
-  };
 
   const handleCloseModal = () => {
     setModalOpen(false);
     setItemToDelete(null);
   };
 
-  // ================== LOADING STATE ==================
+  /* ================= HELPERS ================= */
+  const addonScheduleLabelMap = {
+    daily: "Daily",
+    alternate: "Alternate Days",
+    every_3_days: "Every 3 Days",
+    weekly: "Weekly",
+    monthly: "Monthly",
+    once: "One Time",
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    return new Date(dateStr).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  /* ================= LOADING ================= */
   if (!initialized) {
     return (
       <section>
@@ -72,7 +92,7 @@ export default function CartPage() {
 
   const hasCart = cart?.items?.length > 0;
 
-  // ================== EMPTY CART ==================
+  /* ================= EMPTY CART ================= */
   if (!hasCart) {
     return (
       <section>
@@ -85,12 +105,11 @@ export default function CartPage() {
         <BreadCrumbs
           items={[{ label: "Home", href: "/" }, { label: "Cart" }]}
         />
-
         <div className="container text-center py-5">
           <ShoppingCart size={72} className="text-muted mb-3" />
           <h3>Your cart is empty</h3>
-          <p className="text-muted" style={{ display: "inherit" }}>
-            Looks like you haven’t added any meals yet.
+          <p className="text-muted">
+            Looks like you haven’t added any items yet.
           </p>
           <Link href="/menu" className="btn btn-danger mt-3">
             Browse Menu
@@ -103,6 +122,7 @@ export default function CartPage() {
   const canCheckout =
     cart?.total_cart_amount && Number(cart.total_cart_amount) > 0;
 
+  /* ================= MAIN ================= */
   return (
     <section>
       <PageBanner
@@ -116,14 +136,14 @@ export default function CartPage() {
 
       <div className="container py-5">
         <div className="row">
-          {/* ================= LEFT SIDE ================= */}
+          {/* ================= LEFT ================= */}
           <div className="col-md-8">
             {cart.items.map((item) => (
               <div key={item._id} className="card cart-item mb-3">
-                <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="card-body d-flex justify-content-between align-items-start">
                   <div>
-                    <h5 className="mb-2 text-capitalize">
-                      {item.subscription_type
+                    <h5 className="mb-2">
+                      {item.item_type === "subscription"
                         ? `${
                             item.subscription_type === "veg" ? "Veg" : "Non Veg"
                           } Subscription`
@@ -131,34 +151,87 @@ export default function CartPage() {
                     </h5>
 
                     <div className="text-muted small d-flex flex-wrap gap-3 mt-1">
-                      <span className="d-flex align-items-center gap-1">
-                        <CalendarDays size={16} />
-                        {item.weeks} Weeks
-                      </span>
+                      {/* ===== SUBSCRIPTION ===== */}
+                      {item.item_type === "subscription" && (
+                        <>
+                          {item.weeks > 0 && (
+                            <span className="d-flex align-items-center gap-1">
+                              <CalendarDays size={16} />
+                              {item.weeks} Weeks
+                            </span>
+                          )}
 
-                      <span className="d-flex align-items-center gap-1">
-                        <Utensils size={16} />
-                        {item.meal_count} Meals
-                      </span>
+                          {item.days > 0 && (
+                            <span className="d-flex align-items-center gap-1">
+                              <CalendarDays size={16} />
+                              {item.days} Days
+                            </span>
+                          )}
 
-                      {item.start_date && item.end_date && (
-                        <span className="d-flex align-items-center gap-1">
-                          <CalendarDays size={16} />
-                          {formatDate(item.start_date)} →{" "}
-                          {formatDate(item.end_date)}
-                        </span>
+                          {item.meal_count > 0 && (
+                            <span className="d-flex align-items-center gap-1">
+                              <Utensils size={16} />
+                              {item.meal_count} Meals
+                            </span>
+                          )}
+
+                          {item.start_date && item.end_date && (
+                            <span className="d-flex align-items-center gap-1">
+                              <CalendarDays size={16} />
+                              {formatDate(item.start_date)} →{" "}
+                              {formatDate(item.end_date)}
+                            </span>
+                          )}
+                        </>
                       )}
+
+                      {/* ===== ADDITIONAL ITEMS ===== */}
+                      {item.item_type === "additional_item" &&
+                        item.additional_items?.map((addon) => (
+                          <div
+                            key={addon._id}
+                            className="d-flex flex-wrap gap-3 w-100"
+                          >
+                            <span className="fw-semibold">
+                              {addon.item_id?.itemName}
+                            </span>
+
+                            {addon.addon_schedule_type && (
+                              <span className="d-flex align-items-center gap-1">
+                                <CalendarDays size={16} />
+                                {
+                                  addonScheduleLabelMap[
+                                    addon.addon_schedule_type
+                                  ]
+                                }
+                              </span>
+                            )}
+
+                            {addon.delivery_count > 0 && (
+                              <span className="d-flex align-items-center gap-1">
+                                <Utensils size={16} />
+                                {addon.delivery_count} Deliveries
+                              </span>
+                            )}
+
+                            {addon.addon_start_date && addon.addon_end_date && (
+                              <span className="d-flex align-items-center gap-1">
+                                <CalendarDays size={16} />
+                                {formatDate(addon.addon_start_date)} →{" "}
+                                {formatDate(addon.addon_end_date)}
+                              </span>
+                            )}
+                          </div>
+                        ))}
                     </div>
                   </div>
 
                   <div className="text-end d-flex align-items-center gap-3">
                     <div className="price">£{item.item_total_price}</div>
-
                     <button
                       className="delete-btn"
                       disabled={loading}
                       onClick={() => handleDeleteClick(item._id)}
-                      aria-label="Remove item"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -168,25 +241,20 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* ================= RIGHT SIDE ================= */}
+          {/* ================= RIGHT ================= */}
           <div className="col-md-4">
             <div className="cart-summary sticky-top">
               <h4 className="mb-4">Order Summary</h4>
 
               <ul className="summary-list">
                 <li>
-                  Subtotal
-                  <span>£{cart.total_cart_amount}</span>
+                  Subtotal <span>£{cart.total_cart_amount}</span>
                 </li>
-
                 <li>
-                  Delivery
-                  <span className="text-success">FREE</span>
+                  Delivery <span className="text-success">FREE</span>
                 </li>
-
                 <li className="total">
-                  Total
-                  <span>£{cart.total_cart_amount}</span>
+                  Total <span>£{cart.total_cart_amount}</span>
                 </li>
               </ul>
 
@@ -204,12 +272,11 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* ================= CONFIRM MODAL ================= */}
       <ConfirmModal
         open={modalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
-        message="Are you sure you want to remove this subscription from your cart?"
+        message="Are you sure you want to remove this item from your cart?"
       />
 
       {/* ================= STYLES ================= */}
