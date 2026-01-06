@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from "react";
 import Modal from "./Modal";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { CartContext } from "@/app/context/CartContext";
+import { useRouter } from "next/navigation";
 
 const SCHEDULES = [
   { label: "Daily", value: "daily" },
@@ -32,6 +33,7 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
+  const router = useRouter();
 
   // Reset state when modal closes
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
       return;
     }
 
-    // 🔒 LOGIN CHECK (FINAL STEP ONLY)
+    // 🔒 LOGIN CHECK 
     if (!isLoggedIn()) {
       setShowLoginModal(true);
       return;
@@ -79,8 +81,10 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
         `Your ${item.name || "item"} menu added to the cart successfully!`
       );
 
-      // Auto-close after 2 seconds
-      setTimeout(() => onClose(), 2000);
+      // ✅ Redirect after 2 seconds without closing modal
+      setTimeout(() => {
+        router.push("/cart");
+      }, 2000);
     } catch (err) {
       console.error(err);
     }

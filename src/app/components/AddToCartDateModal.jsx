@@ -5,7 +5,6 @@ import Modal from "./Modal";
 import { CartContext } from "@/app/context/CartContext";
 import { useRouter } from "next/navigation";
 export default function AddToCartDateModal({
-
   open,
   onClose,
   subscriptionType, // "veg" | "non_veg"
@@ -19,7 +18,7 @@ export default function AddToCartDateModal({
   const [successMessage, setSuccessMessage] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
-const router = useRouter();
+  const router = useRouter();
   // RESET STATE ON CLOSE
   useEffect(() => {
     if (!open) {
@@ -81,14 +80,11 @@ const router = useRouter();
         } menu added to the cart successfully!`
       );
 
-      // auto-close after 2 seconds
-setTimeout(() => {
-  onClose();
-  router.push("/cart");
-}, 1500);
-    } catch (err) {
-      // addToCart already alerts
-    }
+      // redirect after 2 seconds WITHOUT closing modal
+      setTimeout(() => {
+        router.push("/cart");
+      }, 2000);
+    } catch (err) {}
   };
 
   return (
