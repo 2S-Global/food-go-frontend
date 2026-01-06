@@ -22,7 +22,7 @@ const isLoggedIn = () => {
 
 export default function AddToCartScheduleModal({ open, item, onClose }) {
 
-  const router = useRouter();
+
 
   const { addToCart, loading } = useContext(CartContext);
 
@@ -37,6 +37,7 @@ const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
+  const router = useRouter();
 
   // Reset state when modal closes
   useEffect(() => {
