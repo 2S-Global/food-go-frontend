@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { CartContext } from "@/app/context/CartContext";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
@@ -18,10 +18,10 @@ import {
 } from "lucide-react";
 
 export default function CartPage() {
-  const { cart, loading, initialized, removeCartItem } =
+  const { cart, loading, initialized, removeCartItem, refreshCart } =
     useContext(CartContext);
 
-    const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
+  const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
 
   /* ================= CONFIRM MODAL ================= */
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,19 +32,22 @@ export default function CartPage() {
     setModalOpen(true);
   };
 
-const handleConfirmDelete = async () => {
-  if (!itemToDelete) return;
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
 
-  setModalOpen(false);
+    setModalOpen(false);
 
-  await removeCartItem(itemToDelete);
+    await removeCartItem(itemToDelete);
 
-  // ✅ update cart badge count
-  fetchCartCount();
+    // ✅ update cart badge count
+    fetchCartCount();
 
-  setItemToDelete(null);
-};
+    setItemToDelete(null);
+  };
 
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
 
   const handleCloseModal = () => {
     setModalOpen(false);
