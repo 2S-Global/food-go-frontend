@@ -193,32 +193,12 @@ useEffect(() => {
       </header>
 
       <div className="responsive-header">
-        <div className="responsive-topbar">
-          <div className="select-wrp">
-            <select data-placeholder="Feel Like Eating">
-              <option>FEEL LIKE EATING</option>
-              <option>Burger</option>
-              <option>Pizza</option>
-              <option>Fried Rice</option>
-              <option>Chicken Shots</option>
-            </select>
-          </div>
-          <div className="select-wrp">
-            <select data-placeholder="Choose Location">
-              <option>CHOOSE LOCATION</option>
-              <option>New york</option>
-              <option>Washington</option>
-              <option>Chicago</option>
-              <option>Los Angeles</option>
-            </select>
-          </div>
-        </div>
         <div className="responsive-logomenu">
           <div className="logo">
             <h1 itemProp="headline">
-              <a href="index.html" title="Home" itemProp="url">
-                <img src="/assets/images/logo.png" alt="logo.png" itemProp="image" />
-              </a>
+              <Link href="/">
+                <img src="/assets/images/logo2.png" alt="logo.png" itemProp="image" />
+              </Link>
             </h1>
           </div>
           <span className="menu-btn yellow-bg brd-rd4">
@@ -231,346 +211,48 @@ useEffect(() => {
           </span>
           <div className="menu-lst">
             <ul>
-              <li className="menu-item-has-children">
-                <a href="#" title="HOMEPAGES" itemProp="url">
-                  <span className="yellow-clr">FOOD ORDERING</span>HOMEPAGES
-                </a>
-                <ul className="sub-dropdown">
-                  <li>
-                    <a href="index.html" title="HOMEPAGE 1" itemProp="url">
-                      HOMEPAGE 1
-                    </a>
-                  </li>
-                  <li>
-                    <a href="index2.html" title="HOMEPAGE 2" itemProp="url">
-                      HOMEPAGE 2
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="menu-item-has-children">
-                <a href="#" title="RESTAURANTS" itemProp="url">
-                  <span className="yellow-clr">REAL FOOD</span>RESTAURANTS
-                </a>
-                <ul className="sub-dropdown">
-                  <li>
-                    <a
-                      href="restaurant-found.html"
-                      title="RESTAURANT 1"
-                      itemProp="url"
-                    >
-                      RESTAURANT 1
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="restaurant-found2.html"
-                      title="RESTAURANT 2"
-                      itemProp="url"
-                    >
-                      RESTAURANT 2
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="restaurant-detail.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      RESTAURANT DETAILS
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="restaurant-detail.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      RESTAURANT DETAILS
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="food-recipes.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      FOOD RECIPES
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="our-articles.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      OUR ARTICLES
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="our-menu.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      OUR MENU
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="our-services.html"
-                      title="RESTAURANT DETAILS"
-                      itemProp="url"
-                    >
-                      OUR SERVICES
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="menu-item-has-children">
-                <a href="#" title="PAGES" itemProp="url">
-                  <span className="yellow-clr">REAL FOOD</span>PAGES
-                </a>
-                <ul className="sub-dropdown">
-                  <li className="menu-item-has-children">
-                    <a href="#" title="BLOG" itemProp="url">
-                      BLOG
-                    </a>
-                    <ul className="sub-dropdown">
-                      <li className="menu-item-has-children">
-                        <a href="#" title="BLOG LAYOUTS" itemProp="url">
-                          BLOG LAYOUTS
-                        </a>
-                        <ul className="sub-dropdown">
-                          <li>
-                            <a
-                              href="blog-right-sidebar.html"
-                              title="BLOG WITH RIGHT SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG (W.R.S)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog-left-sidebar.html"
-                              title="BLOG WITH LEFT SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG (W.L.S)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog.html"
-                              title="BLOG WITH NO SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="menu-item-has-children">
-                        <a href="#" title="BLOG DETAIL" itemProp="url">
-                          BLOG DETAIL
-                        </a>
-                        <ul className="sub-dropdown">
-                          <li>
-                            <a
-                              href="blog-detail-right-sidebar.html"
-                              title="BLOG DETAIL WITH RIGHT SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL (W.R.S)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog-detail-left-sidebar.html"
-                              title="BLOG DETAIL WITH LEFT SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL (W.L.S)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog-detail.html"
-                              title="BLOG DETAIL WITH NO SIDEBAR"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="menu-item-has-children">
-                        <a href="#" title="BLOG FORMATES" itemProp="url">
-                          BLOG FORMATES
-                        </a>
-                        <ul className="sub-dropdown">
-                          <li>
-                            <a
-                              href="blog-detail-video.html"
-                              title="BLOG DETAIL WITH VIDEO"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL (VIDEO)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog-detail-audio.html"
-                              title="BLOG DETAIL WITH AUDIO"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL (AUDIO)
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="blog-detail-carousel.html"
-                              title="BLOG DETAIL WITH CAROUSEL"
-                              itemProp="url"
-                            >
-                              BLOG DETAIL (CAROUSEL)
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="menu-item-has-children">
-                    <a href="#" title="SPECIAL PAGES" itemProp="url">
-                      SPECIAL PAGES
-                    </a>
-                    <ul className="sub-dropdown">
-                      <li>
-                        <a href="404.html" title="404 ERROR" itemProp="url">
-                          404 ERROR
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="search-found.html"
-                          title="SEARCH FOUND"
-                          itemProp="url"
-                        >
-                          SEARCH FOUND
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="search-not-found.html"
-                          title="SEARCH NOT FOUND"
-                          itemProp="url"
-                        >
-                          SEARCH NOT FOUND
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="coming-soon.html"
-                          title="COMING SOON"
-                          itemProp="url"
-                        >
-                          COMING SOON
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="login-register.html"
-                          title="LOGIN & REGISTER"
-                          itemProp="url"
-                        >
-                          LOGIN &amp; REGISTER
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="price-table.html"
-                          title="PRICE TABLE"
-                          itemProp="url"
-                        >
-                          PRICE TABLE
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="menu-item-has-children">
-                    <a href="#" title="GALLERY" itemProp="url">
-                      GALLERY
-                    </a>
-                    <ul className="sub-dropdown">
-                      <li>
-                        <a
-                          href="gallery.html"
-                          title="FOOD GALLERY"
-                          itemProp="url"
-                        >
-                          FOOD GALLERY
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="gallery-detail.html"
-                          title="GALLERY DETAIL"
-                          itemProp="url"
-                        >
-                          GALLERY DETAIL
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a
-                      href="register-reservation.html"
-                      title="REGISTER RESERVATION"
-                      itemProp="url"
-                    >
-                      REGISTER RESERVATION
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="how-it-works.html"
-                      title="HOW IT WORKS"
-                      itemProp="url"
-                    >
-                      HOW IT WORKS
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="dashboard.html"
-                      title="USER PROFILE"
-                      itemProp="url"
-                    >
-                      USER PROFILE
-                    </a>
-                  </li>
-                  <li>
-                    <a href="about-us.html" title="ABOUT US" itemProp="url">
-                      ABOUT US
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="food-detail.html"
-                      title="FOOD DETAIL"
-                      itemProp="url"
-                    >
-                      FOOD DETAIL
-                    </a>
-                  </li>
-                </ul>
-              </li>
               <li>
-                <a href="contact.html" title="CONTACT US" itemProp="url">
-                  <span className="yellow-clr">REAL FOOD</span>CONTACT US
-                </a>
-              </li>
+                    <Link href="/">HOME</Link>
+                  </li>
+                  <li>
+                    <Link href="/about-us">ABOUT US</Link>
+                  </li>
+                  <li className="menu-item-has-children">
+                    <a href="/menu" title="MENU" itemProp="url">
+                      MENU
+                    </a>
+                    <ul>
+                      <li>
+                        <a href="/menu/veg" title="FOOD MENU" itemProp="url">
+                          VEG MENU
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/menu/non-veg"
+                          title="FOOD MENU"
+                          itemProp="url"
+                        >
+                          NON-VEG MENU
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="/menu/additional-items"
+                          title="FOOD MENU"
+                          itemProp="url"
+                        >
+                          ADDITIONAL ITEMS
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href="/blog">BLOG</Link>
+                  </li>
+                  <li>
+                    <Link href="/contact-us">CONTACT US</Link>
+                  </li>
             </ul>
           </div>
           <div className="topbar-register">
