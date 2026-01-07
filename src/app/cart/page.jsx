@@ -44,10 +44,11 @@ export default function CartPage() {
 
     setItemToDelete(null);
   };
-
-  useEffect(() => {
+useEffect(() => {
+  if (!loading) {
     refreshCart();
-  }, [refreshCart]);
+  }
+}, []);
 
   const handleCloseModal = () => {
     setModalOpen(false);
