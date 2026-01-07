@@ -182,11 +182,11 @@ const PopularFood = () => {
                 </div>
               </div>
 
-              <div className="rite-meta">
+              {/* <div className="rite-meta">
                 <a href="#" className="view-more">
                   view more food
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
