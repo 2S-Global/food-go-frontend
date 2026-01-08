@@ -18,7 +18,7 @@ export default function ChangePasswordPage() {
         items={[
           { label: "Home", href: "/" },
           // { label: "Search", href: "/restaurants#restaurants-search-banner" },
-          { label: "change Password" },
+          { label: "Change Password" },
         ]}
       />
 

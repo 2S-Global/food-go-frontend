@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ChangePasswordForm() {
   const [formData, setFormData] = useState({
@@ -10,189 +11,245 @@ export default function ChangePasswordForm() {
     confirm_password: "",
   });
 
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.old_password.trim())
+      newErrors.old_password = "* Current password is required";
+
+    if (!formData.new_password.trim())
+      newErrors.new_password = "* New password is required";
+
+    if (!formData.confirm_password.trim())
+      newErrors.confirm_password = "* Confirm password is required";
+
+    if (
+      formData.new_password &&
+      formData.confirm_password &&
+      formData.new_password !== formData.confirm_password
+    ) {
+      newErrors.confirm_password = "* Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
-
-    if (formData.new_password !== formData.confirm_password) {
-      setError("New password and confirm password do not match");
-      return;
-    }
+    if (!validate()) return;
 
     setLoading(true);
 
     try {
-      // 🔐 API CALL GOES HERE
-      // await changePassword({
-      //   old_password: formData.old_password,
-      //   new_password: formData.new_password,
-      // });
+      const token = localStorage.getItem("auth_token");
 
-      setSuccess("Password changed successfully!");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/userdata/change-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            oldPassword: formData.old_password,
+            newPassword: formData.new_password,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to change password");
+
+      toast.success("Password changed successfully");
+
       setFormData({
         old_password: "",
         new_password: "",
         confirm_password: "",
       });
-    } catch (err) {
-      setError(err.message || "Something went wrong");
+    } catch (error) {
+      toast.error(error.message || "Server error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="sign-popup-wrapper brd-rd5">
-      <div className="sign-popup-inner brd-rd5">
-        <div className="sign-popup-title text-center">
-          <h4>CHANGE PASSWORD</h4>
-          <span style={{ display: "block", marginTop: "5px" }}>
-            Update your account password
-          </span>
+    <>
+      <Toaster position="top-right" />
 
-          {/* SUCCESS */}
-          {success && (
-            <p style={{ color: "green", marginTop: "12px", marginBottom: 0 }}>
-              {success}
-            </p>
-          )}
-
-          {/* ERROR */}
-          {error && (
-            <p style={{ color: "red", marginTop: "12px", marginBottom: 0 }}>
-              {error}
-            </p>
-          )}
-        </div>
-
-        <form className="sign-form" onSubmit={handleSubmit}>
-          <div className="row">
-            {/* CURRENT PASSWORD */}
-            <div className="col-md-12" style={{ position: "relative" }}>
-              <input
-                className="brd-rd3"
-                type={showOldPassword ? "text" : "password"}
-                name="old_password"
-                placeholder="Current Password"
-                value={formData.old_password}
-                onChange={handleChange}
-                required
-              />
-              <span
-                onClick={() => setShowOldPassword(!showOldPassword)}
-                style={{
-                  position: "absolute",
-                  right: "25px",
-                  top: "40%",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                  color: "#999",
-                }}
-              >
-                <i
-                  className={`fa ${
-                    showOldPassword ? "fa-eye-slash" : "fa-eye"
-                  }`}
-                ></i>
-              </span>
-            </div>
-
-            {/* NEW PASSWORD */}
-            <div className="col-md-12" style={{ position: "relative" }}>
-              <input
-                className="brd-rd3"
-                type={showNewPassword ? "text" : "password"}
-                name="new_password"
-                placeholder="New Password"
-                value={formData.new_password}
-                onChange={handleChange}
-                required
-              />
-              <span
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                style={{
-                  position: "absolute",
-                  right: "25px",
-                  top: "40%",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                  color: "#999",
-                }}
-              >
-                <i
-                  className={`fa ${
-                    showNewPassword ? "fa-eye-slash" : "fa-eye"
-                  }`}
-                ></i>
-              </span>
-            </div>
-
-            {/* CONFIRM PASSWORD */}
-            <div className="col-md-12" style={{ position: "relative" }}>
-              <input
-                className="brd-rd3"
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirm_password"
-                placeholder="Confirm New Password"
-                value={formData.confirm_password}
-                onChange={handleChange}
-                required
-              />
-              <span
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{
-                  position: "absolute",
-                  right: "25px",
-                  top: "40%",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                  color: "#999",
-                }}
-              >
-                <i
-                  className={`fa ${
-                    showConfirmPassword ? "fa-eye-slash" : "fa-eye"
-                  }`}
-                ></i>
-              </span>
-            </div>
-
-            {/* SUBMIT */}
-            <div className="col-md-12">
-              <button
-                className="red-bg brd-rd3"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Please wait..." : "UPDATE PASSWORD"}
-              </button>
-            </div>
-
-            {/* FOOTER */}
-            <div className="col-md-12 text-center">
-              <Link className="sign-btn" href="/login">
-                Back to Login
-              </Link>
-            </div>
+      <div className="sign-popup-wrapper brd-rd5">
+        <div className="sign-popup-inner brd-rd5">
+          <div className="sign-popup-title text-center">
+            <h4>CHANGE PASSWORD</h4>
+            <span style={{ display: "block", marginBottom: "8px" }}>
+              Update your account password
+            </span>
           </div>
-        </form>
+
+          <form className="sign-form" onSubmit={handleSubmit}>
+            <div className="row">
+              {/* CURRENT PASSWORD */}
+              <div className="col-md-12">
+                <div className="password-field">
+                  <input
+                    className="brd-rd3"
+                    type={showOldPassword ? "text" : "password"}
+                    name="old_password"
+                    placeholder="Current Password"
+                    value={formData.old_password}
+                    onChange={handleChange}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowOldPassword(!showOldPassword)}
+                  >
+                    <i
+                      className={`fa ${
+                        showOldPassword ? "fa-eye-slash" : "fa-eye"
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+                {errors.old_password && (
+                  <ErrorText text={errors.old_password} />
+                )}
+              </div>
+
+              {/* NEW PASSWORD */}
+              <div className="col-md-12">
+                <div className="password-field">
+                  <input
+                    className="brd-rd3"
+                    type={showNewPassword ? "text" : "password"}
+                    name="new_password"
+                    placeholder="New Password"
+                    value={formData.new_password}
+                    onChange={handleChange}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    <i
+                      className={`fa ${
+                        showNewPassword ? "fa-eye-slash" : "fa-eye"
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+                {errors.new_password && (
+                  <ErrorText text={errors.new_password} />
+                )}
+              </div>
+
+              {/* CONFIRM PASSWORD */}
+              <div className="col-md-12">
+                <div className="password-field">
+                  <input
+                    className="brd-rd3"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm_password"
+                    placeholder="Confirm New Password"
+                    value={formData.confirm_password}
+                    onChange={handleChange}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    <i
+                      className={`fa ${
+                        showConfirmPassword ? "fa-eye-slash" : "fa-eye"
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+                {errors.confirm_password && (
+                  <ErrorText text={errors.confirm_password} />
+                )}
+              </div>
+
+              {/* SUBMIT */}
+              <div className="col-md-12">
+                <button
+                  className="red-bg brd-rd3"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Please wait..." : "UPDATE PASSWORD"}
+                </button>
+              </div>
+
+              <div className="col-md-12 text-center">
+                <Link className="sign-btn" href="/login">
+                  Back to Login
+                </Link>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+      {/* Improved CSS for perfect eye icon alignment */}
+      <style jsx>{`
+        .password-field {
+          position: relative;
+          height: 48px; /* 🔒 LOCK CONTAINER HEIGHT */
+        }
+
+        .password-field input {
+          width: 100%;
+          height: 48px; /* 🔒 LOCK INPUT HEIGHT */
+          padding-right: 44px; /* space for eye icon */
+          box-sizing: border-box;
+        }
+
+        .eye-icon {
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          color: #999;
+          font-size: 18px;
+          z-index: 10;
+        }
+
+        .eye-icon i {
+          pointer-events: none;
+        }
+      `}</style>
+    </>
   );
 }
+
+const ErrorText = ({ text }) => (
+  <small
+    style={{
+      color: "red",
+      display: "block",
+      marginTop: "4px",
+      marginBottom: "10px",
+    }}
+  >
+    {text}
+  </small>
+);
