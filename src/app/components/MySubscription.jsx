@@ -69,7 +69,8 @@ export default function MySubscription() {
 
       {/* Date Slider */}
       <div className={styles.dateSlider}>
-        <button onClick={() => shiftWeek(-7)} className={styles.arrow}>
+        {/* <button onClick={() => shiftWeek(-7)} className={styles.arrow}> */}
+        <button onClick={() => shiftDay(-1)} className={styles.arrow}>
           ‹
         </button>
 
@@ -93,7 +94,8 @@ export default function MySubscription() {
           })}
         </div>
 
-        <button onClick={() => shiftWeek(7)} className={styles.arrow}>
+        {/* <button onClick={() => shiftWeek(7)} className={styles.arrow}> */}
+        <button onClick={() => shiftDay(1)} className={styles.arrow}>
           ›
         </button>
       </div>
@@ -133,11 +135,24 @@ export default function MySubscription() {
     </div>
   );
 
-  function shiftWeek(days) {
-    const d = new Date(weekStart);
-    d.setDate(d.getDate() + days);
-    setWeekStart(d);
-  }
+  // function shiftWeek(days) {
+  //   const d = new Date(weekStart);
+  //   d.setDate(d.getDate() + days);
+  //   setWeekStart(d);
+  // }
+
+  function shiftDay(step) {
+  // Move weekStart by 1 day
+  const newWeekStart = new Date(weekStart);
+  newWeekStart.setDate(newWeekStart.getDate() + step);
+  setWeekStart(newWeekStart);
+
+  // Move selectedDate by 1 day
+  const current = new Date(selectedDate);
+  current.setDate(current.getDate() + step);
+  setSelectedDate(formatDate(current));
+}
+
 }
 
 /* ======================
