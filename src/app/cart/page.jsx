@@ -111,13 +111,18 @@ useEffect(() => {
         />
         <div className="container text-center py-5">
           <ShoppingCart size={72} className="text-muted mb-3" />
+
           <h3>Your cart is empty</h3>
-          <p className="text-muted">
+
+          <p className="text-muted mb-4">
             Looks like you haven’t added any items yet.
           </p>
-          <Link href="/menu" className="btn btn-danger mt-3">
-            Browse Menu
-          </Link>
+
+          <div>
+            <Link href="/menu" className="btn btn-danger">
+              Browse Menu
+            </Link>
+          </div>
         </div>
       </section>
     );

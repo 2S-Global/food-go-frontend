@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-
+import { useCartCountStore } from "@/app/store/cartCountStore";
 export const getAuthHeaders = () => {
   if (typeof window === "undefined") return {};
 
@@ -22,6 +22,7 @@ export const getAuthHeaders = () => {
 
 export default function CheckoutPage() {
   const router = useRouter();
+    const { fetchCartCount } = useCartCountStore();
 
   // === ALL HOOKS AT THE TOP - UNCONDITIONAL ===
   const context = useContext(CartContext);
@@ -86,7 +87,6 @@ export default function CheckoutPage() {
   if (!initialized || loading) {
     return (
       <section>
-
         <PageBanner
           title="Checkout"
           subtitle="Complete your order"
@@ -172,7 +172,6 @@ export default function CheckoutPage() {
       // Only numbers, max 4 digits
       updatedValue = value.replace(/\D/g, "").slice(0, 4);
     }
-
 
     setFormData((prev) => ({
       ...prev,
@@ -260,7 +259,7 @@ export default function CheckoutPage() {
       payment_method: "online",
     };
 
-    console.log("FLAT PAYLOAD 👉", payload);
+    // console.log("FLAT PAYLOAD 👉", payload);
 
     const toastId = toast.loading("Processing your order...");
 
@@ -281,7 +280,7 @@ export default function CheckoutPage() {
       }
 
       toast.success("🎉 Order placed successfully!", { id: toastId });
-
+      fetchCartCount();
       setTimeout(() => {
         router.push("/dashboard#statement");
       }, 2000);
