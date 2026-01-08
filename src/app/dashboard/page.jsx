@@ -24,7 +24,7 @@ export default function DashboardHome() {
       <div className="welcome-note  brd-rd5">
         <h4 style={{ color:"black" }}>WELCOME TO YOUR ACCOUNT</h4>
         <MySubscription />
-        <img src="/assets/images/welcome-note-img.png" alt="" />
+        {/* <img src="/assets/images/welcome-note-img.png" alt="" /> */}
       </div>
     </div>
   );
