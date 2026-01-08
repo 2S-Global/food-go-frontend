@@ -22,6 +22,8 @@ export const getAuthHeaders = () => {
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const [orderCompleted, setOrderCompleted] = useState(false);
+
     const { fetchCartCount } = useCartCountStore();
 
   // === ALL HOOKS AT THE TOP - UNCONDITIONAL ===
@@ -82,7 +84,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const { cart, initialized, loading } = context;
+  const { cart, initialized, loading, refreshCart } = context;
 
   if (!initialized || loading) {
     return (
@@ -107,32 +109,32 @@ export default function CheckoutPage() {
   const cartItems = cart?.items || [];
   const subtotal = Number(cart?.total_cart_amount || 0);
 
-  if (cartItems.length === 0) {
-    return (
-      <section>
-        <PageBanner
-          title="Checkout"
-          subtitle="Complete your order"
-          background="/assets/images/group-2.jpg"
-          showSearchForm={false}
-        />
-        <BreadCrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Cart", href: "/cart" },
-            { label: "Checkout" },
-          ]}
-        />
-        <div className="container text-center py-5">
-          <h3>Your cart is empty</h3>
-          <p className="text-muted">Add some meals to continue.</p>
-          <a href="/menu" className="btn btn-danger mt-3">
-            Browse Menu
-          </a>
-        </div>
-      </section>
-    );
-  }
+if (cartItems.length === 0 && !orderCompleted) {
+  return (
+    <section>
+      <PageBanner
+        title="Checkout"
+        subtitle="Complete your order"
+        background="/assets/images/group-2.jpg"
+        showSearchForm={false}
+      />
+      <BreadCrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Cart", href: "/cart" },
+          { label: "Checkout" },
+        ]}
+      />
+      <div className="container text-center py-5">
+        <h3>Your cart is empty</h3>
+        <p className="text-muted">Add some meals to continue.</p>
+        <a href="/menu" className="btn btn-danger mt-3">
+          Browse Menu
+        </a>
+      </div>
+    </section>
+  );
+}
 
   // === HELPER FUNCTIONS ===
   const handleInputChange = (e) => {
@@ -280,6 +282,9 @@ export default function CheckoutPage() {
       }
 
       toast.success("🎉 Order placed successfully!", { id: toastId });
+      setOrderCompleted(true); // ✅ block empty-cart UI
+
+      await refreshCart();
       fetchCartCount();
       setTimeout(() => {
         router.push("/dashboard#statement");
