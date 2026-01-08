@@ -11,7 +11,7 @@ export default function AddToCartDateModal({
   onClose,
   subscriptionType, // "veg" | "non_veg"
 }) {
-  const { addToCart, loading } = useContext(CartContext);
+  const { addToCart, loading, refreshCart } = useContext(CartContext);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -52,51 +52,52 @@ export default function AddToCartDateModal({
   }, [startDate]);
 
   // SUBMIT TO CART API
-const handleSave = async () => {
-  if (loading) return;
+  const handleSave = async () => {
+    if (loading) return;
 
-  if (!startDate || !endDate) {
-    alert("Please select start and end date");
-    return;
-  }
+    if (!startDate || !endDate) {
+      alert("Please select start and end date");
+      return;
+    }
 
-  if (new Date(startDate) < new Date(today)) {
-    alert("Start date cannot be in the past");
-    return;
-  }
+    if (new Date(startDate) < new Date(today)) {
+      alert("Start date cannot be in the past");
+      return;
+    }
 
-  if (new Date(endDate) < new Date(minEndDate)) {
-    alert("End date must be at least 7 days");
-    return;
-  }
+    if (new Date(endDate) < new Date(minEndDate)) {
+      alert("End date must be at least 7 days");
+      return;
+    }
 
-  try {
-    await addToCart({
-      item_type: "subscription",
-      subscription_type: subscriptionType,
-      start_date: startDate,
-      end_date: endDate,
-    });
+    try {
+      await addToCart({
+        item_type: "subscription",
+        subscription_type: subscriptionType,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
-    // ✅ success UI
-    setSuccessMessage(
-      `Your ${
-        subscriptionType === "veg" ? "veg" : "non-veg"
-      } menu added to the cart successfully!`
-    );
+      // ✅ success UI
+      setSuccessMessage(
+        `Your ${
+          subscriptionType === "veg" ? "veg" : "non-veg"
+        } menu added to the cart successfully!`
+      );
 
-    // ✅ update cart badge count via Zustand
-    fetchCartCount();
+      await refreshCart();
+      // ✅ update cart badge count via Zustand
+      fetchCartCount();
 
-    // ✅ close + redirect after delay
-    setTimeout(() => {
-      onClose();
-      router.push("/cart");
-    }, 1500);
-  } catch (err) {
-    console.error(err);
-  }
-};
+      // ✅ close + redirect after delay
+      setTimeout(() => {
+        onClose();
+        router.push("/cart");
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
