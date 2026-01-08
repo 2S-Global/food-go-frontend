@@ -76,6 +76,18 @@ export default function DashboardSidebar({ user, loading }) {
               <span className="arrow">›</span>
             )}
           </Link>
+
+          <Link
+            href="/dashboard/change-password"
+            className={`nav-link ${
+              isActive("/dashboard/") ? "active" : ""
+            }`}
+          >
+            <i className="fa fa-key" /> CHANGE PASSWORD
+            {isActive("/dashboard/account") && (
+              <span className="arrow">›</span>
+            )}
+          </Link>
         </div>
       </div>
     </div>

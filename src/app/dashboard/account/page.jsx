@@ -34,14 +34,14 @@ export default function AccountSettingsPage() {
                   itemProp="image"
                 />
               </div>
-              <a
+              {/* <a
                 className="red-clr change-password"
                 href="/change-password"
                 title=""
                 itemProp="url"
               >
                 Change Password
-              </a>
+              </a> */}
               <div className="profile-img-upload-btn">
                 <label className="fileContainer brd-rd5 yellow-bg">
                   UPLOAD PICTURE
