@@ -200,7 +200,7 @@ export default function ChangePasswordForm() {
 
               <div className="col-md-12 text-center">
                 <Link className="sign-btn" href="/login">
-                  Back to Login
+                  Back to <strong>Login</strong>
                 </Link>
               </div>
             </div>

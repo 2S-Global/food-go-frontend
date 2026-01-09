@@ -80,11 +80,11 @@ export default function DashboardSidebar({ user, loading }) {
           <Link
             href="/dashboard/change-password"
             className={`nav-link ${
-              isActive("/dashboard/") ? "active" : ""
+              isActive("/dashboard/change-password") ? "active" : ""
             }`}
           >
             <i className="fa fa-key" /> CHANGE PASSWORD
-            {isActive("/dashboard/account") && (
+            {isActive("/dashboard/change-password") && (
               <span className="arrow">›</span>
             )}
           </Link>
