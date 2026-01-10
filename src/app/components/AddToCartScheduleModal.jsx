@@ -31,7 +31,8 @@ export default function AddToCartScheduleModal({ open, item, onClose }) {
   const [startDate, setStartDate] = useState("");
   const [hover, setHover] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
+  const [addiErrorMessage, setAddiErrorMessage] = useState("");
+  const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
 
   // 🔐 login modal state
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -45,6 +46,7 @@ const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
       setSchedule(SCHEDULES[0]);
       setStartDate("");
       setSuccessMessage("");
+      setAddiErrorMessage("");
       setShowLoginModal(false);
     }
   }, [open]);
@@ -53,49 +55,60 @@ const fetchCartCount = useCartCountStore((state) => state.fetchCartCount);
   if (!open || !item) return null;
 
   // Add additional item to cart
-const handleSave = async () => {
-  if (loading) return;
+  const handleSave = async () => {
+    if (loading) return;
 
-  if (!startDate) {
-    alert("Please select start date");
-    return;
-  }
+    if (!startDate) {
+      alert("Please select start date");
+      return;
+    }
 
-  // 🔒 LOGIN CHECK
-  if (!isLoggedIn()) {
-    setShowLoginModal(true);
-    return;
-  }
+    // 🔒 LOGIN CHECK
+    if (!isLoggedIn()) {
+      setShowLoginModal(true);
+      return;
+    }
 
-  try {
-    await addToCart({
-      item_type: "additional_item",
-      additional_items: [
-        {
-          item_id: item._id,
-          quantity: 1,
-          addon_start_date: startDate,
-          addon_schedule_type: schedule.value,
-        },
-      ],
-    });
+    try {
+      await addToCart({
+        item_type: "additional_item",
+        additional_items: [
+          {
+            item_id: item._id,
+            quantity: 1,
+            addon_start_date: startDate,
+            addon_schedule_type: schedule.value,
+          },
+        ],
+      });
 
-    // ✅ UPDATE CART COUNT (ZUSTAND)
-    fetchCartCount();
+      // ✅ UPDATE CART COUNT (ZUSTAND)
+      fetchCartCount();
 
-    // Success message
-    setSuccessMessage(
-      `Your ${item.name || "item"} menu added to the cart successfully!`
-    );
+      // Success message
+      setSuccessMessage(
+        `Your ${item.name || "item"} menu added to the cart successfully!`
+      );
 
-    setTimeout(() => {
-      onClose(); 
-      router.push("/cart"); 
-    }, 1500);
-  } catch (err) {
-    console.error(err);
-  }
-};
+      setTimeout(() => {
+        onClose();
+        router.push("/cart");
+      }, 1500);
+    } catch (err) {
+      const errorMessage =
+        err?.response?.data?.message || // backend error
+        err?.message ||                 // thrown Error()
+        err ||                           // thrown string
+        "Failed to add item to cart";
+      setAddiErrorMessage(errorMessage);
+      // ⏳ Auto-close modal after 2 seconds
+      setTimeout(() => {
+        onClose();
+        setAddiErrorMessage("");
+      }, 2000);
+      console.error(err);
+    }
+  };
 
 
   return (
@@ -156,6 +169,13 @@ const handleSave = async () => {
           </p>
         )}
 
+        {/* Error message */}
+        {addiErrorMessage && (
+          <p style={{ marginTop: "16px", color: "red", fontWeight: "bold" }}>
+            {addiErrorMessage}
+          </p>
+        )}
+
         {/* Action button */}
         <div style={{ textAlign: "right", marginTop: "24px" }}>
           <button
@@ -169,8 +189,8 @@ const handleSave = async () => {
               backgroundColor: !startDate
                 ? "#ccc"
                 : hover
-                ? "#c8102e"
-                : "#012169",
+                  ? "#c8102e"
+                  : "#012169",
               color: "#fff",
               border: "none",
               borderRadius: "6px",
