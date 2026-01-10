@@ -2,29 +2,59 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
-export default function DashboardSidebar({ user, loading }) {
+export default function DashboardSidebar() {
   const pathname = usePathname();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const isActive = (href) => pathname === href;
+
+  // Load user + listen for auth changes
+  useEffect(() => {
+    const loadUser = () => {
+      const storedUser = localStorage.getItem("auth_user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+      setLoading(false);
+    };
+
+    loadUser();
+    window.addEventListener("authChange", loadUser);
+
+    return () => {
+      window.removeEventListener("authChange", loadUser);
+    };
+  }, []);
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+    window.dispatchEvent(new Event("authChange"));
+  };
 
   return (
     <div className="profile-sidebar brd-rd5 wow fadeIn" data-wow-delay="0.2s">
       <div className="profile-sidebar-inner brd-rd5">
-
         {/* USER INFO */}
         <div className="user-info red-bg">
           <img
             className="brd-rd50"
-            src={user?.avatar || "/assets/images/user-avatar.jpg"}
+            src={user?.profilePicture || "/assets/images/default-user.jpg"}
             alt="User Avatar"
+            style={{width: "83px", height: "83px"}}
           />
           <div className="user-info-inner">
             <h5>{loading ? "Loading..." : user?.name || "Guest User"}</h5>
             <span>{user?.email || "email@example.com"}</span>
-             <a
+            <a
               className="brd-rd3 sign-out-btn yellow-bg"
               href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
             >
               <i className="fa fa-sign-out"></i> SIGN OUT
             </a>
@@ -45,7 +75,8 @@ export default function DashboardSidebar({ user, loading }) {
             href="/dashboard/subscriptions"
             className={`nav-link ${
               isActive("/dashboard/subscriptions") ? "active" : ""
-            }`} style={{ display: "none" }}
+            }`}
+            style={{ display: "none" }}
           >
             <i className="fa fa-file-text" /> MY SUBSCRIPTIONS
             {isActive("/dashboard/subscriptions") && (
