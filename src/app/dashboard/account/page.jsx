@@ -62,7 +62,7 @@ export default function AccountSettingsPage() {
         setProfilePreview(
           data.data.profilePicture
             ? `${data.data.profilePicture}?t=${Date.now()}`
-            : "/assets/images/profile-img1.jpg"
+            : "/assets/images/default-user.jpg"
         );
       } else {
         toast.error(data.message || "Failed to load profile");
