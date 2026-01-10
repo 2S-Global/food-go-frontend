@@ -40,6 +40,68 @@ export default function OrderDetailsPage() {
       year: "numeric",
     });
 
+  const computeAddonMealCount = (addon) => {
+    if (!addon) return 0;
+
+    // Prefer explicit delivery_count if available
+    if (typeof addon.delivery_count === "number" && addon.delivery_count >= 0) {
+      return (addon.quantity ?? 1) * addon.delivery_count;
+    }
+
+    // Prefer delivery_dates array if present
+    if (Array.isArray(addon.delivery_dates) && addon.delivery_dates.length > 0) {
+      return (addon.quantity ?? 1) * addon.delivery_dates.length;
+    }
+
+    // Fallback: compute from start/end and schedule type
+    const start = addon.addon_start_date ? new Date(addon.addon_start_date) : null;
+    const end = addon.addon_end_date ? new Date(addon.addon_end_date) : null;
+    const qty = addon.quantity ?? 1;
+    if (!start || !end || isNaN(start) || isNaN(end) || start > end) return 0;
+
+    const countByStep = (stepDays) => {
+      let count = 0;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + stepDays)) {
+        count += 1;
+        // safety: prevent infinite loops
+        if (count > 10000) break;
+      }
+      return count;
+    };
+
+    let occurrences = 0;
+    switch (addon.addon_schedule_type) {
+      case "daily":
+        occurrences = countByStep(1);
+        break;
+      case "alternate":
+        occurrences = countByStep(2);
+        break;
+      case "every_3_days":
+        occurrences = countByStep(3);
+        break;
+      case "weekly":
+        occurrences = countByStep(7);
+        break;
+      case "monthly": {
+        let count = 0;
+        for (let d = new Date(start); d <= end; d.setMonth(d.getMonth() + 1)) {
+          count += 1;
+          if (count > 10000) break;
+        }
+        occurrences = count;
+        break;
+      }
+      case "once":
+        occurrences = 1;
+        break;
+      default:
+        occurrences = 0;
+    }
+
+    return occurrences * qty;
+  };
+
 
   return (
     <>
@@ -150,7 +212,8 @@ export default function OrderDetailsPage() {
                                     <strong>{addon.item_id?.itemName}</strong>
                                   </td>
                               
-                                  <td>—</td>
+                                  <td>{computeAddonMealCount(addon) ?? 0}</td>
+
                                   <td>{formatDate(addon.addon_start_date)}</td>
 
                                   <td>{formatDate(addon.addon_end_date)}</td>

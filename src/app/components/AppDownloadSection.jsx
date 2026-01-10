@@ -34,7 +34,7 @@ const AppDownloadSection = () => {
                       <h4 itemProp="headline">
                         Fast and Simple Food Delivery App.
                       </h4>
-                      <p itemProp="description">
+                      <p itemProp="description" style={{textAlign: "justify"}}>
                         FoodGo makes daily meals effortless for hostel residents
                         across the UK. Choose from healthy vegetarian and
                         delicious non-vegetarian meals, add extra items whenever
