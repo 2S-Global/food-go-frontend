@@ -64,6 +64,17 @@ export default function AccountSettingsPage() {
             ? `${data.data.profilePicture}?t=${Date.now()}`
             : "/assets/images/default-user.jpg"
         );
+
+        // Update localStorage so header shows latest info on page load
+        localStorage.setItem(
+          "auth_user",
+          JSON.stringify({
+            ...data.data,
+            name: data.data.name,
+            profilePicture: data.data.profilePicture,
+          })
+        );
+        window.dispatchEvent(new Event("authChange"));
       } else {
         toast.error(data.message || "Failed to load profile");
       }
@@ -91,7 +102,7 @@ export default function AccountSettingsPage() {
     const file = e.target.files[0];
     if (file) {
       setFormData((p) => ({ ...p, profileImage: file }));
-      setProfilePreview(URL.createObjectURL(file)); // instant preview
+      setProfilePreview(URL.createObjectURL(file));
     }
   };
 
@@ -100,7 +111,6 @@ export default function AccountSettingsPage() {
   ========================= */
   const hasProfileChanges = () => {
     if (!initialData) return false;
-
     for (const key in initialData) {
       if (formData[key] !== initialData[key]) return true;
     }
@@ -184,10 +194,21 @@ export default function AccountSettingsPage() {
 
       toast.success("Profile updated successfully");
 
-      // REFRESH PROFILE DATA AND IMAGE
-      await fetchUserDetails();
+      // Update localStorage so header auto-refreshes
+      const storedUser = localStorage.getItem("auth_user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        const updatedUser = {
+          ...parsedUser,
+          name: formData.name,
+          profilePicture: profilePreview,
+        };
+        localStorage.setItem("auth_user", JSON.stringify(updatedUser));
+        window.dispatchEvent(new Event("authChange"));
+      }
 
-      // Reset local image state
+      // Refresh profile image + data
+      await fetchUserDetails();
       setFormData((p) => ({ ...p, profileImage: null }));
     } catch (err) {
       console.error(err);
@@ -244,7 +265,11 @@ export default function AccountSettingsPage() {
 
                   <div className="col-md-12">
                     <label>Email</label>
-                    <input className="brd-rd3" value={formData.email} readOnly />
+                    <input
+                      className="brd-rd3"
+                      value={formData.email}
+                      readOnly
+                    />
                   </div>
 
                   <div className="col-md-12">
@@ -296,7 +321,6 @@ export default function AccountSettingsPage() {
                     />
                   </div>
 
-                  {/* BUTTON */}
                   <div className="col-md-12 mt-3">
                     <button
                       type="submit"
