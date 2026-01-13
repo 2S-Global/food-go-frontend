@@ -28,14 +28,18 @@ export default function MySubscription() {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  /* Generate week */
+  /* ======================
+     WEEK DATES
+  ====================== */
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
     d.setDate(d.getDate() + i);
     return d;
   });
 
-  /* Fetch menu */
+  /* ======================
+     FETCH MENU
+  ====================== */
   useEffect(() => {
     if (!selectedDate) return;
 
@@ -51,25 +55,27 @@ export default function MySubscription() {
         );
 
         const json = await res.json();
-        setMenus(json.menus || []);
-        setAdditionalItems(json.additionalItems || []);
+        setMenus(json?.menus || []);
+        setAdditionalItems(json?.additionalItems || []);
       } catch (err) {
-        console.error(err);
+        console.error("Menu fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchMenu();
-  }, [selectedDate]);
+  }, [selectedDate, API_URL]);
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.monthYear}>{formatMonthYear(weekStart)}</div>
+      {/* MONTH HEADER — FIXED */}
+      <div className={styles.monthYear}>
+        {formatMonthYear(new Date(selectedDate))}
+      </div>
 
-      {/* Date Slider */}
+      {/* DATE SLIDER */}
       <div className={styles.dateSlider}>
-        {/* <button onClick={() => shiftWeek(-7)} className={styles.arrow}> */}
         <button onClick={() => shiftDay(-1)} className={styles.arrow}>
           ‹
         </button>
@@ -94,7 +100,6 @@ export default function MySubscription() {
           })}
         </div>
 
-        {/* <button onClick={() => shiftWeek(7)} className={styles.arrow}> */}
         <button onClick={() => shiftDay(1)} className={styles.arrow}>
           ›
         </button>
@@ -104,7 +109,27 @@ export default function MySubscription() {
 
       {loading && <Loader />}
 
-      {/* Veg & Non-Veg */}
+      {/* EMPTY STATE */}
+      {!loading && menus.length === 0 && additionalItems.length === 0 && (
+        <div
+          style={{
+            marginTop: "40px",
+            padding: "30px 20px",
+            textAlign: "center",
+            color: "#6c757d",
+          }}
+        >
+          <div style={{ fontSize: "48px", marginBottom: "10px" }}>🍽️</div>
+          <h5 style={{ fontWeight: 600, marginBottom: "6px", color: "#343a40" }}>
+            No meals ordered
+          </h5>
+          <p style={{ fontSize: "14px", marginBottom: 0 }}>
+            You don’t have any meals scheduled for this date.
+          </p>
+        </div>
+      )}
+
+      {/* SUBSCRIPTION MEALS */}
       {!loading &&
         menus.map((order, idx) => (
           <div key={idx} className={styles.orderBlock}>
@@ -113,7 +138,7 @@ export default function MySubscription() {
           </div>
         ))}
 
-      {/* ✅ ADDITIONAL ITEMS LIKE MEALS */}
+      {/* ADDITIONAL ITEMS */}
       {!loading && additionalItems.length > 0 && (
         <div className={styles.orderBlock}>
           {additionalItems.map((add, i) => (
@@ -135,24 +160,18 @@ export default function MySubscription() {
     </div>
   );
 
-  // function shiftWeek(days) {
-  //   const d = new Date(weekStart);
-  //   d.setDate(d.getDate() + days);
-  //   setWeekStart(d);
-  // }
-
+  /* ======================
+     SHIFT DAY
+  ====================== */
   function shiftDay(step) {
-  // Move weekStart by 1 day
-  const newWeekStart = new Date(weekStart);
-  newWeekStart.setDate(newWeekStart.getDate() + step);
-  setWeekStart(newWeekStart);
+    const newWeekStart = new Date(weekStart);
+    newWeekStart.setDate(newWeekStart.getDate() + step);
+    setWeekStart(newWeekStart);
 
-  // Move selectedDate by 1 day
-  const current = new Date(selectedDate);
-  current.setDate(current.getDate() + step);
-  setSelectedDate(formatDate(current));
-}
-
+    const current = new Date(selectedDate);
+    current.setDate(current.getDate() + step);
+    setSelectedDate(formatDate(current));
+  }
 }
 
 /* ======================
@@ -164,6 +183,7 @@ function OrderCard({ meal, data, isAdditional }) {
       <img
         src={data.images?.[0] || "/assets/images/popular-dish-img1.jpg"}
         className={styles.orderImg}
+        alt={data.menuName}
       />
 
       <div className={styles.orderContent}>
