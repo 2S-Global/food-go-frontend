@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
     <>
       <PageBanner
         title="Dashboard"
-        subtitle="A Greate Restaurant Website"
+        subtitle="Your daily meals, simplified"
         background="/assets/images/group-2.jpg"
         showSearchForm={false}
       />
