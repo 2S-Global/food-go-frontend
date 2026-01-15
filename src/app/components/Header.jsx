@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useScrollUpBar from "./useScrollUpBar";
 import { useCartCountStore } from "@/app/store/cartCountStore";
+import useAuthStore from "@/app/store/useAuthStore";
+
 
 const Header = () => {
   useScrollUpBar();
@@ -14,6 +16,15 @@ const Header = () => {
   const [authLoaded, setAuthLoaded] = useState(false);
 const { count, fetchCartCount, resetCount } = useCartCountStore();
 
+const { user: zustandUser, hydrateUser } = useAuthStore();
+
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("auth_user");
+  if (storedUser) {
+    hydrateUser(JSON.parse(storedUser));
+  }
+}, []);
 
 useEffect(() => {
   if (user) {
@@ -48,6 +59,12 @@ useEffect(() => {
 
     router.push("/login");
   };
+
+const avatarSrc =
+  zustandUser?.profilePicture && zustandUser.profilePicture.trim() !== ""
+    ? zustandUser.profilePicture
+    : "/assets/images/default-user.jpg";
+
 
   return (
     <>
@@ -168,7 +185,7 @@ useEffect(() => {
                     <div className="user-profile menu-item-has-children">
                       <a href="#" onClick={(e) => e.preventDefault()}>
                         <img
-                          src="/assets/images/default-user.jpg"
+                          src={avatarSrc}
                           alt="user"
                           className="user-avatar"
                         />
@@ -197,7 +214,11 @@ useEffect(() => {
           <div className="logo">
             <h1 itemProp="headline">
               <Link href="/">
-                <img src="/assets/images/logo2.png" alt="logo.png" itemProp="image" />
+                <img
+                  src="/assets/images/logo2.png"
+                  alt="logo.png"
+                  itemProp="image"
+                />
               </Link>
             </h1>
           </div>
@@ -212,47 +233,43 @@ useEffect(() => {
           <div className="menu-lst">
             <ul>
               <li>
-                    <Link href="/">HOME</Link>
-                  </li>
+                <Link href="/">HOME</Link>
+              </li>
+              <li>
+                <Link href="/about-us">ABOUT US</Link>
+              </li>
+              <li className="menu-item-has-children">
+                <a href="/menu" title="MENU" itemProp="url">
+                  MENU
+                </a>
+                <ul>
                   <li>
-                    <Link href="/about-us">ABOUT US</Link>
-                  </li>
-                  <li className="menu-item-has-children">
-                    <a href="/menu" title="MENU" itemProp="url">
-                      MENU
+                    <a href="/menu/veg" title="FOOD MENU" itemProp="url">
+                      VEG MENU
                     </a>
-                    <ul>
-                      <li>
-                        <a href="/menu/veg" title="FOOD MENU" itemProp="url">
-                          VEG MENU
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/menu/non-veg"
-                          title="FOOD MENU"
-                          itemProp="url"
-                        >
-                          NON-VEG MENU
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/menu/additional-items"
-                          title="FOOD MENU"
-                          itemProp="url"
-                        >
-                          ADDITIONAL ITEMS
-                        </a>
-                      </li>
-                    </ul>
                   </li>
                   <li>
-                    <Link href="/blog">BLOG</Link>
+                    <a href="/menu/non-veg" title="FOOD MENU" itemProp="url">
+                      NON-VEG MENU
+                    </a>
                   </li>
                   <li>
-                    <Link href="/contact-us">CONTACT US</Link>
+                    <a
+                      href="/menu/additional-items"
+                      title="FOOD MENU"
+                      itemProp="url"
+                    >
+                      ADDITIONAL ITEMS
+                    </a>
                   </li>
+                </ul>
+              </li>
+              <li>
+                <Link href="/blog">BLOG</Link>
+              </li>
+              <li>
+                <Link href="/contact-us">CONTACT US</Link>
+              </li>
             </ul>
           </div>
           <div className="topbar-register">

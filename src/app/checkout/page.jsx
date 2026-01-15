@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import { CartContext } from "@/app/context/CartContext";
 import PageBanner from "../components/PageBanner";
 import BreadCrumbs from "../components/Breadcrumbs";
@@ -24,10 +24,52 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [orderCompleted, setOrderCompleted] = useState(false);
 
-    const { fetchCartCount } = useCartCountStore();
+  const { fetchCartCount } = useCartCountStore();
 
   // === ALL HOOKS AT THE TOP - UNCONDITIONAL ===
   const context = useContext(CartContext);
+
+const fetchUserDetails = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/userdata/user-details`,
+      {
+        method: "GET",
+        headers: getAuthHeaders(),
+      }
+    );
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+    const user = result?.data;
+    if (!user) return;
+
+    // ✅ Split full name safely
+    const nameParts = user.name?.split(" ") || [];
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
+
+    setFormData((prev) => ({
+      ...prev,
+      firstName,
+      lastName,
+      email: user.email || "",
+      phone: user.phone_number || "",
+      address: user.address || "",
+      city: user.city || "",
+      state: user.state || "",
+      country: user.country || "",
+    }));
+  } catch (error) {
+    console.error("USER DETAILS FETCH ERROR ❌", error);
+  }
+};
+
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -109,32 +151,32 @@ export default function CheckoutPage() {
   const cartItems = cart?.items || [];
   const subtotal = Number(cart?.total_cart_amount || 0);
 
-if (cartItems.length === 0 && !orderCompleted) {
-  return (
-    <section>
-      <PageBanner
-        title="Checkout"
-        subtitle="Complete your order"
-        background="/assets/images/group-2.jpg"
-        showSearchForm={false}
-      />
-      <BreadCrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Cart", href: "/cart" },
-          { label: "Checkout" },
-        ]}
-      />
-      <div className="container text-center py-5">
-        <h3>Your cart is empty</h3>
-        <p className="text-muted">Add some meals to continue.</p>
-        <a href="/menu" className="btn btn-danger mt-3">
-          Browse Menu
-        </a>
-      </div>
-    </section>
-  );
-}
+  if (cartItems.length === 0 && !orderCompleted) {
+    return (
+      <section>
+        <PageBanner
+          title="Checkout"
+          subtitle="Complete your order"
+          background="/assets/images/group-2.jpg"
+          showSearchForm={false}
+        />
+        <BreadCrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Cart", href: "/cart" },
+            { label: "Checkout" },
+          ]}
+        />
+        <div className="container text-center py-5">
+          <h3>Your cart is empty</h3>
+          <p className="text-muted">Add some meals to continue.</p>
+          <a href="/menu" className="btn btn-danger mt-3">
+            Browse Menu
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   // === HELPER FUNCTIONS ===
   const handleInputChange = (e) => {
@@ -559,33 +601,72 @@ if (cartItems.length === 0 && !orderCompleted) {
                   <div
                     key={item._id}
                     style={{
-                      display: "flex",
-                      justifyContent: "space-between",
                       padding: "12px 0",
                       borderBottom: "1px solid #eee",
                     }}
                   >
-                    <div>
-                      <strong>
-                        {item.subscription_type
-                          ? `${
-                              item.subscription_type === "veg"
-                                ? "Veg"
-                                : "Non-Veg"
-                            } Subscription`
-                          : "Meal Plan"}
-                      </strong>
-                      <p
+                    {/* ✅ SUBSCRIPTION */}
+                    {item.item_type === "subscription" && (
+                      <div
                         style={{
-                          margin: "4px 0 0",
-                          fontSize: "14px",
-                          color: "#666",
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
                       >
-                        {item.weeks} Weeks • {item.meal_count} Meals
-                      </p>
-                    </div>
-                    <strong>£{item.item_total_price}</strong>
+                        <div>
+                          <strong>
+                            {item.subscription_type === "veg"
+                              ? "Veg"
+                              : "Non-Veg"}{" "}
+                            Subscription
+                          </strong>
+                          <p
+                            style={{
+                              margin: "4px 0 0",
+                              fontSize: "14px",
+                              color: "#666",
+                            }}
+                          >
+                            {item.weeks} Weeks • {item.meal_count} Meals
+                          </p>
+                        </div>
+                        <strong>£{item.item_total_price}</strong>
+                      </div>
+                    )}
+
+                    {/* ✅ ADDITIONAL ITEMS */}
+                    {item.item_type === "additional_item" && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        {/* LEFT: Add-on Names */}
+                        <div>
+                          {item.additional_items.map((addon) => (
+                            <p
+                              key={addon._id}
+                              style={{
+                                margin: "0",
+                                fontSize: "14px",
+                                color: "#333",
+                              }}
+                            >
+                              <strong>{addon.item_id.itemName}</strong>{" "}
+                              <span style={{ color: "#666" }}>
+                                × {addon.quantity} ({addon.delivery_count}{" "}
+                                deliveries)
+                              </span>
+                            </p>
+                          ))}
+                        </div>
+
+                        {/* RIGHT: TOTAL PRICE */}
+                        <strong>£{item.item_total_price}</strong>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

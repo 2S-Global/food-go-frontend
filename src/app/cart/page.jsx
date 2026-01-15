@@ -166,7 +166,7 @@ useEffect(() => {
                           {item.weeks > 0 && (
                             <span className="d-flex align-items-center gap-1">
                               <CalendarDays size={16} />
-                              {item.weeks} Weeks
+                              {item.weeks} Week
                             </span>
                           )}
 

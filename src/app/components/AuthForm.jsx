@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { customerRegister, customerLogin } from "@/app/lib/api";
+import useAuthStore from "@/app/store/useAuthStore"; // ✅ ADD
 
 export default function AuthForm({ type }) {
   const isLogin = type === "login";
@@ -44,6 +45,8 @@ export default function AuthForm({ type }) {
         // Save auth data
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("auth_user", JSON.stringify(data.data));
+
+        useAuthStore.getState().setUser(data.data);
 
         // notify header instantly
         window.dispatchEvent(new Event("authChange"));

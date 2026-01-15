@@ -4,12 +4,19 @@ import React, { useState, useEffect } from "react";
 import Loader from "@/app/components/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuthStore from "@/app/store/useAuthStore";
+
+
+
 
 export default function AccountSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [profilePreview, setProfilePreview] = useState("");
   const [isHover, setIsHover] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+const { updateUser } = useAuthStore();
+
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -85,6 +92,8 @@ export default function AccountSettingsPage() {
       setLoading(false);
     }
   };
+
+  
 
   useEffect(() => {
     fetchUserDetails();
@@ -195,17 +204,30 @@ export default function AccountSettingsPage() {
       toast.success("Profile updated successfully");
 
       // Update localStorage so header auto-refreshes
-      const storedUser = localStorage.getItem("auth_user");
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        const updatedUser = {
-          ...parsedUser,
-          name: formData.name,
-          profilePicture: profilePreview,
-        };
-        localStorage.setItem("auth_user", JSON.stringify(updatedUser));
-        window.dispatchEvent(new Event("authChange"));
-      }
+const storedUser = localStorage.getItem("auth_user");
+if (storedUser) {
+  const parsedUser = JSON.parse(storedUser);
+
+  const updatedUser = {
+    ...parsedUser,
+    name: formData.name,
+    profilePicture: profilePreview,
+  };
+
+  // ✅ persist
+  localStorage.setItem("auth_user", JSON.stringify(updatedUser));
+
+  // ✅ update zustand (THIS FIXES HEADER IMAGE)
+  updateUser({
+    name: formData.name,
+    profilePicture: profilePreview,
+  });
+
+  // optional (can stay)
+  window.dispatchEvent(new Event("authChange"));
+}
+
+
 
       // Refresh profile image + data
       await fetchUserDetails();
