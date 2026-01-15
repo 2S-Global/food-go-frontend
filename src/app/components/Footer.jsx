@@ -50,16 +50,16 @@ const Footer = () => {
   /* ===============================
      FALLBACK DATA (STATIC)
   =============================== */
-  const fallbackContact = {
-    logo: "/assets/images/logo.png",
-    short_description: "Trusted platform delivering quality services.",
-    address: "India",
-    phone_number: "+91-0000000000",
-    email: "support@example.com",
-    social_links: {},
-  };
+  // const fallbackContact = {
+  //   logo: "/assets/images/logo.png",
+  //   short_description: "Trusted platform delivering quality services.",
+  //   address: "India",
+  //   phone_number: "+91-0000000000",
+  //   email: "support@example.com",
+  //   social_links: {},
+  // };
 
-  const data = contact || fallbackContact;
+  const data = contact ;
 
   return (
     <>
