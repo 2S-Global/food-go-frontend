@@ -7,32 +7,30 @@ import useScrollUpBar from "./useScrollUpBar";
 import { useCartCountStore } from "@/app/store/cartCountStore";
 import useAuthStore from "@/app/store/useAuthStore";
 
-
 const Header = () => {
   useScrollUpBar();
   const router = useRouter();
 
   const [user, setUser] = useState(null);
   const [authLoaded, setAuthLoaded] = useState(false);
-const { count, fetchCartCount, resetCount } = useCartCountStore();
+  const { count, fetchCartCount, resetCount } = useCartCountStore();
 
-const { user: zustandUser, hydrateUser } = useAuthStore();
+  const { user: zustandUser, hydrateUser } = useAuthStore();
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("auth_user");
+    if (storedUser) {
+      hydrateUser(JSON.parse(storedUser));
+    }
+  }, []);
 
-useEffect(() => {
-  const storedUser = localStorage.getItem("auth_user");
-  if (storedUser) {
-    hydrateUser(JSON.parse(storedUser));
-  }
-}, []);
-
-useEffect(() => {
-  if (user) {
-    fetchCartCount();
-  } else {
-    resetCount();
-  }
-}, [user]);
+  useEffect(() => {
+    if (user) {
+      fetchCartCount();
+    } else {
+      resetCount();
+    }
+  }, [user]);
   // Load user + listen for auth changes
   useEffect(() => {
     const loadUser = () => {
@@ -60,11 +58,10 @@ useEffect(() => {
     router.push("/login");
   };
 
-const avatarSrc =
-  zustandUser?.profilePicture && zustandUser.profilePicture.trim() !== ""
-    ? zustandUser.profilePicture
-    : "/assets/images/default-user.jpg";
-
+  const avatarSrc =
+    zustandUser?.profilePicture && zustandUser.profilePicture.trim() !== ""
+      ? zustandUser.profilePicture
+      : "/assets/images/default-user.jpg";
 
   return (
     <>
@@ -93,14 +90,16 @@ const avatarSrc =
             </div>
 
             <div className="social1">
-              <a href="#" title="Facebook">
-                <i className="fa fa-facebook-square" />
+              <a href="#" title="Facebook" target="_blank">
+                <i className="fa-brands fa-facebook"></i>
               </a>
-              <a href="#" title="Twitter">
-                <i className="fa fa-twitter" />
+
+              <a href="#" title="X" target="_blank">
+                <i className="fa-brands fa-x-twitter"></i>
               </a>
-              <a href="#" title="Google Plus">
-                <i className="fa fa-google-plus" />
+
+              <a href="#" title="Instagram" target="_blank">
+                <i className="fa-brands fa-instagram"></i>
               </a>
             </div>
           </div>

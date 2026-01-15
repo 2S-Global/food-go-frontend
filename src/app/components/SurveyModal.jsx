@@ -8,10 +8,12 @@ export default function SurveyModal({ onSkip, onComplete }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "");
   }, []);
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const submitSurvey = async () => {
@@ -109,6 +111,21 @@ export default function SurveyModal({ onSkip, onComplete }) {
         className="survey-modal"
         onSubmit={(e) => e.preventDefault()}
       >
+        {/* ✅ TOP RIGHT IMAGE */}
+        {!isSubmitted && (
+          <img
+            src="/assets/images/Offer.png"
+            alt="Survey"
+            style={{
+              position: "absolute",
+              top: "16px",
+              right: "36px",
+              width: "125px",
+              height: "auto",
+              zIndex: 2,
+            }}
+          />
+        )}
         {errorMsg && (
           <div
             style={{
@@ -215,17 +232,17 @@ function Step1({ formData, updateField }) {
       />
 
       {/* EMAIL – REQUIRED */}
-      <label>Imperial College Email *</label>
+      <label>College Email *</label>
       <input
         type="email"
-        placeholder="name@imperial.ac.uk"
+        placeholder="name@mail.ac.uk"
         value={formData.email || ""}
         onChange={(e) => updateField("email", e.target.value)}
       />
 
       {/* ACCOMMODATION */}
       <label>
-        Which Imperial College accommodation/hostel do you currently live in?
+        Which College accommodation/hostel do you currently live in?
       </label>
       <Select
         options={options}
@@ -559,7 +576,7 @@ function Step5({ formData, updateField }) {
       </div>
 
       {/* MENU IDEAS */}
-      <label>Any meals you would love to see in our menu? (Open-ended)</label>
+      <label>Any meals you would love to see in our menu?</label>
       <textarea
         placeholder="Share your ideas..."
         value={formData.menuSuggestions || ""}
@@ -567,7 +584,7 @@ function Step5({ formData, updateField }) {
       />
 
       {/* ADDITIONAL FEEDBACK */}
-      <label>Any additional feedback or suggestions? (Open-ended)</label>
+      <label>Any additional feedback or suggestions?</label>
       <textarea
         placeholder="Let us know your thoughts..."
         value={formData.feedback || ""}
@@ -693,6 +710,7 @@ const box = {
   boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
   flexDirection: "column",
   zIndex: 1000000,
+  position: "relative",
 };
 
 const headerContainer = {

@@ -72,6 +72,7 @@ export default function AdditionalItemsPage() {
           showTitle={false}
           onAddToCart={(item) => setSelectedItem(item)}
           topContent={`Complete your meal with our curated selection of Additional Items. No home-cooked feast is whole without the extras! Choose from a wide range of traditional accompaniments, including handmade pickles, crispy snacks, regional breads, and authentic desserts that satisfy every craving. As a subscriber, you can easily add these "little tastes of home" to your weekly basket. Whether you're looking for a spicy kick or a sweet ending, our diverse selection of extras ensures your table is always fully set. Pick your favorites and make every meal a celebration.`}
+          topHeadline="Complete the Feast: Authentic Little Tastes of Home"
         />
       )}
 

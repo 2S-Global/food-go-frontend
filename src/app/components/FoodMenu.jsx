@@ -10,6 +10,7 @@ export default function FoodMenu({
   subscriptionType,
   onAddToCart,
   topContent,
+  topHeadline,
 }) {
   // ✅ SAFETY: ensure array
   const safeItems = Array.isArray(items) ? items : [];
@@ -45,12 +46,37 @@ export default function FoodMenu({
                 <div
                   style={{
                     maxWidth: "900px",
-                    margin: "0 auto 30px",
-                    textAlign: "justify",
+                    margin: "0 auto 40px",
                     paddingBottom: "20px",
                   }}
                 >
-                  {topContent}
+                  {/* ✅ HEADLINE */}
+                  <h2
+                    style={{
+                      textAlign: "center",
+                      marginBottom: "15px",
+                      fontSize: "28px",
+                      fontWeight: "700",
+                      color: "#c8102e",
+                    }}
+                  >
+                    {topHeadline ||
+                      (variant === "additional"
+                        ? "Additional Items"
+                        : "Our Delicious Menu")}
+                  </h2>
+
+                  {/* ✅ DESCRIPTION CONTENT */}
+                  <div
+                    style={{
+                      textAlign: "justify",
+                      fontSize: "15px",
+                      color: "#555",
+                      lineHeight: "1.7",
+                    }}
+                  >
+                    {topContent}
+                  </div>
                 </div>
               )}
 

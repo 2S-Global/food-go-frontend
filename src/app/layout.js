@@ -25,6 +25,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
         <link rel="stylesheet" href="/assets/css/icons.min.css" />
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/animate.min.css" />
@@ -35,13 +39,11 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-
         {/* 🔒 SURVEY OVERLAY — BLOCKS ENTIRE SITE */}
         <SurveyGate />
 
         {/* APP STATE PROVIDERS */}
         <CartContextProvider>
-
           {/* GLOBAL HEADER */}
           <Header />
 
@@ -50,7 +52,6 @@ export default function RootLayout({ children }) {
 
           {/* GLOBAL FOOTER */}
           <Footer />
-
         </CartContextProvider>
 
         {/* JS SCRIPTS */}
@@ -59,10 +60,12 @@ export default function RootLayout({ children }) {
           src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
           strategy="beforeInteractive"
         />
-        <Script src="/assets/js/bootstrap.min.js" strategy="beforeInteractive" />
+        <Script
+          src="/assets/js/bootstrap.min.js"
+          strategy="beforeInteractive"
+        />
         <Script src="/assets/js/plugins.js" strategy="afterInteractive" />
         <Script src="/assets/js/main.js" strategy="afterInteractive" />
-
       </body>
     </html>
   );
